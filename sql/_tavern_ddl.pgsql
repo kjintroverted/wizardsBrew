@@ -100,17 +100,30 @@ CREATE TABLE classes
    progress text[][]
 );
 
+DROP TABLE IF EXISTS backgrounds;
+CREATE TABLE backgrounds
+(
+   id   serial PRIMARY KEY,
+   name varchar(50) UNIQUE NOT NULL,
+   pro_skill varchar(25)[],
+   pro_tool text,
+   language varchar(100),
+   equipment text,
+   special_opts trait,
+   character_opts trait[]
+);
 
 DROP TABLE IF EXISTS feats;
 CREATE TABLE feats
 (
    id   serial PRIMARY KEY,
    name varchar(50) UNIQUE NOT NULL,
-   class_id int,
+   class varchar(50),
    ability ability_mod[],
    description text[],
    level int,
    path varchar(50),
+   background varchar(50),
    prereq varchar(50)
 );
 
@@ -139,6 +152,6 @@ CREATE TABLE spells
    school varchar(50),
    concentrate bool default false,
    range varchar(50),
-   class_id int[],
+   class varchar(50)[],
    description text[]
 );
