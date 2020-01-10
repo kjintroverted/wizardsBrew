@@ -19,6 +19,18 @@ CREATE TYPE ability_mod AS (
 DROP TYPE IF EXISTS size CASCADE;
 CREATE TYPE size AS ENUM ('Small', 'Medium', 'Large');
 
+DROP TYPE IF EXISTS magic_school CASCADE;
+CREATE TYPE magic_school AS ENUM (
+   'transmutation', 
+   'necromancy', 
+   'illusion',
+   'evocation',
+   'enchantment',
+   'divination',
+   'conjuration',
+   'abjuration'
+   );
+
 DROP TYPE IF EXISTS item_rarity CASCADE;
 CREATE TYPE item_rarity AS ENUM (
    'Common',
@@ -145,13 +157,13 @@ CREATE TABLE spells
 (
    id   serial PRIMARY KEY,
    name varchar(50) UNIQUE NOT NULL,
-   level int NOT NULL,
+   school magic_school,
    time varchar(50),
    duration varchar(100),
    comp text[],
-   school varchar(50),
    concentrate bool default false,
    range varchar(50),
+   level int NOT NULL,
    class varchar(50)[],
    description text[]
 );
