@@ -136,7 +136,7 @@ CREATE TABLE items
    cost numeric,
    weight numeric,
    attune boolean default false,
-   rarity item_type,
+   rarity item_rarity,
    description text
 );
 
