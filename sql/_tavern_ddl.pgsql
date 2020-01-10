@@ -19,6 +19,23 @@ CREATE TYPE ability_mod AS (
 DROP TYPE IF EXISTS size CASCADE;
 CREATE TYPE size AS ENUM ('Small', 'Medium', 'Large');
 
+DROP TYPE IF EXISTS damage_type CASCADE;
+CREATE TYPE damage_type AS ENUM (
+   'acid', 
+   'bludgeoning', 
+   'cold', 
+   'fire', 
+   'force', 
+   'lightning', 
+   'necrotic', 
+   'piercing', 
+   'poison', 
+   'psychic', 
+   'radiant', 
+   'slashing', 
+   'thunder'
+   );
+
 DROP TYPE IF EXISTS magic_school CASCADE;
 CREATE TYPE magic_school AS ENUM (
    'transmutation', 
@@ -144,12 +161,14 @@ CREATE TABLE items
 (
    id   serial PRIMARY KEY,
    name varchar(50) UNIQUE NOT NULL,
-   type item_type NOT NULL,
+   type item_type[] NOT NULL,
    cost numeric,
    weight numeric,
    attune boolean default false,
    rarity item_rarity,
-   description text
+   damage varchar(10),
+   damage_type damage_type,
+   description text[]
 );
 
 DROP TABLE IF EXISTS spells;
