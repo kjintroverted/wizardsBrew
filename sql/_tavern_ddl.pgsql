@@ -62,13 +62,15 @@ CREATE TYPE item_rarity AS ENUM (
 
 DROP TYPE IF EXISTS item_type CASCADE;
 CREATE TYPE item_type AS ENUM (
-  'Vehicle',
+  'Water Vehicle',
+  'Air Vehicle',
+  'Land Vehicle',
   'Treasure',
   'Trade Good',
   'Tool',
   'Tack and Harness',
   'Staff',
-  'Simple Weapon',
+  'Simple',
   'Melee Weapon',
   'Spellcasting Focus',
   'Ranged Weapon',
@@ -79,7 +81,7 @@ CREATE TYPE item_type AS ENUM (
   'Mount',
   'Modern',
   'Medium Armor',
-  'Martial Weapon',
+  'Martial',
   'Light Armor',
   'Instrument',
   'Heavy Armor',
@@ -87,7 +89,7 @@ CREATE TYPE item_type AS ENUM (
   'Gaming Set',
   'Futuristic',
   'Firearm',
-  'Artisan Tool',
+  'Artisan Tools',
   'Adventuring Gear',
   'Poison',
   'Wondrous Item',
@@ -96,6 +98,13 @@ CREATE TYPE item_type AS ENUM (
   'Rod',
   'Ring',
   'Potion'
+  );
+
+DROP TYPE IF EXISTS weapon_info CASCADE;
+CREATE TYPE weapon_info AS (
+   category item_type,
+   damage varchar(10),
+   damage_type damage_type
   );
 
 DROP TABLE IF EXISTS races;
@@ -160,15 +169,15 @@ DROP TABLE IF EXISTS items;
 CREATE TABLE items
 (
    id   serial PRIMARY KEY,
-   name varchar(50) UNIQUE NOT NULL,
-   type item_type[] NOT NULL,
+   name varchar(100) UNIQUE NOT NULL,
+   type item_type,
    cost numeric,
    weight numeric,
-   attune boolean default false,
+   attune varchar(100),
    rarity item_rarity,
-   damage varchar(10),
-   damage_type damage_type,
-   description text[]
+   weapon weapon_info,
+   armor_class int,
+   info section[]
 );
 
 DROP TABLE IF EXISTS spells;
