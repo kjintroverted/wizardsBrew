@@ -6,4 +6,5 @@ import (
 
 func main() {
 	tasks.GenerateItemInserts()
+	tasks.GenerateSpellInserts()
 }

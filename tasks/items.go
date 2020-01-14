@@ -237,8 +237,7 @@ func GenerateItemInserts() {
 		fmt.Println("ERROR:", err)
 	}
 
-	fmt.Println("created:", x)
-	fmt.Println("total:", len(items))
+	fmt.Println(x, "Items")
 }
 
 func getProp(prop string, ref map[string]interface{}) (name string, desc []interface{}, ok bool) {

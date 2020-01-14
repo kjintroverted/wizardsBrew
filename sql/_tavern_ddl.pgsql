@@ -193,5 +193,5 @@ CREATE TABLE spells
    range varchar(50),
    level int NOT NULL,
    class varchar(50)[],
-   description text[]
+   description section[]
 );
