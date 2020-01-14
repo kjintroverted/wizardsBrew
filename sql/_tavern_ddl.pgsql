@@ -10,10 +10,24 @@ CREATE TYPE section AS (
   body text[]
   );
 
+DROP TYPE IF EXISTS spell_time CASCADE;
+CREATE TYPE spell_time AS (
+  time varchar(50),
+  condition text
+  );
+
 DROP TYPE IF EXISTS ability_mod CASCADE;
 CREATE TYPE ability_mod AS (
   name varchar(10),
   mod int
+  );
+
+DROP TYPE IF EXISTS spell_comp CASCADE;
+CREATE TYPE spell_comp AS (
+  name varchar(15),
+  description text,
+  cost int,
+  consume bool
   );
 
 DROP TYPE IF EXISTS size CASCADE;
@@ -186,9 +200,9 @@ CREATE TABLE spells
    id   serial PRIMARY KEY,
    name varchar(50) UNIQUE NOT NULL,
    school magic_school,
-   time varchar(50),
+   time spell_time,
    duration varchar(100),
-   comp text[],
+   comp spell_comp[],
    concentrate bool default false,
    range varchar(50),
    level int NOT NULL,
