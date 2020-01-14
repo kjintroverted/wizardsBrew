@@ -188,20 +188,10 @@ func GenerateItemInserts() {
 						info = append(info, section{Title: san(entryMap["name"].(string)), Body: sanAll(entryMap["entries"].([]interface{}))})
 					}
 					if entryMap["type"].(string) == "table" {
-						title := "|"
-						for _, label := range entryMap["colLabels"].([]interface{}) {
-							title += " " + label.(string) + " |"
-						}
+						title := createRow(entryMap["colLabels"].([]interface{}))
 						var body []interface{}
 						for _, row := range entryMap["rows"].([]interface{}) {
-							rowArr := row.([]interface{})
-							rowStr := "|"
-							for _, cell := range rowArr {
-								if _, ok := cell.(string); !ok {
-									continue
-								}
-								rowStr += " " + cell.(string) + " |"
-							}
+							rowStr := createRow(row.([]interface{}))
 							body = append(body, san(rowStr))
 						}
 						info = append(info, section{Title: san(title), Body: body})
@@ -209,20 +199,19 @@ func GenerateItemInserts() {
 				}
 			}
 			if len(paragraph) > 0 {
-				info = append(info, section{Title: "Description", Body: paragraph})
+				info = append(info, section{Title: "", Body: paragraph})
 			}
 		}
 
 		infoInsert := "null"
 		if len(info) > 0 {
 			infoInsert = "array["
-			for _, div := range info {
-				bodyInsert := "array["
-				for _, p := range div.Body {
-					bodyInsert += fmt.Sprintf("'%s',", p)
+			for _, d := range info {
+				infoInsert += fmt.Sprintf("row('%s', array[", d.Title)
+				for _, b := range d.Body {
+					infoInsert += fmt.Sprintf("'%s',", b)
 				}
-				bodyInsert = strings.Trim(bodyInsert, ",") + "]"
-				infoInsert += fmt.Sprintf("row('%s', %s)::section,", div.Title, bodyInsert)
+				infoInsert = strings.Trim(infoInsert, ",") + "])::section,"
 			}
 			infoInsert = strings.Trim(infoInsert, ",") + "]"
 		}

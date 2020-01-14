@@ -10,11 +10,11 @@ import (
 )
 
 func createRow(cells []interface{}) string {
-	s := "|"
+	s := ""
 	for _, c := range cells {
-		s += fmt.Sprintf(" %s |", c)
+		s += fmt.Sprintf("%s|", c)
 	}
-	return s
+	return strings.Trim(s, "|")
 }
 
 var schoolMap map[interface{}]string = map[interface{}]string{
