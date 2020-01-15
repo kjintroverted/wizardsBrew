@@ -11,9 +11,9 @@ import (
 	"github.com/kjintroverted/wizardsBrew/psql"
 )
 
-// BeginRaceQuiz starts a quiz to help choose a race
-// for character building
-func BeginRaceQuiz() {
+// BeginQuiz starts a quiz to help choose a
+// race and class for character building
+func BeginQuiz() {
 	db, err := psql.NewPostgresConnection()
 	if err != nil {
 		fmt.Println("ERR", err)
@@ -22,7 +22,7 @@ func BeginRaceQuiz() {
 	service := nodes.NewNodeService(nodes.NewNodeRepo(db))
 
 	// GET START NODE
-	node, err := service.FindByID(`16`)
+	raceNode, err := service.FindByID(`16`)
 	if err != nil {
 		fmt.Println("ERR", err)
 		return
@@ -32,14 +32,14 @@ func BeginRaceQuiz() {
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Println()
-		if node.Type == "terminus" {
-			fmt.Printf("Your result: %s\n", node.Value)
+		if raceNode.Type == "terminus" {
+			fmt.Printf("Your result: %s\n", raceNode.Value)
 			break
 		}
 
 		// PROMPT
-		fmt.Println(node.Value)
-		for i, c := range node.Paths {
+		fmt.Println(raceNode.Value)
+		for i, c := range raceNode.Paths {
 			fmt.Printf("%d. %s\n", i+1, c.Prompt)
 		}
 		fmt.Print(">> ")
@@ -51,12 +51,12 @@ func BeginRaceQuiz() {
 		}
 		cmdString = strings.Trim(strings.TrimSuffix(cmdString, "\n"), " ")
 		choice, err := strconv.Atoi(cmdString)
-		if err != nil || choice > len(node.Paths) || choice < 1 {
-			fmt.Printf("Please enter a valid option (1-%d)", len(node.Paths))
+		if err != nil || choice > len(raceNode.Paths) || choice < 1 {
+			fmt.Printf("Please enter a valid option (1-%d)", len(raceNode.Paths))
 			continue
 		}
 
 		// LOAD NEXT NODE
-		node, err = service.FindByID(node.Paths[choice-1].Value)
+		raceNode, err = service.FindByID(raceNode.Paths[choice-1].Value)
 	}
 }

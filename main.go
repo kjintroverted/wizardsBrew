@@ -2,24 +2,72 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 
+	"github.com/kjintroverted/wizardsBrew/api"
+
+	"github.com/gorilla/mux"
 	"github.com/kjintroverted/wizardsBrew/quiz"
 
-	"github.com/kjintroverted/wizardsBrew/tasks"
+	"github.com/kjintroverted/wizardsBrew/data/tasks"
 )
 
 func main() {
 	var command string
-	if command = os.Args[1]; command == "" {
-		fmt.Println("Please enter a command.")
+
+	if len(os.Args) == 1 {
+		goto API
 	}
 
+	command = os.Args[1]
 	switch command {
 	case "sql":
 		tasks.GenerateItemInserts()
 		tasks.GenerateSpellInserts()
-	case "race":
-		quiz.BeginRaceQuiz()
+	case "quiz":
+		quiz.BeginQuiz()
 	}
+	return
+
+API:
+	// SET PORT
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "4000"
+	}
+
+	// GET MULTIPLEX
+	mux := createMux()
+
+	// START SERVER
+	fmt.Println("Server listening on", port)
+	if error := http.ListenAndServe(":"+port, mux); error != nil {
+		fmt.Println("ERROR", error)
+	}
+}
+
+// CREATE MULTIPLEX PATH HANDLER
+func createMux() *mux.Router {
+	r := mux.NewRouter()
+	r.HandleFunc("/api", root)
+
+	// SRD ENDPOINTS
+	r.HandleFunc("/api/item/{id}", api.Items)
+
+	r.Use(enableCORS)
+
+	return r
+}
+
+// ROOT GETTER
+func root(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Wizard's Brew API")
+}
+
+func enableCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		next.ServeHTTP(w, r)
+	})
 }
