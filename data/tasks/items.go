@@ -147,7 +147,7 @@ func GenerateItemInserts() {
 			}
 			dmg := "null"
 			if item["dmg1"] != nil {
-				dmgType = fmt.Sprintf("'%s'", item["dmg1"])
+				dmg = fmt.Sprintf("'%s'", item["dmg1"])
 			}
 			weapon = fmt.Sprintf("row('%s', %s, %s)::weapon_info", item["weaponCategory"], dmg, dmgType)
 		}
