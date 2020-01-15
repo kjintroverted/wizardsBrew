@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/kjintroverted/wizardsBrew/nodes"
+	"github.com/kjintroverted/wizardsBrew/api/nodes"
 	"github.com/kjintroverted/wizardsBrew/psql"
 )
 
