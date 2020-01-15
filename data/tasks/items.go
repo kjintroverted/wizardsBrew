@@ -86,7 +86,7 @@ func GenerateItemInserts() {
 		return
 	}
 
-	f, err := os.Create("sql/items.pgsql")
+	f, err := os.Create("data/sql/srd/items.pgsql")
 	if err != nil {
 		fmt.Println("ERROR:", err)
 		return
@@ -146,7 +146,7 @@ func GenerateItemInserts() {
 				dmgType = fmt.Sprintf("'%s'", dmgTypes[item["dmgType"].(string)])
 			}
 			dmg := "null"
-			if item["dmg"] != nil {
+			if item["dmg1"] != nil {
 				dmgType = fmt.Sprintf("'%s'", item["dmg1"])
 			}
 			weapon = fmt.Sprintf("row('%s', %s, %s)::weapon_info", item["weaponCategory"], dmg, dmgType)
