@@ -17,8 +17,8 @@ type itemRepo struct {
 	db *sql.DB
 }
 
-// NewNodeRepo returns a ItemRepo with a db connection
-func NewNodeRepo(db *sql.DB) *itemRepo {
+// NewItemRepo returns a ItemRepo with a db connection
+func NewItemRepo(db *sql.DB) *itemRepo {
 	return &itemRepo{
 		db,
 	}
