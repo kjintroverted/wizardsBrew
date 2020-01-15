@@ -1,0 +1,2 @@
+### SRD ALL CLASSES
+GET http://localhost:4000/api/item/1

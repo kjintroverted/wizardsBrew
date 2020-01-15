@@ -24,12 +24,14 @@ func Items(w http.ResponseWriter, r *http.Request) {
 	pathParams := mux.Vars(r)
 
 	if id, ok := pathParams["id"]; ok { // GET ONE
-		item, err := service.FindByID(id)
-		if err != nil {
+		item, e := service.FindByID(id)
+		if e != nil {
+			err = e
 			goto Fail
 		}
 		res, _ := json.Marshal(item)
 		w.Write(res)
+		return
 	}
 
 Fail:
