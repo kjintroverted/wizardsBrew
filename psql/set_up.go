@@ -1,12 +1,11 @@
-package db
+package psql
 
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"os"
 
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // access to psql driver
 )
 
 // NewPostgresConnection attempts to connect to a psql server
@@ -27,6 +26,5 @@ func NewPostgresConnection() (db *sql.DB, err error) {
 		return nil, err
 	}
 
-	fmt.Println("DB connected")
 	return
 }
