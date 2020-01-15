@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/kjintroverted/wizardsBrew/nodes"
 	"github.com/kjintroverted/wizardsBrew/psql"
 )
 
@@ -18,10 +19,10 @@ func BeginRaceQuiz() {
 		fmt.Println("ERR", err)
 	}
 	defer db.Close()
-	repo := psql.NewNodeRepo(db)
+	service := nodes.NewNodeService(nodes.NewNodeRepo(db))
 
 	// GET START NODE
-	node, err := repo.FindByID(`16`)
+	node, err := service.FindByID(`16`)
 	if err != nil {
 		fmt.Println("ERR", err)
 		return
@@ -56,6 +57,6 @@ func BeginRaceQuiz() {
 		}
 
 		// LOAD NEXT NODE
-		node, err = repo.FindByID(node.Paths[choice-1].Value)
+		node, err = service.FindByID(node.Paths[choice-1].Value)
 	}
 }
