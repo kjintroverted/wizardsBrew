@@ -19,7 +19,12 @@ type path struct {
 
 func (p *path) Scan(value interface{}) error {
 	str := string(value.([]byte))
-	vals := strings.Split(strings.Trim(str, "()"), "\",")
+	var vals []string
+	if strings.Contains(str, "\"") {
+		vals = strings.Split(strings.Trim(str, "()"), "\",")
+	} else {
+		vals = strings.Split(strings.Trim(str, "()"), ",")
+	}
 
 	p.Prompt = strings.Trim(vals[0], "\"")
 	p.Value = strings.Trim(vals[1], "\"")
