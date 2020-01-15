@@ -21,7 +21,7 @@ func NewNodeRepo(db *sql.DB) *nodeRepo {
 	}
 }
 
-func (r *nodeRepo) FindByID(id int) (node *nodes.Node, err error) {
+func (r *nodeRepo) FindByID(id string) (node *nodes.Node, err error) {
 	node = new(nodes.Node)
 	sql := `SELECT * FROM story_nodes WHERE id=$1`
 	row := r.db.QueryRow(sql, id)
