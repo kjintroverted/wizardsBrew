@@ -18,3 +18,5 @@ INSERT INTO story_nodes (id, type, value, paths)
 VALUES (25, 'terminus', 'Paladin', null);
 INSERT INTO story_nodes (id, type, value, paths)
 VALUES (26, 'terminus', 'Cleric', null);
+INSERT INTO story_nodes (id, type, value, paths)
+VALUES (27, 'terminus', 'Bard', null);
