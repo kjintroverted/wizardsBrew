@@ -167,10 +167,10 @@ func GenerateItemInserts() {
 					continue
 				}
 				if p.(string) == "V" {
-					n += " - " + item["dmg2"].(string)
+					n += " (" + item["dmg2"].(string) + ")"
 				}
 				if p.(string) == "T" || p.(string) == "A" {
-					n += " - " + item["range"].(string) + " ft"
+					n += " (" + item["range"].(string) + " ft)"
 				}
 				info = append(info, section{Title: n, Body: d})
 			}
