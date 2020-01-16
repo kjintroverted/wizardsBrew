@@ -24,15 +24,29 @@ func Items(w http.ResponseWriter, r *http.Request) {
 	pathParams := mux.Vars(r)
 
 	if id, ok := pathParams["id"]; ok { // GET ONE
-		item, e := service.FindByID(id)
-		if e != nil {
-			err = e
+		var item *items.Item
+		if item, err = service.FindByID(id); err != nil {
 			goto Fail
 		}
 		res, _ := json.Marshal(item)
 		w.Write(res)
 		return
+	} else if itemType := r.URL.Query().Get("type"); itemType != "" {
+		var items []items.Item
+		switch itemType {
+		case "weapon":
+			if items, err = service.FindWeapons(); err != nil {
+				goto Fail
+			}
+		default:
+			err = fmt.Errorf("Could not match type: %s", itemType)
+			goto Fail
+		}
+		res, _ := json.Marshal(items)
+		w.Write(res)
+		return
 	}
+	err = fmt.Errorf("Requested endpoint not found")
 
 Fail:
 	w.WriteHeader(http.StatusInternalServerError)

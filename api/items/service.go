@@ -4,6 +4,7 @@ package items
 // available to interact with Item data
 type ItemService interface {
 	FindByID(id string) (*Item, error)
+	FindWeapons() ([]Item, error)
 }
 
 type itemService struct {
@@ -20,6 +21,13 @@ func NewItemService(repo ItemRepo) ItemService {
 // FindById will call the repo's function to
 // find a Item by ID
 func (s *itemService) FindByID(id string) (item *Item, err error) {
-	item, err = s.repo.findByID(id)
+	item, err = s.repo.FindByID(id)
 	return item, err
+}
+
+// FindWeapons will call the repo's function to
+// find all weapon items
+func (s *itemService) FindWeapons() ([]Item, error) {
+	items, err := s.repo.FindWeapons()
+	return items, err
 }

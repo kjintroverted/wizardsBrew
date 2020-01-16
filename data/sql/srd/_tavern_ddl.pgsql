@@ -184,7 +184,7 @@ CREATE TABLE items
 (
    id   serial PRIMARY KEY,
    name varchar(100) UNIQUE NOT NULL,
-   type item_type,
+   type varchar(50),
    cost numeric,
    weight numeric,
    attune varchar(100),

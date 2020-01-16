@@ -57,6 +57,7 @@ func createMux() *mux.Router {
 	r.HandleFunc("/api", root)
 
 	// SRD ENDPOINTS
+	r.HandleFunc("/api/item", api.Items)
 	r.HandleFunc("/api/item/{id}", api.Items)
 
 	r.Use(enableCORS)
