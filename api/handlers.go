@@ -23,7 +23,7 @@ func Items(w http.ResponseWriter, r *http.Request) {
 	// LOAD PATH PARAMS
 	pathParams := mux.Vars(r)
 
-	if id, ok := pathParams["id"]; ok { // GET ONE
+	if id, ok := pathParams["id"]; ok { // GET ONE BY ID
 		var item *items.Item
 		if item, err = service.FindByID(id); err != nil {
 			goto Fail
@@ -31,11 +31,15 @@ func Items(w http.ResponseWriter, r *http.Request) {
 		res, _ := json.Marshal(item)
 		w.Write(res)
 		return
-	} else if itemType := r.URL.Query().Get("type"); itemType != "" {
+	} else if itemType := r.URL.Query().Get("type"); itemType != "" { // FIND BY TYPE
 		var items []items.Item
 		switch itemType {
-		case "weapon":
+		case "weapon": // WEAPONS
 			if items, err = service.FindWeapons(); err != nil {
+				goto Fail
+			}
+		case "armor": // ARMOR
+			if items, err = service.FindArmor(); err != nil {
 				goto Fail
 			}
 		default:

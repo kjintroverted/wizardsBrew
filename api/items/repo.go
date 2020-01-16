@@ -14,7 +14,7 @@ import (
 type ItemRepo interface {
 	FindByID(id string) (*Item, error)
 	FindWeapons() ([]Item, error)
-	// findArmor() (*[]Item, error)
+	FindArmor() ([]Item, error)
 	// findGear() (*[]Item, error)
 }
 
@@ -37,6 +37,19 @@ func (r *itemRepo) FindByID(id string) (item *Item, err error) {
 
 func (r *itemRepo) FindWeapons() (items []Item, err error) {
 	sql := `select * from items where weapon is not null`
+	rows, err := r.db.Query(sql)
+	for rows.Next() {
+		if item, err := scanItem(rows); err == nil {
+			items = append(items, *item)
+		} else {
+			return nil, fmt.Errorf("Could not find row: %s", err)
+		}
+	}
+	return
+}
+
+func (r *itemRepo) FindArmor() (items []Item, err error) {
+	sql := `select * from items where armor_class is not null`
 	rows, err := r.db.Query(sql)
 	for rows.Next() {
 		if item, err := scanItem(rows); err == nil {
