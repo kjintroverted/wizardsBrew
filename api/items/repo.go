@@ -31,7 +31,7 @@ func NewItemRepo(db *sql.DB) ItemRepo {
 
 func (r *itemRepo) FindByID(id string) (item *Item, err error) {
 	sql := `SELECT * FROM items WHERE id=$1`
-	row, err := r.db.Query(sql, id)
+	row := r.db.QueryRow(sql, id)
 	return scanItem(row)
 }
 
