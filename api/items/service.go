@@ -6,6 +6,7 @@ type ItemService interface {
 	FindByID(id string) (*Item, error)
 	FindWeapons() ([]Item, error)
 	FindArmor() ([]Item, error)
+	FindItems() ([]Item, error)
 }
 
 type itemService struct {
@@ -37,5 +38,12 @@ func (s *itemService) FindWeapons() ([]Item, error) {
 // find all armor items
 func (s *itemService) FindArmor() ([]Item, error) {
 	items, err := s.repo.FindArmor()
+	return items, err
+}
+
+// FindItems will call the repo's function to
+// find all armor items
+func (s *itemService) FindItems() ([]Item, error) {
+	items, err := s.repo.FindItems()
 	return items, err
 }

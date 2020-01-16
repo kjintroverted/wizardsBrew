@@ -15,7 +15,7 @@ type ItemRepo interface {
 	FindByID(id string) (*Item, error)
 	FindWeapons() ([]Item, error)
 	FindArmor() ([]Item, error)
-	// findGear() (*[]Item, error)
+	FindItems() ([]Item, error)
 }
 
 type itemRepo struct {
@@ -50,6 +50,19 @@ func (r *itemRepo) FindWeapons() (items []Item, err error) {
 
 func (r *itemRepo) FindArmor() (items []Item, err error) {
 	sql := `select * from items where armor_class is not null`
+	rows, err := r.db.Query(sql)
+	for rows.Next() {
+		if item, err := scanItem(rows); err == nil {
+			items = append(items, *item)
+		} else {
+			return nil, fmt.Errorf("Could not find row: %s", err)
+		}
+	}
+	return
+}
+
+func (r *itemRepo) FindItems() (items []Item, err error) {
+	sql := `select * from items where armor_class is null and weapon is null`
 	rows, err := r.db.Query(sql)
 	for rows.Next() {
 		if item, err := scanItem(rows); err == nil {

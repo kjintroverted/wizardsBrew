@@ -1,6 +1,9 @@
 ### SRD ITEM
 GET http://localhost:4000/api/item/675
 
+### SRD ITEMS
+GET http://localhost:4000/api/item
+
 ### SRD WEAPONS
 GET http://localhost:4000/api/item?type=weapon
 
