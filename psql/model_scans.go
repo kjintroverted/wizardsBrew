@@ -18,7 +18,7 @@ func (d *Description) Scan(value interface{}) (err error) {
 	str := string(value.([]byte))
 	vals := strings.Split(strings.Trim(str, "()"), ",\"")
 
-	d.Title = vals[0]
+	d.Title = strings.Trim(vals[0], "\"")
 
 	var p []string
 	for _, s := range vals[1:] {
