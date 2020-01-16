@@ -71,7 +71,6 @@ func BeginQuiz() {
 	for {
 		fmt.Println()
 		if classNode.Type == "terminus" {
-			fmt.Printf("Your result: %s\n", classNode.Value)
 			break
 		}
 
