@@ -48,7 +48,7 @@ func (r *itemRepo) FindByID(id string) (item *Item, err error) {
 }
 
 func (r *itemRepo) FindWeapons() (items []Item, err error) {
-	sql := `select * from items where type ILIKE '%weapon%'`
+	sql := `select * from items where weapon is not null`
 	rows, err := r.db.Query(sql)
 	for rows.Next() {
 		item := new(Item)

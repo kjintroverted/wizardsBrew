@@ -140,7 +140,7 @@ func GenerateItemInserts() {
 
 		// GET ITEM WEAPON INFO
 		weapon := "null"
-		if item["weapon"] != nil {
+		if item["weaponCategory"] != nil {
 			dmgType := "null"
 			if item["dmgType"] != nil {
 				dmgType = fmt.Sprintf("'%s'", dmgTypes[item["dmgType"].(string)])
