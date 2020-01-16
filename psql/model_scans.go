@@ -29,6 +29,12 @@ func (d *Description) Scan(value interface{}) (err error) {
 	return
 }
 
+// Scannable is an abstraction of a
+// row to be scanned to all for more flexible handlers
+type Scannable interface {
+	Scan(dest ...interface{}) error
+}
+
 // NullFloat is an alias fot sql nullable float
 type NullFloat struct {
 	sql.NullFloat64

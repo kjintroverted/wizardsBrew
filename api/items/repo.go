@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/kjintroverted/wizardsBrew/psql"
+
 	"github.com/lib/pq"
 )
 
@@ -28,9 +30,26 @@ func NewItemRepo(db *sql.DB) ItemRepo {
 }
 
 func (r *itemRepo) FindByID(id string) (item *Item, err error) {
-	item = new(Item)
 	sql := `SELECT * FROM items WHERE id=$1`
-	row := r.db.QueryRow(sql, id)
+	row, err := r.db.Query(sql, id)
+	return scanItem(row)
+}
+
+func (r *itemRepo) FindWeapons() (items []Item, err error) {
+	sql := `select * from items where weapon is not null`
+	rows, err := r.db.Query(sql)
+	for rows.Next() {
+		if item, err := scanItem(rows); err == nil {
+			items = append(items, *item)
+		} else {
+			return nil, fmt.Errorf("Could not find row: %s", err)
+		}
+	}
+	return
+}
+
+func scanItem(row psql.Scannable) (item *Item, err error) {
+	item = new(Item)
 	if err := row.Scan(
 		&item.ID,
 		&item.Name,
@@ -42,30 +61,7 @@ func (r *itemRepo) FindByID(id string) (item *Item, err error) {
 		&item.Weapon,
 		&item.AC,
 		pq.Array(&item.Info)); err != nil {
-		return item, fmt.Errorf("Could not find row: %s", err)
-	}
-	return
-}
-
-func (r *itemRepo) FindWeapons() (items []Item, err error) {
-	sql := `select * from items where weapon is not null`
-	rows, err := r.db.Query(sql)
-	for rows.Next() {
-		item := new(Item)
-		if err := rows.Scan(
-			&item.ID,
-			&item.Name,
-			&item.Type,
-			&item.Cost,
-			&item.Weight,
-			&item.Attune,
-			&item.Rarity,
-			&item.Weapon,
-			&item.AC,
-			pq.Array(&item.Info)); err != nil {
-			return nil, fmt.Errorf("Could not find row: %s", err)
-		}
-		items = append(items, *item)
+		return nil, fmt.Errorf("Could not find row: %s", err)
 	}
 	return
 }
