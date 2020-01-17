@@ -29,6 +29,35 @@ func (d *Description) Scan(value interface{}) (err error) {
 	return
 }
 
+// ParseRow turns a row string into an array of values
+func ParseRow(row string) (vals []string) {
+	row = strings.Trim(row, "(")
+	for v, r := "", row; r != ""; {
+		v, r = parseNext(r)
+		vals = append(vals, v)
+	}
+	return vals
+}
+
+func parseNext(s string) (val, remainder string) {
+	if len(s) == 0 {
+		return
+	}
+	if string(s[0]) == "\"" {
+		arr := strings.SplitN(s, "\",", 2)
+		if len(arr) == 1 {
+			return strings.Trim(arr[0], "\")"), ""
+		}
+		return strings.Trim(arr[0], "\")"), arr[1]
+	}
+
+	arr := strings.SplitN(s, ",", 2)
+	if len(arr) == 1 {
+		return strings.Trim(arr[0], ")"), ""
+	}
+	return strings.Trim(arr[0], ")"), arr[1]
+}
+
 // Scannable is an abstraction of a
 // row to be scanned to all for more flexible handlers
 type Scannable interface {
@@ -72,4 +101,17 @@ func (n *NullString) MarshalJSON() ([]byte, error) {
 		return []byte("null"), nil
 	}
 	return json.Marshal(n.String)
+}
+
+// NullBool is an alias fot sql nullable float
+type NullBool struct {
+	sql.NullBool
+}
+
+// MarshalJSON unwraps the valid value when writing to JSON
+func (n *NullBool) MarshalJSON() ([]byte, error) {
+	if !n.Valid {
+		return []byte("null"), nil
+	}
+	return json.Marshal(n.Bool)
 }
