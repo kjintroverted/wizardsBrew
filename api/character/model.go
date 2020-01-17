@@ -5,6 +5,7 @@ type PC struct {
 	ID           int        `json:"ID" db:"ID"`
 	Owner        string     `json:"owner" db:"owner"`
 	AuthUsers    []string   `json:"authUsers" db:"auth_users"`
+	ReadUsers    []string   `json:"readUsers" db:"read_users"`
 	Name         string     `json:"name" db:"name"`
 	RaceID       int        `json:"raceID" db:"race_id"`
 	ClassID      int        `json:"classID" db:"class_id"`
@@ -16,12 +17,12 @@ type PC struct {
 	ProSkills    []proSkill `json:"proSkills" db:"proSkills"`
 	ProTools     []string   `json:"proTools" db:"proTools"`
 	Lang         []string   `json:"languages" db:"languages"`
-	EquipmentIDs []int      `json:"equipmentIDs" db:"equipmentIDs"`
-	WeaponIDs    []int      `json:"weaponIDs" db:"weaponIDs"`
-	InventoryIDs []int      `json:"inventoryIDs" db:"inventoryIDs"`
+	EquipmentIDs []int      `json:"equipmentIDs" db:"equipment_ids"`
+	WeaponIDs    []int      `json:"weaponIDs" db:"weapon_ids"`
+	InventoryIDs []int      `json:"inventoryIDs" db:"inventory_ids"`
 	Gold         float64    `json:"gold" db:"gold"`
-	SpellIDs     []int      `json:"spellIDs" db:"spellIDs"`
-	SpecFeatIDs  []int      `json:"specFeatIDs" db:"specFeatIDs"`
+	SpellIDs     []int      `json:"spellIDs" db:"spell_ids"`
+	SpecFeatIDs  []int      `json:"specFeatIDs" db:"specFeat_ids"`
 }
 
 type stats struct {
