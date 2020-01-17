@@ -2,7 +2,7 @@ package character
 
 // PC describes the data for a Playable Character
 type PC struct {
-	ID           int        `json:"ID" db:"ID"`
+	ID           int        `json:"id" db:"id"`
 	Owner        string     `json:"owner" db:"owner"`
 	AuthUsers    []string   `json:"authUsers" db:"auth_users"`
 	ReadUsers    []string   `json:"readUsers" db:"read_users"`
