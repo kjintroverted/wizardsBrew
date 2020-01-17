@@ -1,8 +1,6 @@
 package items
 
 import (
-	"strings"
-
 	"github.com/kjintroverted/wizardsBrew/psql"
 )
 
@@ -21,19 +19,7 @@ type Item struct {
 }
 
 type weaponInfo struct {
-	Category   string `json:"category,omitempty" db:"category"`
-	Damage     string `json:"damage,omitempty" db:"damage"`
-	DamageType string `json:"damageType,omitempty" db:"damageType"`
-}
-
-func (w *weaponInfo) Scan(value interface{}) (err error) {
-	if value == nil {
-		return
-	}
-	str := string(value.([]byte))
-	vals := strings.Split(strings.Trim(str, "()"), ",")
-	w.Category = vals[0]
-	w.Damage = vals[1]
-	w.DamageType = vals[2]
-	return
+	Category   psql.NullString `json:"category,omitempty" db:"category"`
+	Damage     psql.NullString `json:"damage,omitempty" db:"damage"`
+	DamageType psql.NullString `json:"damageType,omitempty" db:"damageType"`
 }

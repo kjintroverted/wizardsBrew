@@ -9,6 +9,8 @@ import (
 	"github.com/lib/pq"
 )
 
+const fields string = "id,name,type,cost,weight,attune,rarity,(weapon).category,(weapon).damage,(weapon).damage_type,armor_class,info"
+
 // ItemRepo defines the necessary actions to
 // interact with Item data
 type ItemRepo interface {
@@ -30,13 +32,13 @@ func NewItemRepo(db *sql.DB) ItemRepo {
 }
 
 func (r *itemRepo) FindByID(id string) (item *Item, err error) {
-	sql := `SELECT * FROM items WHERE id=$1`
+	sql := fmt.Sprintf(`SELECT %s FROM items WHERE id=$1`, fields)
 	row := r.db.QueryRow(sql, id)
 	return scanItem(row)
 }
 
 func (r *itemRepo) FindWeapons() (items []Item, err error) {
-	sql := `select * from items where weapon is not null`
+	sql := fmt.Sprintf(`select %s from items where weapon is not null`, fields)
 	rows, err := r.db.Query(sql)
 	for rows.Next() {
 		if item, err := scanItem(rows); err == nil {
@@ -49,7 +51,7 @@ func (r *itemRepo) FindWeapons() (items []Item, err error) {
 }
 
 func (r *itemRepo) FindArmor() (items []Item, err error) {
-	sql := `select * from items where armor_class is not null`
+	sql := fmt.Sprintf(`select %s from items where armor_class is not null`, fields)
 	rows, err := r.db.Query(sql)
 	for rows.Next() {
 		if item, err := scanItem(rows); err == nil {
@@ -62,7 +64,7 @@ func (r *itemRepo) FindArmor() (items []Item, err error) {
 }
 
 func (r *itemRepo) FindItems() (items []Item, err error) {
-	sql := `select * from items where armor_class is null and weapon is null`
+	sql := fmt.Sprintf(`select %s from items where armor_class is null and weapon is null`, fields)
 	rows, err := r.db.Query(sql)
 	for rows.Next() {
 		if item, err := scanItem(rows); err == nil {
@@ -76,6 +78,7 @@ func (r *itemRepo) FindItems() (items []Item, err error) {
 
 func scanItem(row psql.Scannable) (item *Item, err error) {
 	item = new(Item)
+	item.Weapon = new(weaponInfo)
 	if err := row.Scan(
 		&item.ID,
 		&item.Name,
@@ -84,7 +87,9 @@ func scanItem(row psql.Scannable) (item *Item, err error) {
 		&item.Weight,
 		&item.Attune,
 		&item.Rarity,
-		&item.Weapon,
+		&item.Weapon.Category,
+		&item.Weapon.Damage,
+		&item.Weapon.DamageType,
 		&item.AC,
 		pq.Array(&item.Info)); err != nil {
 		return nil, fmt.Errorf("Could not find row: %s", err)
