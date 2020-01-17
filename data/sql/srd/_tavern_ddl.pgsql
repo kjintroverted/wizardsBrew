@@ -199,7 +199,7 @@ CREATE TABLE spells
 (
    id   serial PRIMARY KEY,
    name varchar(50) UNIQUE NOT NULL,
-   school magic_school,
+   school varchar(50),
    time spell_time,
    duration varchar(100),
    comp spell_comp[],

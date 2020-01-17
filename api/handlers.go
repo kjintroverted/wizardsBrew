@@ -66,7 +66,7 @@ Fail:
 	w.Write([]byte(err.Error()))
 }
 
-// Items handles all Item req
+// Spells handles all Item req
 func Spells(w http.ResponseWriter, r *http.Request) {
 	db, err := psql.NewPostgresConnection()
 	if err != nil {
@@ -87,6 +87,13 @@ func Spells(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(err.Error()))
 		}
 		res, _ = json.Marshal(spell)
+		w.Write(res)
+		return
+	}
+
+	var spells []spells.Spell
+	if spells, err = service.List(r.URL.Query()); err == nil {
+		res, _ = json.Marshal(spells)
 		w.Write(res)
 		return
 	}

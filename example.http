@@ -1,14 +1,17 @@
 ### SRD ITEM
-GET http://localhost:4000/api/item/675
+GET http://localhost:4000/api/items/675
 
 ### SRD ITEMS
-GET http://localhost:4000/api/item
+GET http://localhost:4000/api/items
 
 ### SRD WEAPONS
-GET http://localhost:4000/api/item?type=weapon
+GET http://localhost:4000/api/items?type=weapon
 
 ### SRD ARMOR
-GET http://localhost:4000/api/item?type=armor
+GET http://localhost:4000/api/items?type=armor
 
 ### SRD SPELL
-GET http://localhost:4000/api/spell/1
+GET http://localhost:4000/api/spells/164
+
+### SRD SPELL LIST (QUERY OPTIONAL)
+http://localhost:4000/api/spells?class=wizard&level=3&school=divination
