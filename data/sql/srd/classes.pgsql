@@ -1,7 +1,8 @@
 select * from classes;
 
-INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
+INSERT into classes (id, name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
 VALUES (
+  1,
   'Barbarian',
   '1d12',
   array[
@@ -10,13 +11,13 @@ VALUES (
     'shields'
   ],
   array[
-    'simple weapons',
-    'martial weapons'
+    'simple',
+    'martial'
   ],
   null,
   array[
-    'str',
-    'con'
+    'STR',
+    'CON'
   ],
   'Choose 2 from Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival.',
   '12 + your Constitution modifier',
@@ -45,6 +46,303 @@ VALUES (
         'When creating a barbarian character, think about where your character comes from and his or her place in the world. Talk with your DM about an appropriate origin for your barbarian. Did you come from a distant land, making you a stranger in the area of the campaign? Or is the campaign set in a rough-and-tumble frontier where barbarians are common?',
         'What led you to take up the adventuring life? Were you lured to settled lands by the promise of riches? Did you join forces with soldiers of those lands to face a shared threat? Did monsters or an invading horde drive you out of your homeland, making you a rootless refugee? Perhaps you were a prisoner of war, brought in chains to "civilized" lands and only now able to win your freedom. Or you might have been cast out from your people because of a crime you committed, a taboo you violated, or a coup that removed you from a position of authority.',
         'You can make a barbarian quickly by following these suggestions. First, put your highest ability score in Strength, followed by Constitution. Second, choose the outlander background.'
+        ])::section
+  ],
+  array[
+    array['rages', '2', '2', '3', '3', '3', '4', '4', '4', '4', '4', '4', '5', '5', '5', '5', '5', '6', '6', '6', null],
+    array['damage_mod', '2', '2', '2', '2', '2', '2', '2', '2', '3', '3', '3', '3', '3', '3', '3', '4', '4', '4', '4', '4']
+  ]
+);
+
+INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
+VALUES (
+  2,
+  '',
+  '1d12',
+  array[''],
+  array[''],
+  array[''],
+  array[
+    'STR',
+    'CON'
+  ],
+  '',
+  '',
+  '',
+  array[
+    row('', 
+      array[
+        '',
+        ])::section
+  ],
+  array[
+    array['rages', '2', '2', '3', '3', '3', '4', '4', '4', '4', '4', '4', '5', '5', '5', '5', '5', '6', '6', '6', null],
+    array['damage_mod', '2', '2', '2', '2', '2', '2', '2', '2', '3', '3', '3', '3', '3', '3', '3', '4', '4', '4', '4', '4']
+  ]
+);
+
+INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
+VALUES (
+  3,
+  '',
+  '1d12',
+  array[''],
+  array[''],
+  array[''],
+  array[
+    'STR',
+    'CON'
+  ],
+  '',
+  '',
+  '',
+  array[
+    row('', 
+      array[
+        '',
+        ])::section
+  ],
+  array[
+    array['rages', '2', '2', '3', '3', '3', '4', '4', '4', '4', '4', '4', '5', '5', '5', '5', '5', '6', '6', '6', null],
+    array['damage_mod', '2', '2', '2', '2', '2', '2', '2', '2', '3', '3', '3', '3', '3', '3', '3', '4', '4', '4', '4', '4']
+  ]
+);
+
+INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
+VALUES (
+  4,
+  '',
+  '1d12',
+  array[''],
+  array[''],
+  array[''],
+  array[
+    'STR',
+    'CON'
+  ],
+  '',
+  '',
+  '',
+  array[
+    row('', 
+      array[
+        '',
+        ])::section
+  ],
+  array[
+    array['rages', '2', '2', '3', '3', '3', '4', '4', '4', '4', '4', '4', '5', '5', '5', '5', '5', '6', '6', '6', null],
+    array['damage_mod', '2', '2', '2', '2', '2', '2', '2', '2', '3', '3', '3', '3', '3', '3', '3', '4', '4', '4', '4', '4']
+  ]
+);
+
+INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
+VALUES (
+  5,
+  '',
+  '1d12',
+  array[''],
+  array[''],
+  array[''],
+  array[
+    'STR',
+    'CON'
+  ],
+  '',
+  '',
+  '',
+  array[
+    row('', 
+      array[
+        '',
+        ])::section
+  ],
+  array[
+    array['rages', '2', '2', '3', '3', '3', '4', '4', '4', '4', '4', '4', '5', '5', '5', '5', '5', '6', '6', '6', null],
+    array['damage_mod', '2', '2', '2', '2', '2', '2', '2', '2', '3', '3', '3', '3', '3', '3', '3', '4', '4', '4', '4', '4']
+  ]
+);
+
+INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
+VALUES (
+  6,
+  '',
+  '1d12',
+  array[''],
+  array[''],
+  array[''],
+  array[
+    'STR',
+    'CON'
+  ],
+  '',
+  '',
+  '',
+  array[
+    row('', 
+      array[
+        '',
+        ])::section
+  ],
+  array[
+    array['rages', '2', '2', '3', '3', '3', '4', '4', '4', '4', '4', '4', '5', '5', '5', '5', '5', '6', '6', '6', null],
+    array['damage_mod', '2', '2', '2', '2', '2', '2', '2', '2', '3', '3', '3', '3', '3', '3', '3', '4', '4', '4', '4', '4']
+  ]
+);
+
+INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
+VALUES (
+  7,
+  '',
+  '1d12',
+  array[''],
+  array[''],
+  array[''],
+  array[
+    'STR',
+    'CON'
+  ],
+  '',
+  '',
+  '',
+  array[
+    row('', 
+      array[
+        '',
+        ])::section
+  ],
+  array[
+    array['rages', '2', '2', '3', '3', '3', '4', '4', '4', '4', '4', '4', '5', '5', '5', '5', '5', '6', '6', '6', null],
+    array['damage_mod', '2', '2', '2', '2', '2', '2', '2', '2', '3', '3', '3', '3', '3', '3', '3', '4', '4', '4', '4', '4']
+  ]
+);
+
+INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
+VALUES (
+  8,
+  '',
+  '1d12',
+  array[''],
+  array[''],
+  array[''],
+  array[
+    'STR',
+    'CON'
+  ],
+  '',
+  '',
+  '',
+  array[
+    row('', 
+      array[
+        '',
+        ])::section
+  ],
+  array[
+    array['rages', '2', '2', '3', '3', '3', '4', '4', '4', '4', '4', '4', '5', '5', '5', '5', '5', '6', '6', '6', null],
+    array['damage_mod', '2', '2', '2', '2', '2', '2', '2', '2', '3', '3', '3', '3', '3', '3', '3', '4', '4', '4', '4', '4']
+  ]
+);
+
+INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
+VALUES (
+  9,
+  '',
+  '1d12',
+  array[''],
+  array[''],
+  array[''],
+  array[
+    'STR',
+    'CON'
+  ],
+  '',
+  '',
+  '',
+  array[
+    row('', 
+      array[
+        '',
+        ])::section
+  ],
+  array[
+    array['rages', '2', '2', '3', '3', '3', '4', '4', '4', '4', '4', '4', '5', '5', '5', '5', '5', '6', '6', '6', null],
+    array['damage_mod', '2', '2', '2', '2', '2', '2', '2', '2', '3', '3', '3', '3', '3', '3', '3', '4', '4', '4', '4', '4']
+  ]
+);
+
+INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
+VALUES (
+  10,
+  '',
+  '1d12',
+  array[''],
+  array[''],
+  array[''],
+  array[
+    'STR',
+    'CON'
+  ],
+  '',
+  '',
+  '',
+  array[
+    row('', 
+      array[
+        '',
+        ])::section
+  ],
+  array[
+    array['rages', '2', '2', '3', '3', '3', '4', '4', '4', '4', '4', '4', '5', '5', '5', '5', '5', '6', '6', '6', null],
+    array['damage_mod', '2', '2', '2', '2', '2', '2', '2', '2', '3', '3', '3', '3', '3', '3', '3', '4', '4', '4', '4', '4']
+  ]
+);
+
+INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
+VALUES (
+ 11,
+  '',
+  '1d12',
+  array[''],
+  array[''],
+  array[''],
+  array[
+    'STR',
+    'CON'
+  ],
+  '',
+  '',
+  '',
+  array[
+    row('', 
+      array[
+        '',
+        ])::section
+  ],
+  array[
+    array['rages', '2', '2', '3', '3', '3', '4', '4', '4', '4', '4', '4', '5', '5', '5', '5', '5', '6', '6', '6', null],
+    array['damage_mod', '2', '2', '2', '2', '2', '2', '2', '2', '3', '3', '3', '3', '3', '3', '3', '4', '4', '4', '4', '4']
+  ]
+);
+
+INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_hp, init_equip, description, progress)
+VALUES (
+  12,
+  '',
+  '1d12',
+  array[''],
+  array[''],
+  array[''],
+  array[
+    'STR',
+    'CON'
+  ],
+  '',
+  '',
+  '',
+  array[
+    row('', 
+      array[
+        '',
         ])::section
   ],
   array[
