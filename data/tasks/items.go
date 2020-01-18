@@ -79,7 +79,7 @@ func GenerateItemInserts() {
 		return
 	}
 
-	fileData, _ = ioutil.ReadFile("data/items.json")
+	fileData, _ = ioutil.ReadFile("data/items_gen.json")
 	var items []map[string]interface{}
 	if err := json.Unmarshal(fileData, &items); err != nil {
 		fmt.Println("ERROR:", err)

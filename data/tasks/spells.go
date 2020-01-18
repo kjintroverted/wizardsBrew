@@ -38,7 +38,7 @@ func GenerateSpellInserts() {
 		return
 	}
 
-	f, err := os.Create("data/sql/srd/spells.pgsql")
+	f, err := os.Create("data/sql/srd/spells_gen.pgsql")
 	if err != nil {
 		fmt.Println("ERROR:", err)
 		return
