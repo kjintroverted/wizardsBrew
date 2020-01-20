@@ -143,11 +143,10 @@ CREATE TABLE classes
    hit_dice varchar(25) NOT NULL,
    pro_armor varchar(25)[],
    pro_weapon varchar(25)[],
-   pro_tool varchar(25)[],
+   pro_tool varchar(50)[],
    pro_save varchar(25)[],
    skills text,
-   init_hp varchar(50),
-   init_equip text,
+   init_equip text[],
    description section[],
    progress text[][]
 );

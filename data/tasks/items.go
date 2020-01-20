@@ -9,11 +9,6 @@ import (
 	"strings"
 )
 
-type section struct {
-	Title string
-	Body  []interface{}
-}
-
 var dmgTypes map[string]string = map[string]string{
 	"B": "bludgeoning",
 	"N": "necrotic",
@@ -53,40 +48,24 @@ var itemTypes map[string]string = map[string]string{
 	"OTH": "Other",
 }
 
-// san will sanitize string for psql statements
-func san(s string) string {
-	return strings.ReplaceAll(s, "'", "''")
-}
-
-// san will sanitize string for psql statements
-func sanAll(s []interface{}) (res []interface{}) {
-	for _, inter := range s {
-		if _, ok := inter.(string); !ok {
-			continue
-		}
-		res = append(res, strings.ReplaceAll(inter.(string), "'", "''"))
-	}
-	return
-}
-
 // GenerateItemInserts will pull in a json file of
 // items and generate SQL insert statements
 func GenerateItemInserts() {
-	fileData, _ := ioutil.ReadFile("data/ref.json")
+	fileData, _ := ioutil.ReadFile("data/json/ref.json")
 	var ref map[string]interface{}
 	if err := json.Unmarshal(fileData, &ref); err != nil {
 		fmt.Println("ERROR:", err)
 		return
 	}
 
-	fileData, _ = ioutil.ReadFile("data/items_gen.json")
+	fileData, _ = ioutil.ReadFile("data/json/items.json")
 	var items []map[string]interface{}
 	if err := json.Unmarshal(fileData, &items); err != nil {
 		fmt.Println("ERROR:", err)
 		return
 	}
 
-	f, err := os.Create("data/sql/srd/items.pgsql")
+	f, err := os.Create("data/sql/srd/items_gen.pgsql")
 	if err != nil {
 		fmt.Println("ERROR:", err)
 		return

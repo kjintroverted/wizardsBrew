@@ -64,3 +64,69 @@ func parseAndExec(queryBlob string, db *sql.DB) {
 	}
 	fmt.Printf("\t%d rows affected\n", rows)
 }
+
+// HELPERS
+
+type section struct {
+	Title string
+	Body  []interface{}
+}
+
+// san will sanitize string for psql statements
+func san(s string) string {
+	return strings.ReplaceAll(s, "'", "''")
+}
+
+// san will sanitize string for psql statements
+func sanAll(s []interface{}) (res []interface{}) {
+	for _, inter := range s {
+		if _, ok := inter.(string); !ok {
+			continue
+		}
+		res = append(res, strings.ReplaceAll(inter.(string), "'", "''"))
+	}
+	return
+}
+
+func simpleStrArray(arr []interface{}) string {
+	if len(arr) == 0 {
+		return "null"
+	}
+	s := "array["
+	for _, x := range arr {
+		if str, ok := x.(string); ok {
+			s += fmt.Sprintf("'%s',", san(str))
+		}
+	}
+	return strings.Trim(s, ",") + "]"
+}
+
+func simpleArray(arr []interface{}) string {
+	if len(arr) == 0 {
+		return "null"
+	}
+	s := "array["
+	for _, x := range arr {
+		s += fmt.Sprintf("%s,", x)
+	}
+	return strings.Trim(s, ",") + "]"
+}
+
+func rowString(t string, arr ...interface{}) string {
+	if len(arr) == 0 {
+		return "null"
+	}
+	s := "row("
+	for _, x := range arr {
+		s += fmt.Sprintf("%s,", x)
+	}
+	return fmt.Sprintf("%s)::%s", strings.Trim(s, ","), t)
+}
+
+func join(arr []interface{}, sep string) (j string) {
+	for _, s := range arr {
+		j += fmt.Sprintf("%s%s", s, sep)
+	}
+	j = strings.Trim(j, sep)
+	return
+}

@@ -31,7 +31,7 @@ var schoolMap map[interface{}]string = map[interface{}]string{
 // GenerateSpellInserts pulls data from json
 // and converts to sql inserts
 func GenerateSpellInserts() {
-	fileData, _ := ioutil.ReadFile("data/spells.json")
+	fileData, _ := ioutil.ReadFile("data/json/spells.json")
 	var spells []map[string]interface{}
 	if err := json.Unmarshal(fileData, &spells); err != nil {
 		fmt.Println("ERROR:", err)

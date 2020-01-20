@@ -23,9 +23,11 @@ func main() {
 	command = os.Args[1]
 	switch command {
 	case "sql-gen":
+		tasks.GenerateClassInserts()
 		tasks.GenerateItemInserts()
 		tasks.GenerateSpellInserts()
 	case "sql":
+		tasks.GenerateClassInserts()
 		tasks.GenerateItemInserts()
 		tasks.GenerateSpellInserts()
 		tasks.ExecSQL("data")
