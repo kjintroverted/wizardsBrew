@@ -88,6 +88,15 @@ func sanAll(s []interface{}) (res []interface{}) {
 	return
 }
 
+func stripFilter(s string) string {
+	if !strings.Contains(s, "{@filter") {
+		return s
+	}
+
+	str := string(s[9:])
+	return strings.Split(str, "|")[0]
+}
+
 func simpleStrArray(arr []interface{}) string {
 	if len(arr) == 0 {
 		return "null"
