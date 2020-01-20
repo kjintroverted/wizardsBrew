@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/kjintroverted/wizardsBrew/api/items"
+	"github.com/kjintroverted/wizardsBrew/api/races"
 	"github.com/kjintroverted/wizardsBrew/api/spells"
 	"github.com/kjintroverted/wizardsBrew/psql"
 
@@ -66,7 +67,7 @@ Fail:
 	w.Write([]byte(err.Error()))
 }
 
-// Spells handles all Item req
+// Spells handles all Spell req
 func Spells(w http.ResponseWriter, r *http.Request) {
 	db, err := psql.NewPostgresConnection()
 	if err != nil {
@@ -100,4 +101,49 @@ func Spells(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Write([]byte(err.Error()))
+}
+
+// Races handles all Race req
+func Races(w http.ResponseWriter, r *http.Request) {
+	db, err := psql.NewPostgresConnection()
+	if err != nil {
+		fmt.Println("ERR", err)
+	}
+	defer db.Close()
+	service := races.NewRaceService(races.NewRaceRepo(db))
+
+	var res []byte
+
+	// LOAD PATH PARAMS
+	pathParams := mux.Vars(r)
+
+	if id, ok := pathParams["id"]; ok { // GET ONE BY ID
+		var race *races.Race
+		if race, err = service.FindByID(id); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+		res, _ = json.Marshal(race)
+		w.Write(res)
+		return
+	}
+
+	var races []races.Race
+	if name := r.URL.Query().Get("name"); name != "" {
+		if race, err := service.FindByName(name); err == nil {
+			res, _ = json.Marshal(race)
+			w.Write(res)
+			return
+		}
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+	} else {
+		if races, err = service.List(); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+		res, _ = json.Marshal(races)
+		w.Write(res)
+		return
+	}
 }
