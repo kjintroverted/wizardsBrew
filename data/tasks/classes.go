@@ -115,6 +115,8 @@ func genSQLString(data map[string]interface{}) (statement string, err error) {
 		descRows = append(descRows, rowString("section", fmt.Sprintf("'%s'", san(sec.Title)), simpleStrArray(sec.Body)))
 	}
 
+	// PROGRESS
+
 	statement = fmt.Sprintf("INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_equip, description, progress) VALUES ('%s', '%s', %s, %s, %s, %s, %s, %s, %s, %s);\n",
 		data["name"], hitDice, simpleStrArray(armor), simpleStrArray(weapons), tools, simpleStrArray(stats), skills, simpleStrArray(equip), simpleArray(descRows), "")
 	return
