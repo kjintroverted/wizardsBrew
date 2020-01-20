@@ -65,6 +65,8 @@ func createMux() *mux.Router {
 	r.HandleFunc("/api/spells/{id}", api.Spells)
 	r.HandleFunc("/api/races", api.Races)
 	r.HandleFunc("/api/races/{id}", api.Races)
+	r.HandleFunc("/api/classes", api.Classes)
+	r.HandleFunc("/api/classes/{id}", api.Classes)
 
 	r.Use(enableCORS)
 
