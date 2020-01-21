@@ -73,7 +73,7 @@ func genSQLString(data map[string]interface{}) (statement string, err error) {
 	// 		TOOLS
 	tools := "null"
 	if v, ok := pro["tools"]; ok {
-		tools = fmt.Sprintf("'%s'", san(v.([]interface{})[0].(string)))
+		tools = fmt.Sprintf("'%s'", escape(v.([]interface{})[0].(string)))
 	}
 	// 		SKILLS
 	skills := "null"

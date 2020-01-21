@@ -47,7 +47,7 @@ func GenerateSpellInserts() {
 		time := fmt.Sprintf("%s %s", strconv.FormatFloat(timeObj["number"].(float64), 'f', -1, 64), timeObj["unit"])
 		condition := "null"
 		if timeObj["condition"] != nil {
-			condition = fmt.Sprintf("'%s'", san(timeObj["condition"].(string)))
+			condition = fmt.Sprintf("'%s'", escape(timeObj["condition"].(string)))
 		}
 		spellTime := fmt.Sprintf("row('%s', %s)::spell_time", time, condition)
 
@@ -74,7 +74,7 @@ func GenerateSpellInserts() {
 		}
 		if info, ok := comp["m"]; ok {
 			if infoStr, ok := info.(string); ok {
-				componentStr += fmt.Sprintf("row('material', '%s', null, null)::spell_comp", san(infoStr))
+				componentStr += fmt.Sprintf("row('material', '%s', null, null)::spell_comp", escape(infoStr))
 			} else {
 				infoObj := info.(map[string]interface{})
 				cost := "0"
@@ -82,7 +82,7 @@ func GenerateSpellInserts() {
 					cost = strconv.FormatFloat(infoObj["cost"].(float64), 'f', -1, 64)
 				}
 				_, consume := infoObj["consume"]
-				componentStr += fmt.Sprintf("row('material', '%s', %s, %s)::spell_comp", san(infoObj["text"].(string)), cost, strconv.FormatBool(consume))
+				componentStr += fmt.Sprintf("row('material', '%s', %s, %s)::spell_comp", escape(infoObj["text"].(string)), cost, strconv.FormatBool(consume))
 			}
 		}
 		componentStr = strings.Trim(componentStr, ",")
@@ -124,7 +124,7 @@ func GenerateSpellInserts() {
 		}
 
 		statement := fmt.Sprintf("INSERT INTO spells (name, school, time, duration, comp, concentrate, range, level, class, description) VALUES ('%s', '%s', %s, '%s', %s, %s, '%s', %s, %s, %s);\n",
-			san(spell["name"].(string)), schoolMap[spell["school"]], spellTime, duration, componentStr, strconv.FormatBool(concentrate), distanceStr, level, classStr, parseEntries(entries))
+			escape(spell["name"].(string)), schoolMap[spell["school"]], spellTime, duration, componentStr, strconv.FormatBool(concentrate), distanceStr, level, classStr, parseEntries(entries))
 
 		f.WriteString(statement)
 	}

@@ -72,13 +72,13 @@ type section struct {
 	Body  []interface{}
 }
 
-// san will sanitize string for psql statements
-func san(s string) string {
+// escape will escape string for psql statements
+func escape(s string) string {
 	return strings.ReplaceAll(s, "'", "''")
 }
 
-// san will sanitize string for psql statements
-func sanAll(s []interface{}) (res []interface{}) {
+// escape will escape string for psql statements
+func escapeAll(s []interface{}) (res []interface{}) {
 	for _, inter := range s {
 		if _, ok := inter.(string); !ok {
 			continue
@@ -104,7 +104,7 @@ func simpleStrArray(arr []interface{}) string {
 	s := "array["
 	for _, x := range arr {
 		if str, ok := x.(string); ok {
-			s += fmt.Sprintf("'%s',", san(str))
+			s += fmt.Sprintf("'%s',", escape(str))
 		}
 	}
 	return strings.Trim(s, ",") + "]"
@@ -134,6 +134,9 @@ func rowString(t string, arr ...interface{}) string {
 
 func join(arr []interface{}, sep string) (j string) {
 	for _, s := range arr {
+		if _, ok := s.(string); !ok {
+			continue
+		}
 		j += fmt.Sprintf("%s%s", s, sep)
 	}
 	j = strings.Trim(j, sep)
@@ -162,14 +165,21 @@ func parseEntries(entries []interface{}) string {
 			}
 			descArr = append(descArr, section{Title: title, Body: body})
 		case "list":
-			descArr = append(descArr, section{Title: "choices", Body: sanAll(valMap["items"].([]interface{}))})
+			descArr = append(descArr, section{Title: "choices", Body: escapeAll(valMap["items"].([]interface{}))})
+		case "options":
+			var body []interface{}
+			for _, e := range valMap["entries"].([]interface{}) {
+				info := e.(map[string]interface{})
+				body = append(body, fmt.Sprintf("%s: %s", info["name"], join(info["entries"].([]interface{}), " ")))
+			}
+			descArr = append(descArr, section{Title: "choices", Body: escapeAll(body)})
 		}
 	}
 
 	var descRows []interface{}
 	descRows = append(descRows, rowString("section", "''", simpleStrArray(p)))
 	for _, sec := range descArr {
-		descRows = append(descRows, rowString("section", fmt.Sprintf("'%s'", san(sec.Title)), simpleStrArray(sec.Body)))
+		descRows = append(descRows, rowString("section", fmt.Sprintf("'%s'", escape(sec.Title)), simpleStrArray(sec.Body)))
 	}
 
 	return simpleArray(descRows)

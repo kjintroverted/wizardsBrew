@@ -17,7 +17,7 @@ var dmgTypes map[string]string = map[string]string{
 }
 
 var itemTypes map[string]string = map[string]string{
-	"AT":  "Artisan Tools",
+	"AT":  "Artiescape Tools",
 	"A":   "Ammunition",
 	"TAH": "Tack and Harness",
 	"LA":  "Light Armor",
@@ -161,7 +161,7 @@ func GenerateItemInserts() {
 		}
 
 		statement := fmt.Sprintf("INSERT INTO items (name, type, cost, weight, attune, rarity, weapon, armor_class, info) VALUES ('%s', '%s', %s, %s, '%s', '%s', %s, %s, %s);\n",
-			san(item["name"].(string)), san(itemType), cost, weight, san(reqAttune), rarity, weapon, ac, infoInsert)
+			escape(item["name"].(string)), escape(itemType), cost, weight, escape(reqAttune), rarity, weapon, ac, infoInsert)
 
 		f.WriteString(statement)
 	}
@@ -183,7 +183,7 @@ func getProp(prop string, ref map[string]interface{}) (name string, desc []inter
 		if prop == refMap["abbreviation"].(string) {
 			for _, info := range refMap["entries"].([]interface{}) {
 				infoMap := info.(map[string]interface{})
-				return infoMap["name"].(string), sanAll(infoMap["entries"].([]interface{})), true
+				return infoMap["name"].(string), escapeAll(infoMap["entries"].([]interface{})), true
 			}
 		}
 	}
