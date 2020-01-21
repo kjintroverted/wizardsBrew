@@ -37,7 +37,7 @@ func GenerateClassInserts() {
 		}
 
 		classArr := classData["class"].([]interface{})
-		if statement, err := genSQLString(classArr[0].(map[string]interface{})); err == nil {
+		if statement, err := genClassSQLString(classArr[0].(map[string]interface{})); err == nil {
 			x++
 			f.WriteString(statement)
 			if err := f.Sync(); err != nil {
@@ -49,7 +49,7 @@ func GenerateClassInserts() {
 	fmt.Println(x, "Classes")
 }
 
-func genSQLString(data map[string]interface{}) (statement string, err error) {
+func genClassSQLString(data map[string]interface{}) (statement string, err error) {
 	if data["source"] != "PHB" {
 		return "", fmt.Errorf("Not standard class: %s", data["name"])
 	}
