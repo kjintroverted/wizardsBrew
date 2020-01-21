@@ -148,7 +148,7 @@ CREATE TABLE classes
    skills text,
    init_equip text[],
    description section[],
-   progress text[][]
+   progress text[]
 );
 
 DROP TABLE IF EXISTS backgrounds;

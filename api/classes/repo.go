@@ -61,8 +61,9 @@ func scanClass(row psql.Scannable) (class *Class, err error) {
 		&class.Skills,
 		pq.Array(&class.StartEquipment),
 		pq.Array(&class.Description),
-		&class.Progress); err != nil {
+		pq.Array(&class.ProgressString)); err != nil {
 		return nil, fmt.Errorf("Error scanning row: %s", err)
 	}
+	class.expandTable()
 	return
 }

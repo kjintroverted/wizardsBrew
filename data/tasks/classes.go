@@ -123,42 +123,38 @@ func genSQLString(data map[string]interface{}) (statement string, err error) {
 	if progressTable, ok := data["classTableGroups"].([]interface{}); ok {
 		for _, table := range progressTable {
 			tableData := table.(map[string]interface{})
-			var tableArr [][]interface{}
+			var tableArr []interface{}
 			for _, v := range tableData["colLabels"].([]interface{}) {
-				var col []interface{}
-				col = append(col, stripFilter(v.(string)))
-				tableArr = append(tableArr, col)
+				tableArr = append(tableArr, stripFilter(v.(string)))
 			}
 			for _, row := range tableData["rows"].([]interface{}) {
 				for i, x := range row.([]interface{}) {
 					if v, ok := x.(float64); ok {
-						tableArr[i] = append(tableArr[i], fmt.Sprintf("%d", int(v)))
+						tableArr[i] = tableArr[i].(string) + "|" + fmt.Sprintf("%d", int(v))
 						continue
 					}
 					if v, ok := x.(string); ok {
-						tableArr[i] = append(tableArr[i], stripFilter(v))
+						tableArr[i] = tableArr[i].(string) + "|" + stripFilter(v)
 						continue
 					}
 					valMap := x.(map[string]interface{})
 					if strings.Contains(valMap["type"].(string), "bonus") {
-						tableArr[i] = append(tableArr[i], strconv.Itoa(int(valMap["value"].(float64))))
+						tableArr[i] = tableArr[i].(string) + "|" + strconv.Itoa(int(valMap["value"].(float64)))
 						continue
 					}
 					if valMap["type"] == "dice" {
 						dice := valMap["toRoll"].([]interface{})[0].(map[string]interface{})
-						tableArr[i] = append(tableArr[i], fmt.Sprintf("%dd%d", int(dice["number"].(float64)), int(dice["faces"].(float64))))
+						tableArr[i] = tableArr[i].(string) + "|" + fmt.Sprintf("%dd%d", int(dice["number"].(float64)), int(dice["faces"].(float64)))
 						continue
 					}
 					fmt.Println("Skipped", x)
 				}
 			}
-			for _, col := range tableArr {
-				progressArr = append(progressArr, simpleStrArray(col))
-			}
+			progressArr = append(progressArr, tableArr...)
 		}
 	}
 
 	statement = fmt.Sprintf("INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_equip, description, progress) VALUES ('%s', '%s', %s, %s, %s, %s, %s, %s, %s, %s);\n",
-		data["name"], hitDice, simpleStrArray(armor), simpleStrArray(weapons), tools, simpleStrArray(stats), skills, simpleStrArray(equip), simpleArray(descRows), simpleArray(progressArr))
+		data["name"], hitDice, simpleStrArray(armor), simpleStrArray(weapons), tools, simpleStrArray(stats), skills, simpleStrArray(equip), simpleArray(descRows), simpleStrArray(progressArr))
 	return
 }

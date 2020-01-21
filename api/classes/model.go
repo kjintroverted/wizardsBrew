@@ -1,10 +1,9 @@
 package classes
 
 import (
-	"fmt"
+	"strings"
 
 	"github.com/kjintroverted/wizardsBrew/psql"
-	"github.com/lib/pq"
 )
 
 // Class defines a character class
@@ -19,25 +18,12 @@ type Class struct {
 	Skills         string             `json:"skills" json:"skills"`
 	StartEquipment []string           `json:"startEquip" json:"startEquip"`
 	Description    []psql.Description `json:"description" json:"description"`
-	Progress       table              `json:"progress" json:"progress"`
+	ProgressString []string           `json:"-" json:"progress"`
+	Progress       [][]string         `json:"progress"`
 }
 
-type table []column
-
-func (t *table) Scan(value interface{}) (err error) {
-	for _, c := range *t {
-		if err := c.Scan(value); err != nil {
-			return err
-		}
-		fmt.Println("COL:", c)
-		// *t = append(*t, c)
+func (c *Class) expandTable() {
+	for _, s := range c.ProgressString {
+		c.Progress = append(c.Progress, strings.Split(s, "|"))
 	}
-	return
-}
-
-type column []string
-
-func (c *column) Scan(value interface{}) error {
-	scanner := pq.Array(&c)
-	return scanner.Scan(value)
 }
