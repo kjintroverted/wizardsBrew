@@ -99,22 +99,6 @@ func genSQLString(data map[string]interface{}) (statement string, err error) {
 	// DESC
 	fluff := data["fluff"].([]interface{})
 	entries := fluff[0].(map[string]interface{})["entries"].([]interface{})
-	var descArr []section
-	var p []interface{}
-	for _, v := range entries {
-		if s, ok := v.(string); ok {
-			p = append(p, s)
-			continue
-		}
-		valMap := v.(map[string]interface{})
-		descArr = append(descArr, section{Title: valMap["name"].(string), Body: valMap["entries"].([]interface{})})
-	}
-
-	var descRows []interface{}
-	descRows = append(descRows, rowString("section", "''", simpleStrArray(p)))
-	for _, sec := range descArr {
-		descRows = append(descRows, rowString("section", fmt.Sprintf("'%s'", san(sec.Title)), simpleStrArray(sec.Body)))
-	}
 
 	// PROGRESS
 	// int, string, bonus, dice
@@ -155,6 +139,6 @@ func genSQLString(data map[string]interface{}) (statement string, err error) {
 	}
 
 	statement = fmt.Sprintf("INSERT into classes (name, hit_dice, pro_armor, pro_weapon, pro_tool, pro_save, skills, init_equip, description, progress) VALUES ('%s', '%s', %s, %s, %s, %s, %s, %s, %s, %s);\n",
-		data["name"], hitDice, simpleStrArray(armor), simpleStrArray(weapons), tools, simpleStrArray(stats), skills, simpleStrArray(equip), simpleArray(descRows), simpleStrArray(progressArr))
+		data["name"], hitDice, simpleStrArray(armor), simpleStrArray(weapons), tools, simpleStrArray(stats), skills, simpleStrArray(equip), parseEntries(entries), simpleStrArray(progressArr))
 	return
 }

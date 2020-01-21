@@ -170,10 +170,10 @@ CREATE TABLE feats
    id   serial PRIMARY KEY,
    name varchar(50) UNIQUE NOT NULL,
    ability ability_mod[],
-   description text[],
+   description section[],
    class varchar(50),
-   path varchar(50),
-   background varchar(50),
+   subclass varchar(50),
+   background_req varchar(50),
    level int,
    prereq varchar(50)
 );

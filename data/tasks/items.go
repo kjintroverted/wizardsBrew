@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
-	"strings"
 )
 
 var dmgTypes map[string]string = map[string]string{
@@ -156,43 +155,9 @@ func GenerateItemInserts() {
 		}
 
 		// LOAD ENTRIES INTO INFO
-		if item["entries"] != nil {
-			var paragraph []interface{}
-			for _, e := range item["entries"].([]interface{}) {
-				if str, ok := e.(string); ok {
-					paragraph = append(paragraph, san(str))
-				} else {
-					entryMap := e.(map[string]interface{})
-					if entryMap["type"].(string) == "entries" {
-						info = append(info, section{Title: san(entryMap["name"].(string)), Body: sanAll(entryMap["entries"].([]interface{}))})
-					}
-					if entryMap["type"].(string) == "table" {
-						title := createRow(entryMap["colLabels"].([]interface{}))
-						var body []interface{}
-						for _, row := range entryMap["rows"].([]interface{}) {
-							rowStr := createRow(row.([]interface{}))
-							body = append(body, san(rowStr))
-						}
-						info = append(info, section{Title: san(title), Body: body})
-					}
-				}
-			}
-			if len(paragraph) > 0 {
-				info = append(info, section{Title: "", Body: paragraph})
-			}
-		}
-
 		infoInsert := "null"
-		if len(info) > 0 {
-			infoInsert = "array["
-			for _, d := range info {
-				infoInsert += fmt.Sprintf("row('%s', array[", d.Title)
-				for _, b := range d.Body {
-					infoInsert += fmt.Sprintf("'%s',", b)
-				}
-				infoInsert = strings.Trim(infoInsert, ",") + "])::section,"
-			}
-			infoInsert = strings.Trim(infoInsert, ",") + "]"
+		if e, ok := item["entries"]; ok {
+			infoInsert = parseEntries(e.([]interface{}))
 		}
 
 		statement := fmt.Sprintf("INSERT INTO items (name, type, cost, weight, attune, rarity, weapon, armor_class, info) VALUES ('%s', '%s', %s, %s, '%s', '%s', %s, %s, %s);\n",

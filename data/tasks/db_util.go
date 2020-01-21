@@ -139,3 +139,38 @@ func join(arr []interface{}, sep string) (j string) {
 	j = strings.Trim(j, sep)
 	return
 }
+
+func parseEntries(entries []interface{}) string {
+	var descArr []section
+	var p []interface{}
+	for _, v := range entries {
+		if s, ok := v.(string); ok {
+			p = append(p, s)
+			continue
+		}
+
+		valMap := v.(map[string]interface{})
+		switch valMap["type"] {
+		case "entries":
+			descArr = append(descArr, section{Title: valMap["name"].(string), Body: valMap["entries"].([]interface{})})
+		case "table":
+			title := join(valMap["colLabels"].([]interface{}), "|")
+			var body []interface{}
+			for _, r := range valMap["rows"].([]interface{}) {
+				arr := r.([]interface{})
+				body = append(body, join(arr, "|"))
+			}
+			descArr = append(descArr, section{Title: title, Body: body})
+		case "list":
+			descArr = append(descArr, section{Title: "choices", Body: sanAll(valMap["items"].([]interface{}))})
+		}
+	}
+
+	var descRows []interface{}
+	descRows = append(descRows, rowString("section", "''", simpleStrArray(p)))
+	for _, sec := range descArr {
+		descRows = append(descRows, rowString("section", fmt.Sprintf("'%s'", san(sec.Title)), simpleStrArray(sec.Body)))
+	}
+
+	return simpleArray(descRows)
+}

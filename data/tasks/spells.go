@@ -9,14 +9,6 @@ import (
 	"strings"
 )
 
-func createRow(cells []interface{}) string {
-	s := ""
-	for _, c := range cells {
-		s += fmt.Sprintf("%s|", c)
-	}
-	return strings.Trim(s, "|")
-}
-
 var schoolMap map[interface{}]string = map[interface{}]string{
 	"T": "transmutation",
 	"N": "necromancy",
@@ -45,7 +37,6 @@ func GenerateSpellInserts() {
 	}
 
 	x := 0
-	// var collection = make(map[interface{}][]string)
 	// BEGIN ITEM LOOP
 	for _, spell := range spells {
 		x++
@@ -132,42 +123,8 @@ func GenerateSpellInserts() {
 			entries = append(entries, higher.([]interface{})...)
 		}
 
-		var description []section
-		description = append(description, section{Title: ""})
-		var body []interface{}
-		for _, e := range entries {
-			if p, ok := e.(string); ok {
-				body = append(body, san(p))
-			} else {
-				info := e.(map[string]interface{})
-				if info["type"].(string) == "table" {
-					title := createRow(info["colLabels"].([]interface{}))
-					var rows []interface{}
-					for _, row := range info["rows"].([]interface{}) {
-						rows = append(rows, createRow(row.([]interface{})))
-					}
-					description = append(description, section{Title: title, Body: body})
-				} else if info["type"].(string) == "list" {
-					description = append(description, section{Title: "choices", Body: sanAll(info["items"].([]interface{}))})
-				} else {
-					description = append(description, section{Title: san(info["name"].(string)), Body: sanAll(info["entries"].([]interface{}))})
-				}
-			}
-		}
-		description[0] = section{Title: "", Body: body}
-
-		descStr := "array["
-		for _, d := range description {
-			descStr += fmt.Sprintf("row('%s', array[", d.Title)
-			for _, b := range d.Body {
-				descStr += fmt.Sprintf("'%s',", b)
-			}
-			descStr = strings.Trim(descStr, ",") + "])::section,"
-		}
-		descStr = strings.Trim(descStr, ",") + "]"
-
 		statement := fmt.Sprintf("INSERT INTO spells (name, school, time, duration, comp, concentrate, range, level, class, description) VALUES ('%s', '%s', %s, '%s', %s, %s, '%s', %s, %s, %s);\n",
-			san(spell["name"].(string)), schoolMap[spell["school"]], spellTime, duration, componentStr, strconv.FormatBool(concentrate), distanceStr, level, classStr, descStr)
+			san(spell["name"].(string)), schoolMap[spell["school"]], spellTime, duration, componentStr, strconv.FormatBool(concentrate), distanceStr, level, classStr, parseEntries(entries))
 
 		f.WriteString(statement)
 	}
@@ -175,10 +132,6 @@ func GenerateSpellInserts() {
 	if err := f.Sync(); err != nil {
 		fmt.Println("ERROR:", err)
 	}
-
-	// for d, arr := range collection {
-	// 	fmt.Println(d, len(arr), arr[0])
-	// }
 
 	fmt.Println(x, "Spells")
 }
