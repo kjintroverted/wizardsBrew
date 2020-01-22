@@ -173,7 +173,7 @@ CREATE TABLE feats
    description section[],
    class varchar(50),
    subclass varchar(50),
-   background_req varchar(50),
+   background varchar(50),
    level int,
    prereq varchar(50)
 );

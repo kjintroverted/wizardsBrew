@@ -44,14 +44,15 @@ func (r *featRepo) List(opt map[string][]string) (feats []Feat, err error) {
 		case "class":
 			sql += fmt.Sprintf(" %s '%s' ILIKE class", clause, arr[0])
 		case "subclass":
-			sql += fmt.Sprintf(" %s '%s' ILIKE subclass", clause, arr[0])
+			sql += fmt.Sprintf(" %s ('%s' ILIKE subclass or subclass is null)", clause, arr[0])
 		case "background":
 			sql += fmt.Sprintf(" %s '%s' ILIKE background", clause, arr[0])
 		case "level":
-			sql += fmt.Sprintf(" %s level = %s", clause, arr[0])
+			sql += fmt.Sprintf(" %s level <= %s", clause, arr[0])
 		}
 		i++
 	}
+	sql += " order by level"
 	rows, err := r.db.Query(sql + ";")
 	if err != nil {
 		return nil, fmt.Errorf("ERROR running query: `%s` (%s)", sql, err)

@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/kjintroverted/wizardsBrew/api/classes"
+	"github.com/kjintroverted/wizardsBrew/api/feats"
 	"github.com/kjintroverted/wizardsBrew/api/items"
 	"github.com/kjintroverted/wizardsBrew/api/races"
 	"github.com/kjintroverted/wizardsBrew/api/spells"
@@ -167,6 +168,42 @@ func Classes(w http.ResponseWriter, r *http.Request) {
 		w.Write(res)
 		return
 	}
+	w.WriteHeader(http.StatusInternalServerError)
+	w.Write([]byte(err.Error()))
+}
+
+// Feats handles all Feat req
+func Feats(w http.ResponseWriter, r *http.Request) {
+	db, err := psql.NewPostgresConnection()
+	if err != nil {
+		fmt.Println("ERR", err)
+	}
+	defer db.Close()
+	service := feats.NewFeatService(feats.NewFeatRepo(db))
+
+	var res []byte
+
+	// LOAD PATH PARAMS
+	pathParams := mux.Vars(r)
+
+	if id, ok := pathParams["id"]; ok { // GET ONE BY ID
+		var feat *feats.Feat
+		if feat, err = service.FindByID(id); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+		res, _ = json.Marshal(feat)
+		w.Write(res)
+		return
+	}
+
+	var feats []feats.Feat
+	if feats, err = service.List(r.URL.Query()); err == nil {
+		res, _ = json.Marshal(feats)
+		w.Write(res)
+		return
+	}
+
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Write([]byte(err.Error()))
 }

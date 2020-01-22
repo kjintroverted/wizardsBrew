@@ -27,3 +27,9 @@ http://localhost:4000/api/classes
 
 ### SRD CLASS BY ID
 http://localhost:4000/api/classes/5
+
+### SRD FEAT LIST (QUERY OPTIONAL)
+http://localhost:4000/api/feats?class=fighter&subclass=eldritch+knight&level=10
+
+### SRD FEAT BY ID
+http://localhost:4000/api/feats/5
