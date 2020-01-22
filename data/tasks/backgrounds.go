@@ -53,7 +53,7 @@ func GenerateBackgroundInserts() {
 		}
 
 		statement := fmt.Sprintf("INSERT INTO backgrounds (name, pro_skill, pro_tool, language, equipment, special_opts, character_opts) VALUES ('%s',%s,%s,%s,%s,%s,%s);\n",
-			background["name"], simpleStrArray(skills), simpleStrArray(tools), "", "", "", "")
+			background["name"], simpleStrArray(skills), simpleStrArray(tools), "null", "null", "null", "null")
 
 		f.WriteString(statement)
 	}
