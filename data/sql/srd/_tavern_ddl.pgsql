@@ -168,7 +168,7 @@ DROP TABLE IF EXISTS feats;
 CREATE TABLE feats
 (
    id   serial PRIMARY KEY,
-   name varchar(50) UNIQUE NOT NULL,
+   name varchar(50) NOT NULL,
    ability ability_mod[],
    description section[],
    class varchar(50),
