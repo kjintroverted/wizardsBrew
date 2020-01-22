@@ -9,6 +9,7 @@ type PC struct {
 	Name         string     `json:"name" db:"name"`
 	RaceID       int        `json:"raceID" db:"race_id"`
 	ClassID      int        `json:"classID" db:"class_id"`
+	Subclass     string     `json:"Subclass" db:"Subclass"`
 	Stats        stats      `json:"stats" db:"stats"`
 	XP           int        `json:"xp" db:"xp"`
 	HP           int        `json:"hp" db:"hp"`
