@@ -157,7 +157,7 @@ CREATE TABLE backgrounds
    id   serial PRIMARY KEY,
    name varchar(50) UNIQUE NOT NULL,
    pro_skill varchar(25)[],
-   pro_tool text,
+   pro_tool text[],
    language varchar(100),
    equipment text,
    special_opts trait,

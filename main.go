@@ -27,11 +27,13 @@ func main() {
 		tasks.GenerateItemInserts()
 		tasks.GenerateSpellInserts()
 		tasks.GenerateFeatInserts()
+		tasks.GenerateBackgroundInserts()
 	case "sql":
 		tasks.GenerateClassInserts()
 		tasks.GenerateItemInserts()
 		tasks.GenerateSpellInserts()
 		tasks.GenerateFeatInserts()
+		tasks.GenerateBackgroundInserts()
 		tasks.ExecSQL("data")
 	case "quiz":
 		quiz.BeginQuiz()
