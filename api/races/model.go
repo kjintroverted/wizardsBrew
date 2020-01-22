@@ -10,7 +10,7 @@ import (
 type Race struct {
 	ID       string             `json:"id" db:"id"`
 	Name     string             `json:"name" db:"name"`
-	Ability  []abilityMod       `json:"ability" db:"ability"`
+	Ability  []AbilityMod       `json:"ability" db:"ability"`
 	Size     string             `json:"size" db:"size"`
 	Speed    int                `json:"speed" db:"speed"`
 	Age      string             `json:"age" db:"age"`
@@ -19,12 +19,14 @@ type Race struct {
 	Traits   []psql.Description `json:"description" db:"description"`
 }
 
-type abilityMod struct {
+// AbilityMod contains info for updating stats
+type AbilityMod struct {
 	Name string `json:"name" db:"name"`
 	Mod  int    `json:"mod" db:"mod"`
 }
 
-func (a *abilityMod) Scan(value interface{}) (err error) {
+// Scan is used to scan a record from the DB into a struct
+func (a *AbilityMod) Scan(value interface{}) (err error) {
 	if value == nil {
 		return
 	}
