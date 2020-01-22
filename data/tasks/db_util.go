@@ -155,6 +155,9 @@ func parseEntries(entries []interface{}) string {
 		valMap := v.(map[string]interface{})
 		switch valMap["type"] {
 		case "entries":
+			if _, ok := valMap["name"]; !ok {
+				valMap = findValidEntry(valMap)
+			}
 			descArr = append(descArr, section{Title: valMap["name"].(string), Body: valMap["entries"].([]interface{})})
 		case "table":
 			title := join(valMap["colLabels"].([]interface{}), "|")
@@ -183,4 +186,14 @@ func parseEntries(entries []interface{}) string {
 	}
 
 	return simpleArray(descRows)
+}
+
+func findValidEntry(e map[string]interface{}) (v map[string]interface{}) {
+	for {
+		arr := e["entries"].([]interface{})
+		v = arr[0].(map[string]interface{})
+		if _, ok := v["name"]; ok {
+			return
+		}
+	}
 }

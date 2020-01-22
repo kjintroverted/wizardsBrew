@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
+	"strings"
 )
 
 // GenerateFeatInserts will pull in all json class files
@@ -39,7 +41,7 @@ func GenerateFeatInserts() {
 		if classInfo["source"] != "PHB" {
 			continue
 		}
-		if statements, err := genFeatSQLString(classInfo["classFeatures"].([]interface{}), classInfo["name"], nil); err == nil {
+		if statements, err := genFeatSQLString(classInfo["classFeatures"].([]interface{}), classInfo["name"]); err == nil {
 			for _, s := range statements {
 				x++
 				f.WriteString(s.(string))
@@ -48,12 +50,30 @@ func GenerateFeatInserts() {
 				fmt.Println("ERROR:", err)
 			}
 		}
+
+		if subArr, ok := classInfo["subclasses"].([]interface{}); ok {
+			for _, sub := range subArr {
+				subClass := sub.(map[string]interface{})
+				if s, ok := subClass["source"]; ok && s != "PHB" {
+					continue
+				}
+				if statements, err := genSubClassFeatSQLString(subClass["subclassFeatures"].([]interface{}), classInfo["name"], subClass["name"]); err == nil {
+					for _, s := range statements {
+						x++
+						f.WriteString(s.(string))
+					}
+					if err := f.Sync(); err != nil {
+						fmt.Println("ERROR:", err)
+					}
+				}
+			}
+		}
 	}
 
 	fmt.Println(x, "Feats")
 }
 
-func genFeatSQLString(feats []interface{}, class, subclass interface{}) (statements []interface{}, err error) {
+func genFeatSQLString(feats []interface{}, class interface{}) (statements []interface{}, err error) {
 	for _, lvl := range feats {
 		lvlArr := lvl.([]interface{})
 		for _, d := range lvlArr {
@@ -62,11 +82,69 @@ func genFeatSQLString(feats []interface{}, class, subclass interface{}) (stateme
 				continue
 			}
 
+			// ENTRIES
+			entries := data["entries"].([]interface{})
+			desc := parseEntries(entries)
+
+			// LEVEL
+			level, _ := findLevel(desc)
+
 			statements = append(statements,
-				fmt.Sprintf("INSERT into feats (name, ability, description, class, subclass, background, level, prereq) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);\n",
-					"", "", "", "", "", "", "", ""))
+				fmt.Sprintf("INSERT into feats (name, description, class, level) VALUES ('%s', %s, '%s', %d);\n",
+					escape(data["name"].(string)), desc, class, level))
 		}
 	}
+	return
+}
 
+func genSubClassFeatSQLString(feats []interface{}, class, subclass interface{}) (statements []interface{}, err error) {
+	for _, lvl := range feats {
+		lvlArr := lvl.([]interface{})
+		lvlEntries := lvlArr[0].(map[string]interface{})["entries"].([]interface{})
+		level := 1
+		for _, d := range lvlEntries {
+			data, ok := d.(map[string]interface{})
+			if !ok {
+				continue
+			}
+			if s, ok := data["source"]; ok && s != "PHB" {
+				continue
+			}
+			if _, ok := data["entries"]; !ok {
+				continue
+			}
+
+			// ENTRIES
+			entries := data["entries"].([]interface{})
+			desc := parseEntries(entries)
+
+			// SUBCLASS
+			sub := "null"
+			if subclass != nil {
+				sub = fmt.Sprintf("'%s'", subclass)
+			}
+
+			// LEVEL
+			if x, err := findLevel(desc); err == nil {
+				level = x
+			}
+
+			statements = append(statements,
+				fmt.Sprintf("INSERT into feats (name, description, class, subclass, level) VALUES ('%s', %s, '%s', %s, %d);\n",
+					escape(data["name"].(string)), desc, class, sub, level))
+		}
+	}
+	return
+}
+
+func findLevel(desc string) (lvl int, err error) {
+	if i := strings.Index(desc, "level"); i != -1 {
+		lvlStr := string(desc[i-5 : i-3])
+		x, err := strconv.Atoi(strings.Trim(lvlStr, " "))
+		if err != nil {
+			return 0, err
+		}
+		lvl = x
+	}
 	return
 }
