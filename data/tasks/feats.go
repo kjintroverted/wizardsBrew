@@ -132,10 +132,6 @@ func genSubClassFeatSQLString(feats []interface{}, class, subclass interface{}) 
 				level = x
 			}
 
-			if class == "Fighter" {
-				fmt.Println(subclass, data["name"], level)
-			}
-
 			statements = append(statements,
 				fmt.Sprintf("INSERT into feats (name, description, class, subclass, level) VALUES ('%s', %s, '%s', %s, %d);\n",
 					escape(data["name"].(string)), desc, class, sub, level))
