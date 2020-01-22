@@ -87,7 +87,10 @@ func genFeatSQLString(feats []interface{}, class interface{}) (statements []inte
 			desc := parseEntries(entries)
 
 			// LEVEL
-			level, _ := findLevel(desc)
+			level := 1
+			if x, err := findLevel(desc); err == nil {
+				level = x
+			}
 
 			statements = append(statements,
 				fmt.Sprintf("INSERT into feats (name, description, class, level) VALUES ('%s', %s, '%s', %d);\n",
@@ -129,6 +132,10 @@ func genSubClassFeatSQLString(feats []interface{}, class, subclass interface{}) 
 				level = x
 			}
 
+			if class == "Fighter" {
+				fmt.Println(subclass, data["name"], level)
+			}
+
 			statements = append(statements,
 				fmt.Sprintf("INSERT into feats (name, description, class, subclass, level) VALUES ('%s', %s, '%s', %s, %d);\n",
 					escape(data["name"].(string)), desc, class, sub, level))
@@ -142,9 +149,9 @@ func findLevel(desc string) (lvl int, err error) {
 		lvlStr := string(desc[i-5 : i-3])
 		x, err := strconv.Atoi(strings.Trim(lvlStr, " "))
 		if err != nil {
-			return 0, err
+			return -1, err
 		}
-		lvl = x
+		return x, nil
 	}
-	return
+	return -1, fmt.Errorf("level not found in description entries")
 }
