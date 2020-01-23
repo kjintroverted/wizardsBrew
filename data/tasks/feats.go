@@ -88,7 +88,7 @@ func GenerateFeatInserts() {
 				if v, ok := entry["name"]; ok {
 					if str, ok := v.(string); ok && strings.Contains(str, "Feature") {
 						statement := fmt.Sprintf("INSERT into feats (name, description, background) VALUES ('%s', %s, '%s');\n",
-							escape(string(str[9:])), simpleStrArray(entry["entries"].([]interface{})), background["name"])
+							escape(string(str[9:])), parseEntries(entry["entries"].([]interface{})), background["name"])
 						statements = append(statements, statement)
 					}
 				}
