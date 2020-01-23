@@ -110,6 +110,17 @@ func simpleStrArray(arr []interface{}) string {
 	return strings.Trim(s, ",") + "]"
 }
 
+func simplerStrArray(arr []string) string {
+	if len(arr) == 0 {
+		return "null"
+	}
+	s := "array["
+	for _, x := range arr {
+		s += fmt.Sprintf("'%s',", escape(x))
+	}
+	return strings.Trim(s, ",") + "]"
+}
+
 func simpleArray(arr []interface{}) string {
 	if len(arr) == 0 {
 		return "null"

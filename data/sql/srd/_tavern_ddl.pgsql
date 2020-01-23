@@ -159,8 +159,8 @@ CREATE TABLE backgrounds
    pro_skill varchar(25)[],
    pro_tool text[],
    language varchar(100),
-   equipment text,
-   special_opts trait,
+   equipment text[],
+   special_opts text[],
    character_opts trait[]
 );
 

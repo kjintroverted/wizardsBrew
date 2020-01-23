@@ -70,6 +70,39 @@ func GenerateFeatInserts() {
 		}
 	}
 
+	fileData, _ := ioutil.ReadFile("data/json/backgrounds.json")
+	var backgrounds []map[string]interface{}
+	if err := json.Unmarshal(fileData, &backgrounds); err != nil {
+		fmt.Println("ERROR:", err)
+		return
+	}
+	for _, background := range backgrounds {
+		if s, ok := background["source"]; ok && s != "PHB" {
+			continue
+		}
+		// BACKGROUND FEATS
+		var statements []string
+		if entries, ok := background["entries"].([]interface{}); ok {
+			for _, e := range entries {
+				entry := e.(map[string]interface{})
+				if v, ok := entry["name"]; ok {
+					if str, ok := v.(string); ok && strings.Contains(str, "Feature") {
+						statement := fmt.Sprintf("INSERT into feats (name, description, background) VALUES ('%s', %s, '%s');\n",
+							escape(string(str[9:])), simpleStrArray(entry["entries"].([]interface{})), background["name"])
+						statements = append(statements, statement)
+					}
+				}
+			}
+		}
+		for _, s := range statements {
+			x++
+			f.WriteString(s)
+		}
+		if err := f.Sync(); err != nil {
+			fmt.Println("ERROR:", err)
+		}
+	}
+
 	fmt.Println(x, "Feats")
 }
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 // GenerateBackgroundInserts pulls data from json
@@ -52,8 +53,58 @@ func GenerateBackgroundInserts() {
 			}
 		}
 
-		statement := fmt.Sprintf("INSERT INTO backgrounds (name, pro_skill, pro_tool, language, equipment, special_opts, character_opts) VALUES ('%s',%s,%s,%s,%s,%s,%s);\n",
-			background["name"], simpleStrArray(skills), simpleStrArray(tools), "null", "null", "null", "null")
+		// LANGUAGES
+		var lang []interface{}
+		if langArr, ok := background["languageProficiencies"].([]interface{}); ok {
+			for _, vals := range langArr {
+				for t, v := range vals.(map[string]interface{}) {
+					if t == "choose" {
+						from := v.(map[string]interface{})["from"].([]interface{})
+						lang = append(lang, join(from, " or "))
+						continue
+					}
+					if t == "anyStandard" {
+						lang = append(lang, fmt.Sprintf("Choose %d", int(v.(float64))))
+						continue
+					}
+					lang = append(lang, t)
+				}
+			}
+		}
+
+		var equip []string
+		var special []interface{}
+		if entries, ok := background["entries"].([]interface{}); ok {
+			for _, e := range entries {
+				entry := e.(map[string]interface{})
+				// EQUIPMENT
+				switch {
+				case entry["type"] == "list":
+					items := entry["items"].([]interface{})
+					for _, i := range items {
+						item := i.(map[string]interface{})
+						if item["name"] == "Equipment" {
+							equip = strings.Split(item["entry"].(string), ", ")
+						}
+					}
+				case entry["name"] == "Favorite Schemes" || entry["name"] == "Specialty":
+					items := entry["entries"].([]interface{})
+					for _, i := range items {
+						if item, ok := i.(map[string]interface{}); ok {
+							if item["type"] == "table" {
+								rows := item["rows"].([]interface{})
+								for _, r := range rows {
+									special = append(special, r.([]interface{})[1])
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		statement := fmt.Sprintf("INSERT INTO backgrounds (name, pro_skill, pro_tool, language, equipment, special_opts) VALUES ('%s',%s,%s,%s,%s,%s);\n",
+			background["name"], simpleStrArray(skills), simpleStrArray(tools), simpleStrArray(lang), simplerStrArray(equip), simpleStrArray(special))
 
 		f.WriteString(statement)
 	}
