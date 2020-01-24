@@ -22,6 +22,12 @@ http://localhost:4000/api/races
 ### SRD RACE BY ID
 http://localhost:4000/api/races/5
 
+### SRD BACKGROUND LIST
+http://localhost:4000/api/back
+
+### SRD BACKGROUND BY ID
+http://localhost:4000/api/back/5
+
 ### SRD CLASS LIST
 http://localhost:4000/api/classes
 
