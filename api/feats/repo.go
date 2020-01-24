@@ -53,6 +53,7 @@ func (r *featRepo) List(opt map[string][]string) (feats []Feat, err error) {
 		i++
 	}
 	sql += " order by level"
+	fmt.Println(sql)
 	rows, err := r.db.Query(sql + ";")
 	if err != nil {
 		return nil, fmt.Errorf("ERROR running query: `%s` (%s)", sql, err)

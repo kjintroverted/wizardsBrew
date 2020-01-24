@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/kjintroverted/wizardsBrew/api/backgrounds"
 	"github.com/kjintroverted/wizardsBrew/api/classes"
 	"github.com/kjintroverted/wizardsBrew/api/feats"
 	"github.com/kjintroverted/wizardsBrew/api/items"
@@ -204,6 +205,39 @@ func Feats(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.WriteHeader(http.StatusInternalServerError)
+	w.Write([]byte(err.Error()))
+}
+
+// Backgrounds handles all Background req
+func Backgrounds(w http.ResponseWriter, r *http.Request) {
+	db, err := psql.NewPostgresConnection()
+	if err != nil {
+		fmt.Println("ERR", err)
+	}
+	defer db.Close()
+	service := backgrounds.NewBackgroundService(backgrounds.NewBackgroundRepo(db))
+
+	var res []byte
+
+	// LOAD PATH PARAMS
+	pathParams := mux.Vars(r)
+
+	if id, ok := pathParams["id"]; ok { // GET ONE BY ID
+		var background *backgrounds.Background
+		if background, err = service.FindByID(id); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+		res, _ = json.Marshal(background)
+		w.Write(res)
+		return
+	}
+	if backgrounds, err := service.List(); err == nil {
+		res, _ = json.Marshal(backgrounds)
+		w.Write(res)
+		return
+	}
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Write([]byte(err.Error()))
 }

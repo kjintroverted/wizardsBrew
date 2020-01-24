@@ -158,7 +158,7 @@ CREATE TABLE backgrounds
    name varchar(50) UNIQUE NOT NULL,
    pro_skill varchar(25)[],
    pro_tool text[],
-   language varchar(100),
+   language varchar(100)[],
    equipment text[],
    special_opts text[],
    character_opts trait[]
