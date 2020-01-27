@@ -110,7 +110,7 @@ func simpleStrArray(arr []interface{}) string {
 	return strings.Trim(s, ",") + "]"
 }
 
-func simplerStrArray(arr []string) string {
+func SimplerStrArray(arr []string) string {
 	if len(arr) == 0 {
 		return "null"
 	}
@@ -121,7 +121,7 @@ func simplerStrArray(arr []string) string {
 	return strings.Trim(s, ",") + "]"
 }
 
-func simpleArray(arr []interface{}) string {
+func SimpleArray(arr []interface{}) string {
 	if len(arr) == 0 {
 		return "null"
 	}
@@ -132,7 +132,7 @@ func simpleArray(arr []interface{}) string {
 	return strings.Trim(s, ",") + "]"
 }
 
-func rowString(t string, arr ...interface{}) string {
+func RowString(t string, arr ...interface{}) string {
 	if len(arr) == 0 {
 		return "null"
 	}
