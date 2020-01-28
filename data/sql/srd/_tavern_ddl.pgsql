@@ -121,7 +121,7 @@ CREATE TYPE weapon_info AS (
    damage_type damage_type
   );
 
-DROP TABLE IF EXISTS races;
+DROP TABLE IF EXISTS races CASCADE;
 CREATE TABLE races
 (
    id serial PRIMARY KEY,
@@ -135,7 +135,7 @@ CREATE TABLE races
    traits trait[]
 );
 
-DROP TABLE IF EXISTS classes;
+DROP TABLE IF EXISTS classes CASCADE;
 CREATE TABLE classes
 (
    id serial PRIMARY KEY,

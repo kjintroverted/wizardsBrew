@@ -33,6 +33,7 @@ CREATE TABLE characters
    init int NOT NULL,
    pro_skill skill[],
    pro_tool varchar(100)[],
+   pro_weapon varchar(100)[],
    lang varchar(100)[],
    equip_ids int[],
    weapon_ids int[],

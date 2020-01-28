@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/kjintroverted/wizardsBrew/api/characters"
+
 	"github.com/kjintroverted/wizardsBrew/api"
 
 	"github.com/gorilla/mux"
@@ -75,6 +77,7 @@ func createMux() *mux.Router {
 	r.HandleFunc("/api/feats/{id}", api.Feats)
 	r.HandleFunc("/api/back", api.Backgrounds)
 	r.HandleFunc("/api/back/{id}", api.Backgrounds)
+	r.HandleFunc("/api/pc", characters.UpsertPC).Methods("POST", "PUT")
 
 	r.Use(enableCORS)
 

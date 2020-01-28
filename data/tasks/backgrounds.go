@@ -124,7 +124,7 @@ func buildBG(background map[string]interface{}, bgMap map[string]interface{}) ma
 			}
 		}
 	}
-	bgMap["equip"] = simplerStrArray(equip)
+	bgMap["equip"] = SimplerStrArray(equip)
 	bgMap["special"] = simpleStrArray(special)
 
 	return bgMap

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/kjintroverted/wizardsBrew/psql"
@@ -138,7 +139,12 @@ func RowString(t string, arr ...interface{}) string {
 	}
 	s := "row("
 	for _, x := range arr {
-		s += fmt.Sprintf("%s,", x)
+		switch x.(type) {
+		case string:
+			s += fmt.Sprintf("%s,", x)
+		case int:
+			s += fmt.Sprintf("%d,", x)
+		}
 	}
 	return fmt.Sprintf("%s)::%s", strings.Trim(s, ","), t)
 }
@@ -191,12 +197,12 @@ func parseEntries(entries []interface{}) string {
 	}
 
 	var descRows []interface{}
-	descRows = append(descRows, rowString("section", "''", simpleStrArray(p)))
+	descRows = append(descRows, RowString("section", "''", simpleStrArray(p)))
 	for _, sec := range descArr {
-		descRows = append(descRows, rowString("section", fmt.Sprintf("'%s'", escape(sec.Title)), simpleStrArray(sec.Body)))
+		descRows = append(descRows, RowString("section", fmt.Sprintf("'%s'", escape(sec.Title)), simpleStrArray(sec.Body)))
 	}
 
-	return simpleArray(descRows)
+	return SimpleArray(descRows)
 }
 
 func findValidEntry(e map[string]interface{}) (v map[string]interface{}) {
@@ -207,4 +213,18 @@ func findValidEntry(e map[string]interface{}) (v map[string]interface{}) {
 			return
 		}
 	}
+}
+
+func IntToIArray(arr []int) (res []interface{}) {
+	for _, i := range arr {
+		res = append(res, strconv.Itoa(i))
+	}
+	return
+}
+
+func StrToIArray(arr []string) (res []interface{}) {
+	for _, s := range arr {
+		res = append(res, s)
+	}
+	return
 }

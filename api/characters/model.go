@@ -1,4 +1,8 @@
-package character
+package characters
+
+import (
+	"encoding/json"
+)
 
 // PC describes the data for a Playable Character
 type PC struct {
@@ -10,7 +14,7 @@ type PC struct {
 	RaceID       int        `json:"raceID" db:"race_id"`
 	ClassID      int        `json:"classID" db:"class_id"`
 	Subclass     string     `json:"subclass" db:"subclass"`
-	Background   string     `json:"background" db:"background"`
+	BackgroundID int        `json:"backgroundID" db:"backgroundID"`
 	Stats        stats      `json:"stats" db:"stats"`
 	XP           int        `json:"xp" db:"xp"`
 	HP           int        `json:"hp" db:"hp"`
@@ -18,6 +22,7 @@ type PC struct {
 	Init         int        `json:"initiative" db:"initiative"`
 	ProSkills    []proSkill `json:"proSkills" db:"proSkills"`
 	ProTools     []string   `json:"proTools" db:"proTools"`
+	ProWeapons   []string   `json:"proWeapons" db:"proWeapons"`
 	Lang         []string   `json:"languages" db:"languages"`
 	EquipmentIDs []int      `json:"equipmentIDs" db:"equipment_ids"`
 	WeaponIDs    []int      `json:"weaponIDs" db:"weapon_ids"`
@@ -25,6 +30,13 @@ type PC struct {
 	Gold         float64    `json:"gold" db:"gold"`
 	SpellIDs     []int      `json:"spellIDs" db:"spell_ids"`
 	SpecFeatIDs  []int      `json:"specFeatIDs" db:"specFeat_ids"`
+}
+
+func (pc PC) String() string {
+	if b, err := json.Marshal(pc); err == nil {
+		return string(b)
+	}
+	return "ERROR printing character..."
 }
 
 type stats struct {

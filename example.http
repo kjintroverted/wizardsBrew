@@ -39,3 +39,71 @@ http://localhost:4000/api/feats?class=fighter&subclass=eldritch+knight&level=10
 
 ### SRD FEAT BY ID
 http://localhost:4000/api/feats/5
+
+### UPSERT CHARACTER
+POST http://localhost:4000/api/pc
+Content-Type: application/json
+
+{
+  "id": 2,
+  "owner": "wkgreen13@gmail.com",
+  "name": "Carrion",
+  "raceID": 15,
+  "classID": 10,
+  "backgroundID": 3,
+  "stats": {
+    "str": 10,
+    "dex": 15,
+    "con": 13,
+    "int": 13,
+    "wis": 8,
+    "cha": 16
+  },
+  "xp": 300,
+  "hp": 8,
+  "maxHP": 8,
+  "proTools": [
+    "Poisoner's Tools"
+  ],
+  "proWeapons": [
+    "Dagger",
+    "Dart",
+    "Sling",
+    "Quarterstaff",
+    "Crossbow, light"
+  ],
+  "languages": [
+    "Common",
+    "Infernal",
+    "Orc",
+    "Draconic"
+  ],
+  "weaponIDs": [
+    17,
+    37
+  ],
+  "inventoryIDs": [
+    535,
+    215,
+    486,
+    57,
+    15,
+    750,
+    547,
+    346,
+    711,
+    335,
+    102,
+    227,
+    718
+  ],
+  "gold": 0,
+  "spellIDs": [
+    46,
+    137,
+    298,
+    340,
+    127,
+    214
+  ]
+}
