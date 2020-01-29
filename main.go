@@ -78,6 +78,7 @@ func createMux() *mux.Router {
 	r.HandleFunc("/api/back", api.Backgrounds)
 	r.HandleFunc("/api/back/{id}", api.Backgrounds)
 	r.HandleFunc("/api/pc", characters.UpsertPC).Methods("POST", "PUT")
+	r.HandleFunc("/api/pc/{id}", characters.PlayableCharacters).Methods("GET")
 
 	r.Use(enableCORS)
 

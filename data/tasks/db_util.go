@@ -215,9 +215,9 @@ func findValidEntry(e map[string]interface{}) (v map[string]interface{}) {
 	}
 }
 
-func IntToIArray(arr []int) (res []interface{}) {
+func IntToIArray(arr []psql.NullInt) (res []interface{}) {
 	for _, i := range arr {
-		res = append(res, strconv.Itoa(i))
+		res = append(res, strconv.Itoa(int(i.Int64)))
 	}
 	return
 }

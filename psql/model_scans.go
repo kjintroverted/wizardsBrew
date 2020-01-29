@@ -3,6 +3,8 @@ package psql
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -88,6 +90,19 @@ func (n *NullInt) MarshalJSON() ([]byte, error) {
 		return []byte("null"), nil
 	}
 	return json.Marshal(n.Int64)
+}
+
+// UnmarshalJSON unwraps the valid value when writing to JSON
+func (n *NullInt) UnmarshalJSON(b []byte) error {
+	str := string(b)
+	if i, err := strconv.Atoi(str); err == nil {
+		n.Int64 = int64(i)
+		n.Valid = true
+		return nil
+	}
+	n.Int64 = 0
+	n.Valid = false
+	return fmt.Errorf("Unable to parse int value: %s", str)
 }
 
 // NullString is an alias fot sql nullable float

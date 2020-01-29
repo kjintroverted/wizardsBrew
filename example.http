@@ -40,6 +40,9 @@ http://localhost:4000/api/feats?class=fighter&subclass=eldritch+knight&level=10
 ### SRD FEAT BY ID
 http://localhost:4000/api/feats/5
 
+### GET CHARACTER
+GET http://localhost:4000/api/pc/1
+
 ### UPSERT CHARACTER
 POST http://localhost:4000/api/pc
 Content-Type: application/json

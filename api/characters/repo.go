@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/lib/pq"
+
 	"github.com/kjintroverted/wizardsBrew/data/tasks"
+	"github.com/kjintroverted/wizardsBrew/psql"
 )
 
 const update string = `
@@ -69,6 +72,7 @@ RETURNING id`
 // interact with PC data
 type PCRepo interface {
 	Upsert(data PC) (string, error)
+	FindByID(id string) (*PC, error)
 }
 
 type characterRepo struct {
@@ -80,6 +84,12 @@ func NewPCRepo(db *sql.DB) PCRepo {
 	return &characterRepo{
 		db,
 	}
+}
+
+func (r *characterRepo) FindByID(id string) (*PC, error) {
+	sql := `SELECT * FROM characters WHERE id=$1`
+	row := r.db.QueryRow(sql, id)
+	return scanPC(row)
 }
 
 func (r *characterRepo) Upsert(data PC) (string, error) {
@@ -132,4 +142,36 @@ func (r *characterRepo) Upsert(data PC) (string, error) {
 	}
 
 	return strconv.Itoa(int(id)), nil
+}
+
+func scanPC(row psql.Scannable) (character *PC, err error) {
+	character = new(PC)
+	if err := row.Scan(
+		&character.ID,
+		&character.Name,
+		&character.Owner,
+		pq.Array(&character.AuthUsers),
+		pq.Array(&character.ReadUsers),
+		&character.RaceID,
+		&character.ClassID,
+		&character.Subclass,
+		&character.BackgroundID,
+		&character.Stats,
+		&character.XP,
+		&character.HP,
+		&character.MaxHP,
+		&character.Init,
+		pq.Array(&character.ProSkills),
+		pq.Array(&character.ProTools),
+		pq.Array(&character.ProWeapons),
+		pq.Array(&character.Lang),
+		pq.Array(&character.EquipmentIDs),
+		pq.Array(&character.WeaponIDs),
+		pq.Array(&character.InventoryIDs),
+		&character.Gold,
+		pq.Array(&character.SpellIDs),
+		pq.Array(&character.SpecFeatIDs)); err != nil {
+		return nil, fmt.Errorf("Error scanning row: %s", err)
+	}
+	return
 }
