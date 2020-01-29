@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/kjintroverted/wizardsBrew/data/tasks"
+
 	"github.com/lib/pq"
 
 	"github.com/kjintroverted/wizardsBrew/psql"
@@ -13,6 +15,7 @@ import (
 // interact with Spell data
 type SpellRepo interface {
 	FindByID(id string) (*Spell, error)
+	FindByIDs(ids []psql.NullInt) ([]Spell, error)
 	List(opt map[string][]string) ([]Spell, error)
 }
 
@@ -31,6 +34,19 @@ func (r *spellRepo) FindByID(id string) (spell *Spell, err error) {
 	sql := `SELECT * FROM spells WHERE id=$1`
 	row := r.db.QueryRow(sql, id)
 	return scanSpell(row)
+}
+
+func (r *spellRepo) FindByIDs(ids []psql.NullInt) (spells []Spell, err error) {
+	sql := fmt.Sprintf(`select * from spells where id = any (array[%s])`, tasks.JoinInt(ids, ","))
+	rows, err := r.db.Query(sql)
+	for rows.Next() {
+		if spell, err := scanSpell(rows); err == nil {
+			spells = append(spells, *spell)
+		} else {
+			return nil, fmt.Errorf("Could not find row: %s", err)
+		}
+	}
+	return
 }
 
 func (r *spellRepo) List(opt map[string][]string) (spells []Spell, err error) {

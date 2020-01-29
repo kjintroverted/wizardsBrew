@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/kjintroverted/wizardsBrew/data/tasks"
 	"github.com/kjintroverted/wizardsBrew/psql"
 	"github.com/lib/pq"
 )
@@ -12,6 +13,7 @@ import (
 // interact with Feat data
 type FeatRepo interface {
 	FindByID(id string) (*Feat, error)
+	FindByIDs(ids []psql.NullInt) ([]Feat, error)
 	List(opt map[string][]string) ([]Feat, error)
 }
 
@@ -30,6 +32,20 @@ func (r *featRepo) FindByID(id string) (feat *Feat, err error) {
 	sql := `SELECT * FROM feats WHERE id=$1`
 	row := r.db.QueryRow(sql, id)
 	return scanFeat(row)
+}
+
+func (r *featRepo) FindByIDs(ids []psql.NullInt) (feats []Feat, err error) {
+	sql := fmt.Sprintf(`select * from feats where id = any (array[%s])`, tasks.JoinInt(ids, ","))
+	if rows, err := r.db.Query(sql); err == nil {
+		for rows.Next() {
+			if feat, err := scanFeat(rows); err == nil {
+				feats = append(feats, *feat)
+			} else {
+				return nil, fmt.Errorf("Could not find row: %s", err)
+			}
+		}
+	}
+	return
 }
 
 func (r *featRepo) List(opt map[string][]string) (feats []Feat, err error) {

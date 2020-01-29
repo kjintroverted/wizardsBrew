@@ -1,9 +1,12 @@
 package items
 
+import "github.com/kjintroverted/wizardsBrew/psql"
+
 // ItemService defines the outward functionality
 // available to interact with Item data
 type ItemService interface {
 	FindByID(id string) (*Item, error)
+	FindByIDs(ids []psql.NullInt) ([]Item, error)
 	FindWeapons() ([]Item, error)
 	FindArmor() ([]Item, error)
 	FindItems() ([]Item, error)
@@ -25,6 +28,13 @@ func NewItemService(repo ItemRepo) ItemService {
 func (s *itemService) FindByID(id string) (item *Item, err error) {
 	item, err = s.repo.FindByID(id)
 	return item, err
+}
+
+// FindByIDs will call the repo's function to
+// find all weapon items
+func (s *itemService) FindByIDs(arr []psql.NullInt) ([]Item, error) {
+	items, err := s.repo.FindByIDs(arr)
+	return items, err
 }
 
 // FindWeapons will call the repo's function to

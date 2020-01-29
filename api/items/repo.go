@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/kjintroverted/wizardsBrew/data/tasks"
+
 	"github.com/kjintroverted/wizardsBrew/psql"
 
 	"github.com/lib/pq"
@@ -15,6 +17,7 @@ const fields string = "id,name,type,cost,weight,attune,rarity,(weapon).category,
 // interact with Item data
 type ItemRepo interface {
 	FindByID(id string) (*Item, error)
+	FindByIDs(ids []psql.NullInt) ([]Item, error)
 	FindWeapons() ([]Item, error)
 	FindArmor() ([]Item, error)
 	FindItems() ([]Item, error)
@@ -35,6 +38,20 @@ func (r *itemRepo) FindByID(id string) (item *Item, err error) {
 	sql := fmt.Sprintf(`SELECT %s FROM items WHERE id=$1`, fields)
 	row := r.db.QueryRow(sql, id)
 	return scanItem(row)
+}
+
+func (r *itemRepo) FindByIDs(ids []psql.NullInt) (items []Item, err error) {
+	sql := fmt.Sprintf(`select %s from items where id = any (array[%s])`, fields, tasks.JoinInt(ids, ","))
+	if rows, err := r.db.Query(sql); err == nil {
+		for rows.Next() {
+			if item, err := scanItem(rows); err == nil {
+				items = append(items, *item)
+			} else {
+				return nil, fmt.Errorf("Could not find row: %s", err)
+			}
+		}
+	}
+	return
 }
 
 func (r *itemRepo) FindWeapons() (items []Item, err error) {

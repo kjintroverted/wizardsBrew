@@ -160,6 +160,14 @@ func join(arr []interface{}, sep string) (j string) {
 	return
 }
 
+func JoinInt(arr []psql.NullInt, sep string) (j string) {
+	for _, i := range arr {
+		j += fmt.Sprintf("%d%s", i.Int64, sep)
+	}
+	j = strings.Trim(j, sep)
+	return
+}
+
 func parseEntries(entries []interface{}) string {
 	var descArr []section
 	var p []interface{}

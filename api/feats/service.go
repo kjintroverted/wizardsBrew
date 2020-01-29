@@ -1,9 +1,14 @@
 package feats
 
+import (
+	"github.com/kjintroverted/wizardsBrew/psql"
+)
+
 // FeatService defines the outward functionality
 // available to interact with Feat data
 type FeatService interface {
 	FindByID(id string) (*Feat, error)
+	FindByIDs(ids []psql.NullInt) ([]Feat, error)
 	List(opt map[string][]string) ([]Feat, error)
 }
 
@@ -16,6 +21,13 @@ func NewFeatService(repo FeatRepo) FeatService {
 	return &featService{
 		repo: repo,
 	}
+}
+
+// FindByIds will call the repo's function to
+// find a Feat by ID
+func (s *featService) FindByIDs(ids []psql.NullInt) (feat []Feat, err error) {
+	feat, err = s.repo.FindByIDs(ids)
+	return feat, err
 }
 
 // FindById will call the repo's function to

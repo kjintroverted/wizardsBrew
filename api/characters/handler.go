@@ -5,6 +5,16 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
+
+	"github.com/kjintroverted/wizardsBrew/data/tasks"
+
+	"github.com/kjintroverted/wizardsBrew/api/backgrounds"
+	"github.com/kjintroverted/wizardsBrew/api/classes"
+	"github.com/kjintroverted/wizardsBrew/api/feats"
+	"github.com/kjintroverted/wizardsBrew/api/items"
+	"github.com/kjintroverted/wizardsBrew/api/races"
+	"github.com/kjintroverted/wizardsBrew/api/spells"
 
 	"github.com/gorilla/mux"
 	"github.com/kjintroverted/wizardsBrew/psql"
@@ -56,12 +66,64 @@ func PlayableCharacters(w http.ResponseWriter, r *http.Request) {
 	pathParams := mux.Vars(r)
 
 	if id, ok := pathParams["id"]; ok { // GET ONE BY ID
+		data := make(map[string]interface{})
+
 		var pc *PC
 		if pc, err = service.FindByID(id); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
 		}
-		res, _ = json.Marshal(pc)
+
+		data["info"] = pc
+		lvl := tasks.GetLevelInfo(pc.XP)
+		data["level"] = lvl
+
+		var race *races.Race
+		var background *backgrounds.Background
+		var class *classes.Class
+		if race, err = races.NewRaceService(races.NewRaceRepo(db)).FindByID(strconv.Itoa(pc.RaceID)); err == nil {
+			data["race"] = race
+		}
+		if class, err = classes.NewClassService(classes.NewClassRepo(db)).FindByID(strconv.Itoa(pc.ClassID)); err == nil {
+			data["class"] = class
+		}
+		if background, err = backgrounds.NewBackgroundService(backgrounds.NewBackgroundRepo(db)).FindByID(strconv.Itoa(pc.BackgroundID)); err == nil {
+			data["background"] = background
+		}
+		if equipment, err := items.NewItemService(items.NewItemRepo(db)).FindByIDs(pc.EquipmentIDs); err == nil {
+			data["equipment"] = equipment
+		}
+		if weapons, err := items.NewItemService(items.NewItemRepo(db)).FindByIDs(pc.WeaponIDs); err == nil {
+			data["weapons"] = weapons
+		}
+		if inventory, err := items.NewItemService(items.NewItemRepo(db)).FindByIDs(pc.InventoryIDs); err == nil {
+			data["inventory"] = inventory
+		}
+		if spells, err := spells.NewSpellService(spells.NewSpellRepo(db)).FindByIDs(pc.SpellIDs); err == nil {
+			data["spells"] = spells
+		}
+
+		var featArr []feats.Feat
+		featService := feats.NewFeatService(feats.NewFeatRepo(db))
+		if f, err := featService.FindByIDs(pc.SpecFeatIDs); err == nil {
+			featArr = append(featArr, f...)
+		}
+		var opts = map[string][]string{
+			"class":    []string{class.Name},
+			"subclass": []string{pc.Subclass},
+			"level":    []string{strconv.Itoa(lvl.Level)},
+		}
+		if f, err := featService.List(opts); err == nil {
+			featArr = append(featArr, f...)
+		}
+		opts = map[string][]string{
+			"background": []string{background.Name},
+		}
+		if f, err := featService.List(opts); err == nil {
+			featArr = append(featArr, f...)
+		}
+
+		res, _ = json.Marshal(data)
 		w.Write(res)
 		return
 	}
