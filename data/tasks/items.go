@@ -74,7 +74,7 @@ func GenerateItemInserts() {
 	// BEGIN ITEM LOOP
 	for _, item := range items {
 		// FILTER NON STANDARD ITEMS
-		if item["source"].(string) != "PHB" && item["source"].(string) != "DMG" {
+		if item["source"].(string) == "RMBRE" || item["source"].(string) == "UA" {
 			continue
 		}
 		x++

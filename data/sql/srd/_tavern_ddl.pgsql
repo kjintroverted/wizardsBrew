@@ -62,18 +62,6 @@ CREATE TYPE magic_school AS ENUM (
    'abjuration'
    );
 
-DROP TYPE IF EXISTS item_rarity CASCADE;
-CREATE TYPE item_rarity AS ENUM (
-   'Common',
-   'Uncommon',
-   'Rare',
-   'Very Rare',
-   'Legendary',
-   'Artifact',
-   'Varies',
-   'Unknown'
-   );
-
 DROP TYPE IF EXISTS item_type CASCADE;
 CREATE TYPE item_type AS ENUM (
   'Water Vehicle',
@@ -187,7 +175,7 @@ CREATE TABLE items
    cost numeric,
    weight numeric,
    attune varchar(100),
-   rarity item_rarity,
+   rarity varchar(50),
    weapon weapon_info,
    armor_class int,
    info section[]

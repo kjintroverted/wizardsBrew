@@ -37,37 +37,40 @@ func GenerateFeatInserts() {
 		}
 
 		classArr := classData["class"].([]interface{})
-		classInfo := classArr[0].(map[string]interface{})
-		if classInfo["source"] != "PHB" {
-			continue
-		}
-		if statements, err := genFeatSQLString(classInfo["classFeatures"].([]interface{}), classInfo["name"]); err == nil {
-			for _, s := range statements {
-				x++
-				f.WriteString(s.(string))
+		for _, c := range classArr {
+			classInfo := c.(map[string]interface{})
+			if classInfo["source"] != "PHB" && classInfo["source"] != "ERLW" {
+				continue
 			}
-			if err := f.Sync(); err != nil {
-				fmt.Println("ERROR:", err)
+			if statements, err := genFeatSQLString(classInfo["classFeatures"].([]interface{}), classInfo["name"]); err == nil {
+				for _, s := range statements {
+					x++
+					f.WriteString(s.(string))
+				}
+				if err := f.Sync(); err != nil {
+					fmt.Println("ERROR:", err)
+				}
+			}
+
+			if subArr, ok := classInfo["subclasses"].([]interface{}); ok {
+				for _, sub := range subArr {
+					subClass := sub.(map[string]interface{})
+					if _, ok := subClass["source"]; ok && subClass["source"] != "PHB" && subClass["source"] != "ERLW" {
+						continue
+					}
+					if statements, err := genSubClassFeatSQLString(subClass["subclassFeatures"].([]interface{}), classInfo["name"], subClass["name"]); err == nil {
+						for _, s := range statements {
+							x++
+							f.WriteString(s.(string))
+						}
+						if err := f.Sync(); err != nil {
+							fmt.Println("ERROR:", err)
+						}
+					}
+				}
 			}
 		}
 
-		if subArr, ok := classInfo["subclasses"].([]interface{}); ok {
-			for _, sub := range subArr {
-				subClass := sub.(map[string]interface{})
-				if s, ok := subClass["source"]; ok && s != "PHB" {
-					continue
-				}
-				if statements, err := genSubClassFeatSQLString(subClass["subclassFeatures"].([]interface{}), classInfo["name"], subClass["name"]); err == nil {
-					for _, s := range statements {
-						x++
-						f.WriteString(s.(string))
-					}
-					if err := f.Sync(); err != nil {
-						fmt.Println("ERROR:", err)
-					}
-				}
-			}
-		}
 	}
 
 	fileData, _ := ioutil.ReadFile("data/json/backgrounds.json")
