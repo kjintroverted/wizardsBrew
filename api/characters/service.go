@@ -5,6 +5,7 @@ package characters
 type PCService interface {
 	Upsert(data PC) (string, error)
 	FindByID(id string) (*PC, error)
+	Delete(id string) error
 }
 
 type pcService struct {
@@ -30,4 +31,10 @@ func (s *pcService) Upsert(data PC) (id string, err error) {
 func (s *pcService) FindByID(id string) (pc *PC, err error) {
 	pc, err = s.repo.FindByID(id)
 	return pc, err
+}
+
+// Delete will call the repo's function to
+// find a PC by ID
+func (s *pcService) Delete(id string) error {
+	return s.repo.Delete(id)
 }

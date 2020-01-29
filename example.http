@@ -43,12 +43,14 @@ http://localhost:4000/api/feats/5
 ### GET CHARACTER
 GET http://localhost:4000/api/pc/1
 
+### DELETE CHARACTER
+DELETE http://localhost:4000/api/pc/2
+
 ### UPSERT CHARACTER
 POST http://localhost:4000/api/pc
 Content-Type: application/json
 
 {
-  "id": 2,
   "owner": "wkgreen13@gmail.com",
   "name": "Carrion",
   "raceID": 15,

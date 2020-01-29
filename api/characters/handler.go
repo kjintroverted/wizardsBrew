@@ -51,6 +51,31 @@ func UpsertPC(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
+// DeletePC deletes a PC
+func DeletePC(w http.ResponseWriter, r *http.Request) {
+	db, err := psql.NewPostgresConnection()
+	if err != nil {
+		fmt.Println("ERR", err)
+	}
+	defer db.Close()
+
+	service := NewPCService(NewPCRepo(db))
+
+	// LOAD PATH PARAMS
+	pathParams := mux.Vars(r)
+
+	if id, ok := pathParams["id"]; ok {
+		if err = service.Delete(id); err == nil {
+			w.Write([]byte("Deleted"))
+			return
+		}
+	}
+
+	b, _ := json.Marshal(err)
+	w.WriteHeader(http.StatusInternalServerError)
+	w.Write(b)
+}
+
 // PlayableCharacters handles all GET req for PCs
 func PlayableCharacters(w http.ResponseWriter, r *http.Request) {
 	db, err := psql.NewPostgresConnection()
@@ -72,6 +97,7 @@ func PlayableCharacters(w http.ResponseWriter, r *http.Request) {
 		if pc, err = service.FindByID(id); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
+			return
 		}
 
 		data["info"] = pc
