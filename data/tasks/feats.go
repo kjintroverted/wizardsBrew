@@ -80,7 +80,10 @@ func GenerateFeatInserts() {
 		return
 	}
 	for _, background := range backgrounds {
-		if s, ok := background["source"]; ok && s != "PHB" {
+		if s, ok := background["source"].(string); ok && (strings.Contains(s, "AL") || strings.Contains(s, "PS") || strings.Contains(s, "BG")) {
+			continue
+		}
+		if _, ok := background["_copy"]; ok {
 			continue
 		}
 		// BACKGROUND FEATS
@@ -91,7 +94,7 @@ func GenerateFeatInserts() {
 				if v, ok := entry["name"]; ok {
 					if str, ok := v.(string); ok && strings.Contains(str, "Feature") {
 						statement := fmt.Sprintf("INSERT into feats (name, description, background) VALUES ('%s', %s, '%s');\n",
-							escape(string(str[9:])), parseEntries(entry["entries"].([]interface{})), background["name"])
+							escape(string(str[9:])), parseEntries(entry["entries"].([]interface{})), escape(background["name"].(string)))
 						statements = append(statements, statement)
 					}
 				}

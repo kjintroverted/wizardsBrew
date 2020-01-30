@@ -27,9 +27,14 @@ func GenerateBackgroundInserts() {
 	x := 0
 	// BEGIN BG LOOP
 	for _, background := range backgrounds {
-		if s, ok := background["source"]; ok && s != "PHB" {
+		if s, ok := background["source"].(string); ok && (strings.Contains(s, "AL") || strings.Contains(s, "PS") || strings.Contains(s, "BG")) {
 			continue
 		}
+
+		if _, ok := background["_copy"]; ok {
+			continue
+		}
+
 		x++
 
 		bgMap := make(map[string]interface{})
@@ -49,7 +54,7 @@ func GenerateBackgroundInserts() {
 
 func buildBG(background map[string]interface{}, bgMap map[string]interface{}) map[string]interface{} {
 
-	bgMap["name"] = background["name"]
+	bgMap["name"] = escape(background["name"].(string))
 
 	// SKILLS
 	var skills []interface{}
