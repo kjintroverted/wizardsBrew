@@ -16,7 +16,7 @@ type Race struct {
 	Age      string             `json:"age" db:"age"`
 	Align    string             `json:"align" db:"align"`
 	SizeDesc string             `json:"sizeDesc" db:"sizeDesc"`
-	Traits   []psql.Description `json:"description" db:"description"`
+	Traits   []psql.Description `json:"traits" db:"traits"`
 }
 
 // AbilityMod contains info for updating stats
