@@ -79,23 +79,33 @@ func escape(s string) string {
 }
 
 // escape will escape string for psql statements
-func escapeAll(s []interface{}) (res []interface{}) {
-	for _, inter := range s {
-		if _, ok := inter.(string); !ok {
-			continue
+func escapeAll(arr []interface{}) (res []interface{}) {
+	for _, inter := range arr {
+		if s, ok := inter.(string); ok {
+			res = append(res, strings.ReplaceAll(s, "'", "''"))
 		}
-		res = append(res, strings.ReplaceAll(inter.(string), "'", "''"))
 	}
 	return
 }
 
-func stripFilter(s string) string {
-	if !strings.Contains(s, "{@filter") {
+func stripFilters(s string) string {
+	if !strings.Contains(s, "{@") {
 		return s
 	}
 
-	str := string(s[9:])
-	return strings.Split(str, "|")[0]
+	vals := strings.SplitN(s, "{@", 2)
+	start := vals[0]
+	vals = strings.SplitN(vals[1], "}", 2)
+	end := vals[1]
+
+	str := ""
+	vals = strings.SplitN(vals[0], " ", 2)
+	if len(vals) > 1 {
+		str = vals[1]
+	}
+	str = start + strings.Split(str, "|")[0] + end
+
+	return stripFilters(str)
 }
 
 func simpleStrArray(arr []interface{}) string {

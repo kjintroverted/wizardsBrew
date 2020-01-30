@@ -42,7 +42,7 @@ func GenerateBackgroundInserts() {
 		statement := fmt.Sprintf("INSERT INTO backgrounds (name, pro_skill, pro_tool, language, equipment, special_opts) VALUES ('%s',%s,%s,%s,%s,%s);\n",
 			bgMap["name"], bgMap["skills"], bgMap["tools"], bgMap["lang"], bgMap["equip"], bgMap["special"])
 
-		f.WriteString(statement)
+		f.WriteString(stripFilters(statement))
 	}
 
 	if err := f.Sync(); err != nil {

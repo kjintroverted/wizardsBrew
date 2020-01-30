@@ -40,7 +40,7 @@ func GenerateClassInserts() {
 		for _, c := range classArr {
 			if statement, err := genClassSQLString(c.(map[string]interface{})); err == nil {
 				x++
-				f.WriteString(statement)
+				f.WriteString(stripFilters(statement))
 				if err := f.Sync(); err != nil {
 					fmt.Println("ERROR:", err)
 				}
@@ -111,7 +111,7 @@ func genClassSQLString(data map[string]interface{}) (statement string, err error
 			tableData := table.(map[string]interface{})
 			var tableArr []interface{}
 			for _, v := range tableData["colLabels"].([]interface{}) {
-				tableArr = append(tableArr, stripFilter(v.(string)))
+				tableArr = append(tableArr, v.(string))
 			}
 			for _, row := range tableData["rows"].([]interface{}) {
 				for i, x := range row.([]interface{}) {
@@ -120,7 +120,7 @@ func genClassSQLString(data map[string]interface{}) (statement string, err error
 						continue
 					}
 					if v, ok := x.(string); ok {
-						tableArr[i] = tableArr[i].(string) + "|" + stripFilter(v)
+						tableArr[i] = tableArr[i].(string) + "|" + v
 						continue
 					}
 					valMap := x.(map[string]interface{})

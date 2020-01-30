@@ -51,7 +51,7 @@ func GenerateSpellInserts() {
 		for _, s := range spellArr {
 			if statement, err := genSpellSQLString(s.(map[string]interface{})); err == nil {
 				x++
-				f.WriteString(statement)
+				f.WriteString(stripFilters(statement))
 				if err := f.Sync(); err != nil {
 					fmt.Println("ERROR:", err)
 				}

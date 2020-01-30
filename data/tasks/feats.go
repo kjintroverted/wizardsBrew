@@ -45,7 +45,7 @@ func GenerateFeatInserts() {
 			if statements, err := genFeatSQLString(classInfo["classFeatures"].([]interface{}), classInfo["name"]); err == nil {
 				for _, s := range statements {
 					x++
-					f.WriteString(s.(string))
+					f.WriteString(stripFilters(s.(string)))
 				}
 				if err := f.Sync(); err != nil {
 					fmt.Println("ERROR:", err)
@@ -61,7 +61,7 @@ func GenerateFeatInserts() {
 					if statements, err := genSubClassFeatSQLString(subClass["subclassFeatures"].([]interface{}), classInfo["name"], subClass["name"]); err == nil {
 						for _, s := range statements {
 							x++
-							f.WriteString(s.(string))
+							f.WriteString(stripFilters(s.(string)))
 						}
 						if err := f.Sync(); err != nil {
 							fmt.Println("ERROR:", err)
@@ -102,7 +102,7 @@ func GenerateFeatInserts() {
 		}
 		for _, s := range statements {
 			x++
-			f.WriteString(s)
+			f.WriteString(stripFilters(s))
 		}
 		if err := f.Sync(); err != nil {
 			fmt.Println("ERROR:", err)
@@ -117,9 +117,6 @@ func genFeatSQLString(feats []interface{}, class interface{}) (statements []inte
 		lvlArr := lvl.([]interface{})
 		for _, d := range lvlArr {
 			data := d.(map[string]interface{})
-			if s, ok := data["source"]; ok && s != "PHB" {
-				continue
-			}
 
 			// ENTRIES
 			entries := data["entries"].([]interface{})

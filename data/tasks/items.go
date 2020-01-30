@@ -163,7 +163,7 @@ func GenerateItemInserts() {
 		statement := fmt.Sprintf("INSERT INTO items (name, type, cost, weight, attune, rarity, weapon, armor_class, info) VALUES ('%s', '%s', %s, %s, '%s', '%s', %s, %s, %s);\n",
 			escape(item["name"].(string)), escape(itemType), cost, weight, escape(reqAttune), rarity, weapon, ac, infoInsert)
 
-		f.WriteString(statement)
+		f.WriteString(stripFilters(statement))
 	}
 
 	if err := f.Sync(); err != nil {
