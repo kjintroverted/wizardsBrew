@@ -1,3 +1,15 @@
+- [Wizard's Brew](#wizards-brew)
+  - [Data](#data)
+  - [API](#api)
+    - [Endpoints](#endpoints)
+      - [Races](#races)
+      - [Classes](#classes)
+      - [Backgrounds](#backgrounds)
+      - [Features](#features)
+      - [Spells](#spells)
+      - [Items](#items)
+      - [Characters](#characters)
+
 # Wizard's Brew
 
 A server to handle data for managing a D&D party. 
@@ -12,18 +24,6 @@ The project includes raw json data that acts as the source for much of the base 
 The api interacts with the PSQL database and serves the data out to the requester.
 
 ### Endpoints
-
-- [Wizard's Brew](#wizards-brew)
-  - [Data](#data)
-  - [API](#api)
-    - [Endpoints](#endpoints)
-      - [Races](#races)
-      - [Classes](#classes)
-      - [Backgrounds](#backgrounds)
-      - [Features](#features)
-      - [Spells](#spells)
-      - [Items](#items)
-      - [Characters](#characters)
 
 #### Races
 
