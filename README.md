@@ -14,6 +14,11 @@ The api interacts with the PSQL database and serves the data out to the requeste
 ### Endpoints
 
 - [Races](#races)
+- [Classes](#classes)
+- [Backgrounds](#backgrounds)
+- [Feats](#features)
+- [Spells](#spells)
+- [Items](#items)
 - [Playable Characters](#characters)
 
 #### Races
@@ -758,10 +763,10 @@ The api interacts with the PSQL database and serves the data out to the requeste
 }
 ```
 
-- `/api/pc/{id}
+- `/api/pc/{id}`
   - DELETE deletes a character by id
   - GET returns character data, including details on all relevant field ids
-  ```json
+```json
 {
   "background": {
     "id": "3",
@@ -1508,5 +1513,4 @@ The api interacts with the PSQL database and serves the data out to the requeste
     }
   ]
 }
-
-  ```
+```
