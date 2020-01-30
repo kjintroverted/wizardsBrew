@@ -51,11 +51,13 @@ POST http://localhost:4000/api/pc
 Content-Type: application/json
 
 {
+  "id": 2,
   "owner": "wkgreen13@gmail.com",
-  "name": "Carrion",
-  "raceID": 15,
-  "classID": 10,
-  "backgroundID": 3,
+  "name": "Jerry",
+  "authUsers": ["clayton.yarborough@gmail.com"],
+  "raceID": 1,
+  "classID": 5,
+  "backgroundID": 5,
   "stats": {
     "str": 10,
     "dex": 15,
@@ -83,32 +85,19 @@ Content-Type: application/json
     "Orc",
     "Draconic"
   ],
+  "equipmentIDs": [
+    31
+  ],
   "weaponIDs": [
     17,
     37
   ],
   "inventoryIDs": [
-    535,
-    215,
-    486,
-    57,
-    15,
-    750,
-    547,
-    346,
-    711,
-    335,
-    102,
-    227,
-    718
+    15
   ],
-  "gold": 0,
+  "gold": 10,
   "spellIDs": [
     46,
-    137,
-    298,
-    340,
-    127,
-    214
+    37
   ]
 }
