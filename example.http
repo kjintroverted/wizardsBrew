@@ -23,16 +23,16 @@ http://localhost:4000/api/races
 http://localhost:4000/api/races/5
 
 ### SRD BACKGROUND LIST
-http://localhost:4000/api/back
+http://localhost:4000/api/bg
 
 ### SRD BACKGROUND BY ID
-http://localhost:4000/api/back/5
+http://localhost:4000/api/bg/5
 
 ### SRD CLASS LIST
 http://localhost:4000/api/classes
 
 ### SRD CLASS BY ID
-http://localhost:4000/api/classes/5
+http://localhost:4000/api/classes/10
 
 ### SRD FEAT LIST (QUERY OPTIONAL)
 http://localhost:4000/api/feats?class=fighter&subclass=eldritch+knight&level=10

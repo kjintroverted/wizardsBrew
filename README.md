@@ -13,13 +13,17 @@ The api interacts with the PSQL database and serves the data out to the requeste
 
 ### Endpoints
 
-- [Races](#races)
-- [Classes](#classes)
-- [Backgrounds](#backgrounds)
-- [Feats](#features)
-- [Spells](#spells)
-- [Items](#items)
-- [Playable Characters](#characters)
+- [Wizard's Brew](#wizards-brew)
+  - [Data](#data)
+  - [API](#api)
+    - [Endpoints](#endpoints)
+      - [Races](#races)
+      - [Classes](#classes)
+      - [Backgrounds](#backgrounds)
+      - [Features](#features)
+      - [Spells](#spells)
+      - [Items](#items)
+      - [Characters](#characters)
 
 #### Races
 
@@ -467,10 +471,10 @@ The api interacts with the PSQL database and serves the data out to the requeste
 
 - `/api/feats` lists features 
   - *Query Param Options*
-  - class=<class name>
-  - subclass=<subclass name>
-  - level=<level number>
-  - background=<background name>
+  - class={class name}
+  - subclass={subclass name}
+  - level={level number}
+  - background={background name}
 
 ```json 
 [
@@ -524,9 +528,9 @@ The api interacts with the PSQL database and serves the data out to the requeste
 
 - `/api/spells`
   - *Query Param Options*
-  - class=<class name>
-  - level=<level number>
-  - school=<magic school>
+  - class={class name}
+  - level={level number}
+  - school={magic school}
   
   ```json
   [
@@ -621,7 +625,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
 
 - `/api/items` lists items
   - *Query Param Options` 
-  - type=<weapon/armor>
+  - type={weapon/armor}
   
 ```json
 [
