@@ -13,6 +13,9 @@ The api interacts with the PSQL database and serves the data out to the requeste
 
 ### Endpoints
 
+- [Races](#races)
+- [Playable Characters](#characters)
+
 #### Races
 
 - `/api/races` lists all races
