@@ -3,7 +3,7 @@ package characters
 // PCService defines the outward functionality
 // available to interact with PC data
 type PCService interface {
-	Upsert(data PC) (string, error)
+	Upsert(data PC, uid string) (string, error)
 	FindByID(id string) (*PC, error)
 	Delete(id string) error
 	Authorized(id, uid string) bool
@@ -22,9 +22,8 @@ func NewPCService(repo PCRepo) PCService {
 
 // Upsert will call the repo's function to
 // insert or update a character
-func (s *pcService) Upsert(data PC) (id string, err error) {
-	id, err = s.repo.Upsert(data)
-	return id, err
+func (s *pcService) Upsert(data PC, uid string) (id string, err error) {
+	return s.repo.Upsert(data, uid)
 }
 
 // FindByID will call the repo's function to

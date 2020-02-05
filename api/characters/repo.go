@@ -15,7 +15,6 @@ const update string = `
 UPDATE characters
 SET
 	name = '%s',
-	owner = '%s',
 	auth_users = %s,
 	read_users = %s,
 	race_id = %d,
@@ -43,7 +42,6 @@ const insert string = `
 INSERT INTO characters
 (
 	name,
-	owner,
 	auth_users,
 	read_users,
 	race_id,
@@ -63,15 +61,16 @@ INSERT INTO characters
 	inventory_ids,
 	gold,
 	spell_ids,
-	feat_ids
+	feat_ids,
+	owner
 )
-VALUES ('%s', '%s', %s, %s, %d, %d, '%s', %d, %s, %d, %d, %d, %d, %s, %s, %s, %s, %s, %s, %f, %s, %s)
+VALUES ('%v', %v, %v, %v, %v, '%v', %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, '%v')
 RETURNING id`
 
 // PCRepo defines the necessary actions to
 // interact with PC data
 type PCRepo interface {
-	Upsert(data PC) (string, error)
+	Upsert(data PC, uid string) (string, error)
 	FindByID(id string) (*PC, error)
 	Delete(id string) error
 	Authorized(id, uid string) bool
@@ -108,7 +107,7 @@ func (r *characterRepo) Delete(id string) error {
 	return err
 }
 
-func (r *characterRepo) Upsert(data PC) (string, error) {
+func (r *characterRepo) Upsert(data PC, uid string) (string, error) {
 
 	var skillArr []interface{}
 	for _, skill := range data.ProSkills {
@@ -118,7 +117,6 @@ func (r *characterRepo) Upsert(data PC) (string, error) {
 
 	var vals = []interface{}{
 		data.Name,
-		data.Owner,
 		tasks.SimplerStrArray(data.AuthUsers),
 		tasks.SimplerStrArray(data.ReadUsers),
 		data.RaceID,
@@ -141,10 +139,13 @@ func (r *characterRepo) Upsert(data PC) (string, error) {
 		tasks.SimpleArray(tasks.IntToIArray(data.SpecFeatIDs)),
 	}
 
-	statement := insert
+	var statement string
 	if data.ID != 0 {
 		vals = append(vals, data.ID)
 		statement = update
+	} else {
+		vals = append(vals, uid)
+		statement = insert
 	}
 
 	sql := fmt.Sprintf(statement, vals...)

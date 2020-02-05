@@ -51,10 +51,10 @@ POST http://localhost:4000/api/pc?uid=kDBRAhqohWPymd7249ZiQ4i9T153
 Content-Type: application/json
 
 {
-  "id": 2,
+  "id": 4,
   "owner": "kDBRAhqohWPymd7249ZiQ4i9T153",
-  "name": "Jerry Pratchett",
-  "authUsers": ["clayton.yarborough@gmail.com"],
+  "name": "quayton",
+  "authUsers": [],
   "raceID": 1,
   "classID": 5,
   "backgroundID": 5,

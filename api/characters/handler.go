@@ -38,16 +38,16 @@ func UpsertPC(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("ERR", err)
 	}
 
-	uid := r.Context().Value("uid")
+	uid := r.Context().Value("uid").(string)
 	if data.ID != 0 {
-		if auth := service.Authorized(fmt.Sprintf("%v", data.ID), uid.(string)); !auth {
+		if auth := service.Authorized(fmt.Sprintf("%v", data.ID), uid); !auth {
 			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("Unauthorized UID: " + uid.(string)))
+			w.Write([]byte("Unauthorized UID: " + uid))
 			return
 		}
 	}
 
-	id, err := service.Upsert(data)
+	id, err := service.Upsert(data, uid)
 	if err == nil {
 		res["id"] = id
 		b, _ = json.Marshal(res)

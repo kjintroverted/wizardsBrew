@@ -119,6 +119,13 @@ func googleUser(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		auth := r.Header.Get("Authorization")
+		// fmt.Println(auth)
+		defer func() {
+			recover()
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Invalid or absent auth header"))
+		}()
+
 		token := strings.Split(auth, " ")[1]
 
 		authToken, err := client.VerifyIDToken(ctx, token)
