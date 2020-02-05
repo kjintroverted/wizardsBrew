@@ -1,7 +1,6 @@
 package characters
 
 import (
-	"encoding/json"
 	"strconv"
 
 	"github.com/kjintroverted/wizardsBrew/psql"
@@ -35,12 +34,12 @@ type PC struct {
 	SpecFeatIDs  []psql.NullInt `json:"specFeatIDs" db:"specFeat_ids"`
 }
 
-func (pc PC) String() string {
-	if b, err := json.Marshal(pc); err == nil {
-		return string(b)
-	}
-	return "ERROR printing character..."
-}
+// func (pc PC) String() string {
+// 	if b, err := json.Marshal(pc); err == nil {
+// 		return string(b)
+// 	}
+// 	return "ERROR printing character..."
+// }
 
 type stats struct {
 	STR int `json:"str" db:"str"`

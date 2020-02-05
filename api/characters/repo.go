@@ -74,6 +74,7 @@ type PCRepo interface {
 	Upsert(data PC) (string, error)
 	FindByID(id string) (*PC, error)
 	Delete(id string) error
+	Authorized(id, uid string) bool
 }
 
 type characterRepo struct {
@@ -91,6 +92,14 @@ func (r *characterRepo) FindByID(id string) (*PC, error) {
 	sql := `SELECT * FROM characters WHERE id=$1`
 	row := r.db.QueryRow(sql, id)
 	return scanPC(row)
+}
+
+func (r *characterRepo) Authorized(id, uid string) (auth bool) {
+	sql := `SELECT owner FROM characters WHERE id=$1`
+	row := r.db.QueryRow(sql, id)
+	var owner string
+	row.Scan(&owner)
+	return owner == uid
 }
 
 func (r *characterRepo) Delete(id string) error {

@@ -38,6 +38,15 @@ func UpsertPC(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("ERR", err)
 	}
 
+	uid := r.Context().Value("uid")
+	if data.ID != 0 {
+		if auth := service.Authorized(fmt.Sprintf("%v", data.ID), uid.(string)); !auth {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Unauthorized UID: " + uid.(string)))
+			return
+		}
+	}
+
 	id, err := service.Upsert(data)
 	if err == nil {
 		res["id"] = id

@@ -47,19 +47,19 @@ GET http://localhost:4000/api/pc/1
 DELETE http://localhost:4000/api/pc/2
 
 ### UPSERT CHARACTER
-POST http://localhost:4000/api/pc
+POST http://localhost:4000/api/pc?uid=kDBRAhqohWPymd7249ZiQ4i9T153
 Content-Type: application/json
 
 {
   "id": 2,
-  "owner": "wkgreen13@gmail.com",
-  "name": "Jerry",
+  "owner": "kDBRAhqohWPymd7249ZiQ4i9T153",
+  "name": "Jerry Pratchett",
   "authUsers": ["clayton.yarborough@gmail.com"],
   "raceID": 1,
   "classID": 5,
   "backgroundID": 5,
   "stats": {
-    "str": 10,
+  "str": 10,
     "dex": 15,
     "con": 13,
     "int": 13,

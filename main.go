@@ -1,10 +1,15 @@
 package main
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
+	"strings"
 
+	firebase "firebase.google.com/go"
 	"github.com/kjintroverted/wizardsBrew/api/characters"
 
 	"github.com/kjintroverted/wizardsBrew/api"
@@ -79,9 +84,9 @@ func createMux() *mux.Router {
 	r.HandleFunc("/api/bg/{id}", api.Backgrounds).Methods("GET")
 
 	// PLAYABLE CHARACTERS
-	r.HandleFunc("/api/pc/{id}", characters.PlayableCharacters).Methods("GET")
-	r.HandleFunc("/api/pc", characters.UpsertPC).Methods("POST", "PUT")
-	r.HandleFunc("/api/pc/{id}", characters.DeletePC).Methods("DELETE")
+	r.Handle("/api/pc/{id}", googleUser(http.HandlerFunc(characters.PlayableCharacters))).Methods("GET")
+	r.Handle("/api/pc", googleUser(http.HandlerFunc(characters.UpsertPC))).Methods("POST", "PUT")
+	r.Handle("/api/pc/{id}", googleUser(http.HandlerFunc(characters.DeletePC))).Methods("DELETE")
 
 	r.Use(enableCORS)
 
@@ -98,4 +103,34 @@ func enableCORS(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		next.ServeHTTP(w, r)
 	})
+}
+
+func googleUser(next http.Handler) http.Handler {
+	ctx := context.Background()
+	app, err := firebase.NewApp(ctx, nil)
+	if err != nil {
+		fmt.Println("APP ERROR:", err.Error())
+	}
+
+	client, err := app.Auth(ctx)
+	if err != nil {
+		log.Fatalf("error getting Auth client: %v\n", err)
+	}
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		auth := r.Header.Get("Authorization")
+		token := strings.Split(auth, " ")[1]
+
+		authToken, err := client.VerifyIDToken(ctx, token)
+		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			b, _ := json.Marshal(err)
+			w.Write(b)
+		}
+
+		ctx := context.WithValue(r.Context(), "uid", authToken.UID)
+
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+
 }
