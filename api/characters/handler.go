@@ -72,8 +72,15 @@ func DeletePC(w http.ResponseWriter, r *http.Request) {
 
 	// LOAD PATH PARAMS
 	pathParams := mux.Vars(r)
+	// GET AUTH UID
+	uid := r.Context().Value("uid").(string)
 
 	if id, ok := pathParams["id"]; ok {
+		if !service.Authorized(id, uid) {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Unauthorized"))
+			return
+		}
 		if err = service.Delete(id); err == nil {
 			w.Write([]byte("Deleted"))
 			return

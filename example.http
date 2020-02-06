@@ -44,7 +44,7 @@ http://localhost:4000/api/feats/5
 GET http://localhost:4000/api/pc/1
 
 ### DELETE CHARACTER
-DELETE http://localhost:4000/api/pc/2
+DELETE http://localhost:4000/api/pc/4
 
 ### UPSERT CHARACTER
 POST http://localhost:4000/api/pc?uid=kDBRAhqohWPymd7249ZiQ4i9T153
