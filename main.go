@@ -121,9 +121,10 @@ func googleUser(next http.Handler) http.Handler {
 		auth := r.Header.Get("Authorization")
 		// fmt.Println(auth)
 		defer func() {
-			recover()
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("Invalid or absent auth header"))
+			if err := recover(); err != nil {
+				w.WriteHeader(http.StatusUnauthorized)
+				w.Write([]byte("Invalid or absent auth header"))
+			}
 		}()
 
 		token := strings.Split(auth, " ")[1]
@@ -133,6 +134,7 @@ func googleUser(next http.Handler) http.Handler {
 			w.WriteHeader(http.StatusUnauthorized)
 			b, _ := json.Marshal(err)
 			w.Write(b)
+			return
 		}
 
 		ctx := context.WithValue(r.Context(), "uid", authToken.UID)

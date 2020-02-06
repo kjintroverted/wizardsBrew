@@ -98,6 +98,8 @@ func PlayableCharacters(w http.ResponseWriter, r *http.Request) {
 
 	// LOAD PATH PARAMS
 	pathParams := mux.Vars(r)
+	// GET AUTH UID
+	uid := r.Context().Value("uid").(string)
 
 	if id, ok := pathParams["id"]; ok { // GET ONE BY ID
 		data := make(map[string]interface{})
@@ -110,8 +112,11 @@ func PlayableCharacters(w http.ResponseWriter, r *http.Request) {
 		}
 
 		data["info"] = pc
+
 		lvl := tasks.GetLevelInfo(pc.XP)
 		data["level"] = lvl
+
+		data["authorized"] = service.AuthorizedLocal(*pc, uid)
 
 		var race *races.Race
 		var background *backgrounds.Background
