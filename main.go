@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -132,8 +131,7 @@ func googleUser(next http.Handler) http.Handler {
 		authToken, err := client.VerifyIDToken(ctx, token)
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
-			b, _ := json.Marshal(err)
-			w.Write(b)
+			w.Write([]byte(err.Error()))
 			return
 		}
 

@@ -94,11 +94,11 @@ func (r *characterRepo) FindByID(id string) (*PC, error) {
 }
 
 func (r *characterRepo) Authorized(id, uid string) (auth bool) {
-	sql := `SELECT owner FROM characters WHERE id=$1`
-	row := r.db.QueryRow(sql, id)
-	var owner string
-	row.Scan(&owner)
-	return owner == uid
+	sql := `SELECT id FROM characters WHERE id=$1 and (owner=$2 or $2=any(auth_users))`
+	row := r.db.QueryRow(sql, id, uid)
+	var x int
+	err := row.Scan(&x)
+	return err == nil
 }
 
 func (r *characterRepo) Delete(id string) error {

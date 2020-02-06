@@ -49,12 +49,12 @@ DELETE http://localhost:4000/api/pc/4
 ### UPSERT CHARACTER
 POST http://localhost:4000/api/pc?uid=kDBRAhqohWPymd7249ZiQ4i9T153
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjI1OTc0MmQyNjlhY2IzNWZiNjU3YzBjNGRkMmM3YjcyYWEzMTRiNTAiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiV2lsbGlhbXJvYmVydCBHcmVlbiIsInBpY3R1cmUiOiJodHRwczovL2xoNS5nb29nbGV1c2VyY29udGVudC5jb20vLWVyRmc5RzY4NHNJL0FBQUFBQUFBQUFJL0FBQUFBQUFBQlRrL0ZqWDlXeWVpYmRnL3Bob3RvLmpwZyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9kdW5nZW9uLTRhMzUzIiwiYXVkIjoiZHVuZ2Vvbi00YTM1MyIsImF1dGhfdGltZSI6MTU3NjcwMDQ1MCwidXNlcl9pZCI6ImtEQlJBaHFvaFdQeW1kNzI0OVppUTRpOVQxNTMiLCJzdWIiOiJrREJSQWhxb2hXUHltZDcyNDlaaVE0aTlUMTUzIiwiaWF0IjoxNTgxMDIxOTY1LCJleHAiOjE1ODEwMjU1NjUsImVtYWlsIjoid2tncmVlbjEzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Imdvb2dsZS5jb20iOlsiMTA1MjU2MjUwNTU0Mzk4MzcyMTg2Il0sImVtYWlsIjpbIndrZ3JlZW4xM0BnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJnb29nbGUuY29tIn19.Z7heEBJFr51c09uYeJB_iuODkezP36OAwyvC1xT7Fa9zjoJxhXhlOoxGotC6NQHa6apUqCSyWNC7s7ktc5PnQeZfloah_tjQiZ9Ix-FzYPgxQ460Mss0jPg25epLUyL3A9jFriRHPrVu470iDrVkMZkm5UPzxWbktIkwu3TN5XTsWU1AETiSML2q6XtgRd-deGoa2D80rGMtP1m24k66N8dwB1YO7Rzz6uu_GOSFx3-XQHxz64QdqsdUKBBRxJQHAkp0762TCU3Qa1aGLQ29ReF4KeU3KdK4Sq1yPyUxHTxA51d3JVRmf5VG2ymam9ACqvp7rtwHHX_vuC4UnouT0A
 
 {
-  "id": 4,
-  "owner": "kDBRAhqohWPymd7249ZiQ4i9T153",
-  "name": "quayton",
-  "authUsers": [],
+  "id": 1,
+  "name": "Kayren",
+  "authUsers": ["kDBRAhqohWPymd7249ZiQ4i9T153"],
   "raceID": 1,
   "classID": 5,
   "backgroundID": 5,
