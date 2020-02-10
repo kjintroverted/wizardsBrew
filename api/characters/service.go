@@ -4,6 +4,7 @@ package characters
 // available to interact with PC data
 type PCService interface {
 	Upsert(data PC, uid string) (string, error)
+	FindByUser(uid string) ([]PC, error)
 	FindByID(id string) (*PC, error)
 	Delete(id string) error
 	Authorized(id, uid string) bool
@@ -31,6 +32,13 @@ func (s *pcService) Upsert(data PC, uid string) (id string, err error) {
 // find a PC by ID
 func (s *pcService) FindByID(id string) (pc *PC, err error) {
 	pc, err = s.repo.FindByID(id)
+	return pc, err
+}
+
+// FindByUser will call the repo's function to
+// find a PC by ID
+func (s *pcService) FindByUser(uid string) (pc []PC, err error) {
+	pc, err = s.repo.FindByUser(uid)
 	return pc, err
 }
 

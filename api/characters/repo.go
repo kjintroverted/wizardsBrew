@@ -71,6 +71,7 @@ RETURNING id`
 // interact with PC data
 type PCRepo interface {
 	Upsert(data PC, uid string) (string, error)
+	FindByUser(uid string) ([]PC, error)
 	FindByID(id string) (*PC, error)
 	Delete(id string) error
 	Authorized(id, uid string) bool
@@ -91,6 +92,17 @@ func (r *characterRepo) FindByID(id string) (*PC, error) {
 	sql := `SELECT * FROM characters WHERE id=$1`
 	row := r.db.QueryRow(sql, id)
 	return scanPC(row)
+}
+
+func (r *characterRepo) FindByUser(uid string) (arr []PC, err error) {
+	sql := `SELECT * FROM characters WHERE owner=$1 or $1=any(auth_users)`
+	rows, _ := r.db.Query(sql, uid)
+	for rows.Next() {
+		if pc, err := scanPC(rows); err == nil {
+			arr = append(arr, *pc)
+		}
+	}
+	return
 }
 
 func (r *characterRepo) Authorized(id, uid string) (auth bool) {

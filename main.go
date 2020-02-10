@@ -84,6 +84,7 @@ func createMux() *mux.Router {
 
 	// PLAYABLE CHARACTERS
 	r.Handle("/api/pc/{id}", googleUser(http.HandlerFunc(characters.PlayableCharacters))).Methods("GET")
+	r.Handle("/api/pc", googleUser(http.HandlerFunc(characters.PlayableCharacters))).Methods("GET")
 	r.Handle("/api/pc", googleUser(http.HandlerFunc(characters.UpsertPC))).Methods("POST", "PUT")
 	r.Handle("/api/pc/{id}", googleUser(http.HandlerFunc(characters.DeletePC))).Methods("DELETE")
 
@@ -118,17 +119,17 @@ func googleUser(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		auth := r.Header.Get("Authorization")
-		// fmt.Println(auth)
-		defer func() {
-			if err := recover(); err != nil {
-				w.WriteHeader(http.StatusUnauthorized)
-				w.Write([]byte("Invalid or absent auth header"))
-			}
-		}()
+		// defer func() {
+		// 	if err := recover(); err != nil {
+		// 		w.WriteHeader(http.StatusUnauthorized)
+		// 		w.Write([]byte(fmt.Sprintf("Invalid or absent auth header:\n %v", err)))
+		// 	}
+		// }()
 
 		token := strings.Split(auth, " ")[1]
 
 		authToken, err := client.VerifyIDToken(ctx, token)
+		// fmt.Println(authToken)
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte(err.Error()))
