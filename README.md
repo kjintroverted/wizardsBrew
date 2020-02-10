@@ -821,8 +821,8 @@ Request body should look like:
 </p></details>
 
 ##### `/api/pc/{id}`
-  - DELETE: deletes a character by id
-  - <details><summary>GET</summary><p> 
+DELETE: deletes a character by id
+<details><summary>GET</summary><p> 
 Returns character data, including details on all relevant field ids
 ```json
 {
