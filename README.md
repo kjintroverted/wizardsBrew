@@ -109,7 +109,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ...
 ]
 ```
-</p>
+</p></details>
 
 ##### `/api/races/{id}` 
 <details><summary>returns one race</summary><p>
@@ -180,7 +180,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ]
 }
 ```
-</p>
+</p></details>
 
 #### Classes
 
@@ -318,7 +318,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ...
 ]
 ```
-</p>
+</p></details>
 
 ##### `/api/classes/{id}` 
 <details><summary>returns one class</summary><p>
@@ -410,7 +410,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ]
 }
 ```
-</p>
+</p></details>
 
 #### Backgrounds
 
@@ -467,7 +467,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ...
  ]
 ```
-</p>
+</p></details>
 
 ##### `/api/bg/{id}` 
 <details><summary>returns one background</summary><p>
@@ -495,7 +495,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   "characterOpts": null
 }
 ```
-</p>
+</p></details>
 
 #### Features
 
@@ -532,7 +532,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ...
  ]
 ```
-</p>
+</p></details>
 
 ##### `/api/feats/{id}` 
 <details><summary>returns one feature</summary><p>
@@ -558,7 +558,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   "prereq": null
 }
 ```
-</p>
+</p></details>
 
 #### Spells
 
@@ -616,7 +616,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ...
  ]
   ```
-</p>
+</p></details>
 
 - /api/spells/{id}
 
@@ -657,7 +657,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ]
 }
 ```
-</p>
+</p></details>
 
 #### Items
 
@@ -712,7 +712,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ...
 ]
 ```
-</p>  
+</p></details>  
 
 ##### `/api/items/{id}` 
 <details><summary>returns one item</summary><p>
@@ -753,7 +753,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ]
 }
 ```
-</p>
+</p></details>
 
 #### Characters
 
@@ -814,7 +814,7 @@ Request body should look like:
   ]
 }
 ```
-</p>
+</p></details>
 
 ##### `/api/pc/{id}`
   - DELETE deletes a character by id
@@ -1567,4 +1567,4 @@ Request body should look like:
   ]
 }
 ```
-</p>
+</p></details>
