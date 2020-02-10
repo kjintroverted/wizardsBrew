@@ -16,10 +16,12 @@
         - [`/api/feats/{id}`](#apifeatsid)
       - [Spells](#spells)
         - [`/api/spells`](#apispells)
+        - [`/api/spells/{id}`](#apispellsid)
       - [Items](#items)
         - [`/api/items`](#apiitems)
         - [`/api/items/{id}`](#apiitemsid)
       - [Characters](#characters)
+        - [`/api/pc`](#apipc)
         - [`/api/pc/{id}`](#apipcid)
 
 # Wizard's Brew
@@ -563,6 +565,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
 #### Spells
 
 ##### `/api/spells`
+<details><summary>returns a list of spells</summary><p>
   - *Query Param Options*
   - class={class name}
   - level={level number}
@@ -618,7 +621,8 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ```
 </p></details>
 
-- /api/spells/{id}
+##### `/api/spells/{id}`
+<details><summary>returns one spell</summary><p>
 
 ```json
 {
@@ -664,9 +668,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
 ##### `/api/items` 
 <details><summary>lists items</summary><p>
 
-  - *Query Param Options` 
-  <details><summary></summary><p>
-
+  - *Query Param Options* 
   - type={weapon/armor}
   
 ```json
@@ -757,8 +759,10 @@ The api interacts with the PSQL database and serves the data out to the requeste
 
 #### Characters
 
-- POST `/api/pc` 
-<details><summary>Performs and Upsert on a character. If the character object sent has an ID it will attempt to update at that ID, otherwise it will insert. </summary><p>
+##### `/api/pc` 
+ - <details><summary>POST</summary><p>
+Performs and Upsert on a character. 
+If the character object sent has an ID it will attempt to update at that ID, otherwise it will insert.
 Request body should look like:
 
 ```json
@@ -817,8 +821,9 @@ Request body should look like:
 </p></details>
 
 ##### `/api/pc/{id}`
-  - DELETE deletes a character by id
-  - GET returns character data, including details on all relevant field ids
+  - DELETE: deletes a character by id
+  - <details><summary>GET</summary><p> 
+Returns character data, including details on all relevant field ids
 ```json
 {
   "background": {
