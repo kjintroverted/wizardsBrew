@@ -3,12 +3,24 @@
   - [API](#api)
     - [Endpoints](#endpoints)
       - [Races](#races)
+        - [`/api/races`](#apiraces)
+        - [`/api/races/{id}`](#apiracesid)
       - [Classes](#classes)
+        - [`/api/classes`](#apiclasses)
+        - [`/api/classes/{id}`](#apiclassesid)
       - [Backgrounds](#backgrounds)
+        - [`/api/bg`](#apibg)
+        - [`/api/bg/{id}`](#apibgid)
       - [Features](#features)
+        - [`/api/feats`](#apifeats)
+        - [`/api/feats/{id}`](#apifeatsid)
       - [Spells](#spells)
+        - [`/api/spells`](#apispells)
       - [Items](#items)
+        - [`/api/items`](#apiitems)
+        - [`/api/items/{id}`](#apiitemsid)
       - [Characters](#characters)
+        - [`/api/pc/{id}`](#apipcid)
 
 # Wizard's Brew
 
@@ -27,7 +39,9 @@ The api interacts with the PSQL database and serves the data out to the requeste
 
 #### Races
 
-- `/api/races` lists all races
+##### `/api/races` 
+<details><summary>lists all races</summary><p>
+
 ```json
 [
   {
@@ -95,8 +109,11 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ...
 ]
 ```
+</p>
 
-- `/api/races/{id}` returns one race
+##### `/api/races/{id}` 
+<details><summary>returns one race</summary><p>
+
 ```json
 {
   "id": "5",
@@ -163,10 +180,13 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ]
 }
 ```
+</p>
 
 #### Classes
 
-- `/api/classes` lists all classes
+##### `/api/classes` 
+<details><summary>lists all classes</summary><p>
+
 ```json
 [
   {
@@ -298,8 +318,11 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ...
 ]
 ```
+</p>
 
-- `/api/classes/{id}` returns one class
+##### `/api/classes/{id}` 
+<details><summary>returns one class</summary><p>
+
 
 ```json
 {
@@ -387,10 +410,13 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ]
 }
 ```
+</p>
 
 #### Backgrounds
 
-- `/api/bg` lists all backgrounds
+##### `/api/bg` 
+<details><summary>lists all backgrounds</summary><p>
+
 
 ```json
 [
@@ -441,8 +467,11 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ...
  ]
 ```
+</p>
 
-- `/api/bg/{id}` returns one background
+##### `/api/bg/{id}` 
+<details><summary>returns one background</summary><p>
+
 
 ```json
 {
@@ -466,10 +495,13 @@ The api interacts with the PSQL database and serves the data out to the requeste
   "characterOpts": null
 }
 ```
+</p>
 
 #### Features
 
-- `/api/feats` lists features 
+##### `/api/feats` 
+<details><summary>lists features </summary><p>
+
   - *Query Param Options*
   - class={class name}
   - subclass={subclass name}
@@ -500,8 +532,11 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ...
  ]
 ```
+</p>
 
-- `/api/feats/{id}` returns one feature
+##### `/api/feats/{id}` 
+<details><summary>returns one feature</summary><p>
+
 
 ```json
 {
@@ -523,10 +558,11 @@ The api interacts with the PSQL database and serves the data out to the requeste
   "prereq": null
 }
 ```
+</p>
 
 #### Spells
 
-- `/api/spells`
+##### `/api/spells`
   - *Query Param Options*
   - class={class name}
   - level={level number}
@@ -580,6 +616,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ...
  ]
   ```
+</p>
 
 - /api/spells/{id}
 
@@ -620,11 +657,16 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ]
 }
 ```
+</p>
 
 #### Items
 
-- `/api/items` lists items
+##### `/api/items` 
+<details><summary>lists items</summary><p>
+
   - *Query Param Options` 
+  <details><summary></summary><p>
+
   - type={weapon/armor}
   
 ```json
@@ -670,8 +712,11 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ...
 ]
 ```
-  
-- `/api/items/{id}` returns one item
+</p>  
+
+##### `/api/items/{id}` 
+<details><summary>returns one item</summary><p>
+
 
 ```json
 {
@@ -708,10 +753,13 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ]
 }
 ```
+</p>
 
 #### Characters
 
-- POST `/api/pc` Performs and Upsert on a character. If the character object sent has an ID it will attempt to update at that ID, otherwise it will insert. Request body should look like:
+- POST `/api/pc` 
+<details><summary>Performs and Upsert on a character. If the character object sent has an ID it will attempt to update at that ID, otherwise it will insert. </summary><p>
+Request body should look like:
 
 ```json
 {
@@ -766,8 +814,9 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ]
 }
 ```
+</p>
 
-- `/api/pc/{id}`
+##### `/api/pc/{id}`
   - DELETE deletes a character by id
   - GET returns character data, including details on all relevant field ids
 ```json
@@ -1518,3 +1567,4 @@ The api interacts with the PSQL database and serves the data out to the requeste
   ]
 }
 ```
+</p>
