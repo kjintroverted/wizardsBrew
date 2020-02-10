@@ -760,6 +760,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
 #### Characters
 
 ##### `/api/pc` 
+GET returns an array of [characters](#apipcid) that the user is authorized for
 <details><summary>POST</summary><p>
 Performs and Upsert on a character. 
 If the character object sent has an ID it will attempt to update at that ID, otherwise it will insert.
