@@ -760,7 +760,7 @@ The api interacts with the PSQL database and serves the data out to the requeste
 #### Characters
 
 ##### `/api/pc` 
-GET returns an array of [characters](#apipcid) that the user is authorized for
+<details><summary>GET</summary><p>returns an array of [characters](#apipcid) that the user is authorized for</p></details>
 <details><summary>POST</summary><p>
 Performs and Upsert on a character. 
 If the character object sent has an ID it will attempt to update at that ID, otherwise it will insert.
@@ -822,7 +822,7 @@ Request body should look like:
 </p></details>
 
 ##### `/api/pc/{id}`
-DELETE: deletes a character by id
+<details><summary>DELETE</summary><p>deletes a character by id</p></details>
 <details><summary>GET</summary><p> 
 Returns character data, including details on all relevant field ids
 
