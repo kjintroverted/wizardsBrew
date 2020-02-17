@@ -1,5 +1,8 @@
 - [Wizard's Brew](#wizards-brew)
   - [Data](#data)
+  - [Development](#development)
+    - [Setup](#setup)
+    - [Startup](#startup)
   - [API](#api)
     - [Endpoints](#endpoints)
       - [Races](#races)
@@ -32,6 +35,21 @@ A server to handle data for managing a D&D party.
 
 The project includes raw json data that acts as the source for much of the base SRD data. The data is then converted into SQL inserts and entered into a PSQL database.
 
+## Development
+
+### Setup
+
+To setup the DB run `go run . sql`
+
+### Startup
+
+To start the server run `go run .`
+
+If you are trying to connect to an external front end you need to set up CORS like 
+
+```
+ALLOW_ORIGIN=http://localhost:3000 go run .
+```
 
 ## API
 
