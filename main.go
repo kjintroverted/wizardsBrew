@@ -50,7 +50,7 @@ API:
 	// SET PORT
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "4000"
+		port = "80"
 	}
 
 	// GET MULTIPLEX
@@ -66,29 +66,30 @@ API:
 // CREATE MULTIPLEX PATH HANDLER
 func createMux() *mux.Router {
 	r := mux.NewRouter()
+
 	r.HandleFunc("/api", root)
 
 	// SRD ENDPOINTS
-	r.HandleFunc("/api/items", api.Items).Methods("GET")
-	r.HandleFunc("/api/items/{id}", api.Items).Methods("GET")
-	r.HandleFunc("/api/spells", api.Spells).Methods("GET")
-	r.HandleFunc("/api/spells/{id}", api.Spells).Methods("GET")
-	r.HandleFunc("/api/races", api.Races).Methods("GET")
-	r.HandleFunc("/api/races/{id}", api.Races).Methods("GET")
-	r.HandleFunc("/api/classes", api.Classes).Methods("GET")
-	r.HandleFunc("/api/classes/{id}", api.Classes).Methods("GET")
-	r.HandleFunc("/api/feats", api.Feats).Methods("GET")
-	r.HandleFunc("/api/feats/{id}", api.Feats).Methods("GET")
-	r.HandleFunc("/api/bg", api.Backgrounds).Methods("GET")
-	r.HandleFunc("/api/bg/{id}", api.Backgrounds).Methods("GET")
+	r.HandleFunc("/api/items", api.Items).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/items/{id}", api.Items).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/spells", api.Spells).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/spells/{id}", api.Spells).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/races", api.Races).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/races/{id}", api.Races).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/classes", api.Classes).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/classes/{id}", api.Classes).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/feats", api.Feats).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/feats/{id}", api.Feats).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/bg", api.Backgrounds).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/bg/{id}", api.Backgrounds).Methods("GET", "OPTIONS")
 
 	// PLAYABLE CHARACTERS
-	r.Handle("/api/pc/{id}", googleUser(http.HandlerFunc(characters.PlayableCharacters))).Methods("GET")
-	r.Handle("/api/pc", googleUser(http.HandlerFunc(characters.PlayableCharacters))).Methods("GET")
-	r.Handle("/api/pc", googleUser(http.HandlerFunc(characters.UpsertPC))).Methods("POST", "PUT")
-	r.Handle("/api/pc/{id}", googleUser(http.HandlerFunc(characters.DeletePC))).Methods("DELETE")
+	r.Handle("/api/data/pc/{id}", googleUser(http.HandlerFunc(characters.PlayableCharacters))).Methods("GET", "OPTIONS")
+	r.Handle("/api/data/pc", googleUser(http.HandlerFunc(characters.PlayableCharacters))).Methods("GET", "OPTIONS")
+	r.Handle("/api/data/pc", googleUser(http.HandlerFunc(characters.UpsertPC))).Methods("POST", "PUT", "OPTIONS")
+	r.Handle("/api/data/pc/{id}", googleUser(http.HandlerFunc(characters.DeletePC))).Methods("DELETE", "OPTIONS")
 
-	r.Use(enableCORS)
+	r.Use(cors)
 
 	return r
 }
@@ -98,10 +99,22 @@ func root(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Wizard's Brew API")
 }
 
-func enableCORS(next http.Handler) http.Handler {
+func cors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("Enabling CORS")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		next.ServeHTTP(w, r)
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+		if strings.Contains(r.URL.Path, "/api/data") {
+			w.Header().Set("Access-Control-Allow-Origin", os.Getenv("ALLOW_ORIGIN"))
+		}
+		if r.Method == "OPTIONS" {
+			w.Header().Add("Connection", "keep-alive")
+			w.Header().Add("Access-Control-Max-Age", "86400")
+			w.Write([]byte(""))
+		} else {
+			next.ServeHTTP(w, r)
+		}
 	})
 }
 
@@ -129,13 +142,13 @@ func googleUser(next http.Handler) http.Handler {
 		token := strings.Split(auth, " ")[1]
 
 		authToken, err := client.VerifyIDToken(ctx, token)
-		// fmt.Println(authToken)
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte(err.Error()))
 			return
 		}
 
+		// fmt.Println(authToken.UID)
 		ctx := context.WithValue(r.Context(), "uid", authToken.UID)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
