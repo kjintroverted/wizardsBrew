@@ -2,6 +2,7 @@
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
+
 jobs:
   deploy:
     docker:
@@ -10,8 +11,14 @@ jobs:
     working_directory: ~/wizardsBrew
     steps:
       - checkout
+      - run: git config --global user.email "wkgreen13@gmail.com"
+      - run: git config --global user.name "CircleCI"
+      - run: cd .. && git clone git@github.com:kjintroverted/wizardsDeploy.git build
       - run: go build .
-      - run: ls -la
+      - run: mv wizardsBrew ../build
+      - run: cd ../build && git add .
+      - run: cd ../build && git commit -m "CI deploy"
+      - run: cd ../build && git push
 
 workflows:
   version: 2
