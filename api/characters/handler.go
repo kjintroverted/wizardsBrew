@@ -191,5 +191,7 @@ func getCharacterData(pc *PC, uid string, service PCService, db *sql.DB) map[str
 		featArr = append(featArr, f...)
 	}
 
+	data["features"] = featArr
+
 	return data
 }
