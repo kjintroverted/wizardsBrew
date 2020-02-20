@@ -42,7 +42,7 @@ http://localhost:80/api/feats/5
 
 ### GET CHARACTER
 GET http://localhost:80/api/data/pc/1
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImNiOGUwZDk3Mjg2MWIwNGJlN2RjNzVhMWIzYmUzYjIyOWIyNWYyMDUiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiV2lsbGlhbXJvYmVydCBHcmVlbiIsInBpY3R1cmUiOiJodHRwczovL2xoNS5nb29nbGV1c2VyY29udGVudC5jb20vLWVyRmc5RzY4NHNJL0FBQUFBQUFBQUFJL0FBQUFBQUFBQlRrL0ZqWDlXeWVpYmRnL3Bob3RvLmpwZyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9kdW5nZW9uLTRhMzUzIiwiYXVkIjoiZHVuZ2Vvbi00YTM1MyIsImF1dGhfdGltZSI6MTU4MTk3MTU2NiwidXNlcl9pZCI6ImtEQlJBaHFvaFdQeW1kNzI0OVppUTRpOVQxNTMiLCJzdWIiOiJrREJSQWhxb2hXUHltZDcyNDlaaVE0aTlUMTUzIiwiaWF0IjoxNTgxOTcyMDI2LCJleHAiOjE1ODE5NzU2MjYsImVtYWlsIjoid2tncmVlbjEzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Imdvb2dsZS5jb20iOlsiMTA1MjU2MjUwNTU0Mzk4MzcyMTg2Il0sImVtYWlsIjpbIndrZ3JlZW4xM0BnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJnb29nbGUuY29tIn19.SjsYm5V5UdcVJz9SABg1AzmR3k0xCy5EOEy77ZJHO2e_Z9jtsdFnTVczM2ueyN5JKok3ltIc09Vtn242Qwf5pywNlk_qgLmd57e9DLWgQCIwtIpIx5Gzr8O7-zVAiy2dGqLZT7EsEob9FaJJMwtRjI42_tSDANqQA9AP3ybJQ0eBJ_poZbsmTcBEISRRv0hWjIKi2OyvST3RGv18Q-txyPORBk4eYUjC7JmUmgBe3-8kaUWQUsxhjQSzvEiNcidkzVQMbdGnPIbOISCOl3oUD4vpUFAFoxgeYR6eIlLzWBNhgXzFHieLnkRCGlfaygtXrs225spu1gkhn9OIFsOY4w
+Authorization: dev wkgreen13@gmail.com
 
 ### GET ALL CHARACTERS
 GET http://localhost:80/api/data/pc
@@ -53,10 +53,10 @@ DELETE http://localhost:80/api/data/pc/4
 ### UPSERT CHARACTER
 POST http://localhost:80/api/data/pc?uid=kDBRAhqohWPymd7249ZiQ4i9T153
 Content-Type: application/json
+Authorization: dev wkgreen13@gmail.com
 
 {
-  "id": 1,
-  "name": "Kayren",
+  "name": "Carrion",
   "authUsers": ["kDBRAhqohWPymd7249ZiQ4i9T153"],
   "raceID": 1,
   "classID": 5,

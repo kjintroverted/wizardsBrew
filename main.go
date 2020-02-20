@@ -134,22 +134,35 @@ func googleUser(next http.Handler) http.Handler {
 		auth := r.Header.Get("Authorization")
 		defer func() {
 			if err := recover(); err != nil {
-				w.WriteHeader(http.StatusUnauthorized)
-				w.Write([]byte(fmt.Sprintf("Error completing request:\n %v", err)))
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(fmt.Sprintf("Error completing request:\n %+v", err)))
 			}
 		}()
 
+		mode := strings.Split(auth, " ")[0]
 		token := strings.Split(auth, " ")[1]
+		var uid string
 
-		authToken, err := client.VerifyIDToken(ctx, token)
-		if err != nil {
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte(err.Error()))
-			return
+		if mode == "Bearer" {
+			authToken, err := client.VerifyIDToken(ctx, token)
+			if err != nil {
+				w.WriteHeader(http.StatusUnauthorized)
+				w.Write([]byte(err.Error()))
+				return
+			}
+			uid = authToken.UID
+		} else if mode == "dev" && os.Getenv("ENV") != "PROD" {
+			user, err := client.GetUserByEmail(ctx, token)
+			if err != nil {
+				w.WriteHeader(http.StatusUnauthorized)
+				w.Write([]byte(err.Error()))
+				return
+			}
+			uid = user.UserInfo.UID
 		}
 
 		// fmt.Println(authToken.UID)
-		ctx := context.WithValue(r.Context(), "uid", authToken.UID)
+		ctx := context.WithValue(r.Context(), "uid", uid)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
