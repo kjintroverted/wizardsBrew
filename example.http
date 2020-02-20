@@ -42,7 +42,6 @@ http://localhost:80/api/feats/5
 
 ### GET CHARACTER
 GET http://localhost:80/api/data/pc/1
-Authorization: dev wkgreen13@gmail.com
 
 ### GET ALL CHARACTERS
 GET http://localhost:80/api/data/pc

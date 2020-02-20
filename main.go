@@ -84,12 +84,13 @@ func createMux() *mux.Router {
 	r.HandleFunc("/api/bg/{id}", api.Backgrounds).Methods("GET", "OPTIONS")
 
 	// PLAYABLE CHARACTERS
-	r.Handle("/api/data/pc/{id}", googleUser(http.HandlerFunc(characters.PlayableCharacters))).Methods("GET", "OPTIONS")
-	r.Handle("/api/data/pc", googleUser(http.HandlerFunc(characters.PlayableCharacters))).Methods("GET", "OPTIONS")
-	r.Handle("/api/data/pc", googleUser(http.HandlerFunc(characters.UpsertPC))).Methods("POST", "PUT", "OPTIONS")
-	r.Handle("/api/data/pc/{id}", googleUser(http.HandlerFunc(characters.DeletePC))).Methods("DELETE", "OPTIONS")
+	r.HandleFunc("/api/data/pc/{id}", characters.PlayableCharacters).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/data/pc", characters.PlayableCharacters).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/data/pc", characters.UpsertPC).Methods("POST", "PUT", "OPTIONS")
+	r.HandleFunc("/api/data/pc/{id}", characters.DeletePC).Methods("DELETE", "OPTIONS")
 
 	r.Use(cors)
+	r.Use(userAuth)
 
 	return r
 }
@@ -118,7 +119,7 @@ func cors(next http.Handler) http.Handler {
 	})
 }
 
-func googleUser(next http.Handler) http.Handler {
+func userAuth(next http.Handler) http.Handler {
 	ctx := context.Background()
 	app, err := firebase.NewApp(ctx, nil)
 	if err != nil {
@@ -131,6 +132,10 @@ func googleUser(next http.Handler) http.Handler {
 	}
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !strings.Contains(r.URL.Path, "/api/data") {
+			next.ServeHTTP(w, r)
+			return
+		}
 		auth := r.Header.Get("Authorization")
 		defer func() {
 			if err := recover(); err != nil {
