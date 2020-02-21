@@ -66,6 +66,30 @@ func JoinParty(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Welcome to the Party"))
 }
 
+// KickMember removes a member from the specified party
+func KickMember(w http.ResponseWriter, r *http.Request) {
+	db, err := psql.NewPostgresConnection()
+	if err != nil {
+		fmt.Println("ERR", err)
+	}
+	defer db.Close()
+
+	service := NewPartyService(NewPartyRepo(db))
+
+	id := mux.Vars(r)["id"]
+	member := r.URL.Query().Get("member")
+	uid := r.Context().Value("uid").(string)
+
+	if err := service.KickMember(id, uid, member); err != nil {
+		b, _ := json.Marshal(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(b)
+		return
+	}
+
+	w.Write([]byte("Bye"))
+}
+
 // DeleteParty deletes a Party
 func DeleteParty(w http.ResponseWriter, r *http.Request) {
 	db, err := psql.NewPostgresConnection()

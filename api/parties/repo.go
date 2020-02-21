@@ -35,7 +35,7 @@ VALUES ('%v', '%v', '%v', '%v')
 type PartyRepo interface {
 	Upsert(data Party, uid string) (string, error)
 	Join(id, member string) error
-	// KickMember(id string) error
+	KickMember(id, uid, member string) error
 	FindByMember(id string) ([]Party, error)
 	FindByID(id string) (*Party, error)
 	Delete(id string, uid string) error
@@ -78,6 +78,12 @@ func (r *partyRepo) Delete(id string, uid string) error {
 func (r *partyRepo) Join(id, member string) error {
 	sql := `UPDATE parties SET members = array_append(members, $1) WHERE id = $2`
 	_, err := r.db.Exec(sql, member, id)
+	return err
+}
+
+func (r *partyRepo) KickMember(id, uid, member string) error {
+	sql := `UPDATE parties SET members = array_remove(members, $1) WHERE id = $2 AND admin = $3`
+	_, err := r.db.Exec(sql, member, id, uid)
 	return err
 }
 

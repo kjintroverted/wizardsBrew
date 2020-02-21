@@ -90,7 +90,8 @@ func createMux() *mux.Router {
 	r.HandleFunc("/api/data/party/{id}", parties.Parties).Methods("GET", "OPTIONS")
 	r.HandleFunc("/api/data/party", parties.Parties).Methods("GET", "OPTIONS")
 	r.HandleFunc("/api/data/party", parties.UpsertParty).Methods("POST", "PUT", "OPTIONS")
-	r.HandleFunc("/api/data/party/{id}", parties.JoinParty).Methods("POST", "OPTIONS")
+	r.HandleFunc("/api/data/party/{id}/join", parties.JoinParty).Methods("POST", "OPTIONS")
+	r.HandleFunc("/api/data/party/{id}/kick", parties.KickMember).Methods("POST", "OPTIONS")
 	r.HandleFunc("/api/data/party/{id}", parties.DeleteParty).Methods("DELETE", "OPTIONS")
 
 	// USERS

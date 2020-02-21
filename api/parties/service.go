@@ -5,6 +5,7 @@ package parties
 type PartyService interface {
 	Upsert(data Party, uid string) (string, error)
 	Join(id, member string) error
+	KickMember(id, uid, member string) error
 	FindByMember(uid string) ([]Party, error)
 	FindByID(id string) (*Party, error)
 	Delete(id, uid string) error
@@ -31,6 +32,12 @@ func (s *partyService) Upsert(data Party, uid string) (id string, err error) {
 // insert or update a character
 func (s *partyService) Join(id, member string) error {
 	return s.repo.Join(id, member)
+}
+
+// KickMember will call the repo's function to
+// Kick a member from the party
+func (s *partyService) KickMember(id, uid, member string) error {
+	return s.repo.KickMember(id, uid, member)
 }
 
 // FindByID will call the repo's function to

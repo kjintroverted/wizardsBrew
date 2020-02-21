@@ -133,5 +133,9 @@ DELETE http://localhost:80/api/data/party/510996a9-bb48-4e32-b45f-ee0a696b5853
 Authorization: dev wkgreen13@gmail.com
 
 ### JOIN PARTY
-POST http://localhost:80/api/data/party/510996a9-bb48-4e32-b45f-ee0a696b5853?member=889ad4f2-9305-4a26-87d2-d110b2ff289a
+POST http://localhost:80/api/data/party/510996a9-bb48-4e32-b45f-ee0a696b5853/join?member=889ad4f2-9305-4a26-87d2-d110b2ff289a
+Authorization: dev wkgreen13@gmail.com
+
+### KICK FROM PARTY
+POST http://localhost:80/api/data/party/510996a9-bb48-4e32-b45f-ee0a696b5853/kick?member=889ad4f2-9305-4a26-87d2-d110b2ff289a
 Authorization: dev wkgreen13@gmail.com
