@@ -61,6 +61,52 @@ func UpsertPC(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
+// RequestAccess will post a uid to a characters auth requests
+func RequestAccess(w http.ResponseWriter, r *http.Request) {
+	db, err := psql.NewPostgresConnection()
+	if err != nil {
+		fmt.Println("ERR", err)
+	}
+	defer db.Close()
+
+	service := NewPCService(NewPCRepo(db))
+
+	id := mux.Vars(r)["id"]
+	uid := r.Context().Value("uid").(string)
+
+	if err := service.RequestAuth(id, uid); err != nil {
+		b, _ := json.Marshal(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(b)
+		return
+	}
+
+	w.Write([]byte("Request sent."))
+}
+
+// PartyInvite will post a party id to a characters party invites
+func PartyInvite(w http.ResponseWriter, r *http.Request) {
+	db, err := psql.NewPostgresConnection()
+	if err != nil {
+		fmt.Println("ERR", err)
+	}
+	defer db.Close()
+
+	service := NewPCService(NewPCRepo(db))
+
+	id := mux.Vars(r)["id"]
+	party := r.URL.Query().Get("party")
+
+	if err := service.Invite(id, party); err != nil {
+		b, _ := json.Marshal(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(b)
+		return
+	}
+
+	w.Write([]byte("Invite sent."))
+}
+
 // DeletePC deletes a PC
 func DeletePC(w http.ResponseWriter, r *http.Request) {
 	db, err := psql.NewPostgresConnection()

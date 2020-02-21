@@ -85,6 +85,8 @@ func createMux() *mux.Router {
 	r.HandleFunc("/api/data/pc/{id}", characters.PlayableCharacters).Methods("GET", "OPTIONS")
 	r.HandleFunc("/api/data/pc", characters.PlayableCharacters).Methods("GET", "OPTIONS")
 	r.HandleFunc("/api/data/pc", characters.UpsertPC).Methods("POST", "PUT", "OPTIONS")
+	r.HandleFunc("/api/data/pc/{id}/auth", characters.RequestAccess).Methods("POST", "PUT", "OPTIONS")
+	r.HandleFunc("/api/data/pc/{id}/invite", characters.PartyInvite).Methods("POST", "PUT", "OPTIONS")
 	r.HandleFunc("/api/data/pc/{id}", characters.DeletePC).Methods("DELETE", "OPTIONS")
 
 	r.HandleFunc("/api/data/party/{id}", parties.Parties).Methods("GET", "OPTIONS")

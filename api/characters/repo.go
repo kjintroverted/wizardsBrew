@@ -78,6 +78,8 @@ type PCRepo interface {
 	Upsert(data PC, uid string) (string, error)
 	FindByUser(uid string) ([]PC, error)
 	FindByID(id string) (*PC, error)
+	RequestAuth(id, uid string) error
+	Invite(id, party string) error
 	Delete(id string) error
 	Authorized(id, uid string) bool
 }
@@ -121,6 +123,18 @@ func (r *characterRepo) Authorized(id, uid string) (auth bool) {
 func (r *characterRepo) Delete(id string) error {
 	sql := `DELETE FROM characters WHERE id=$1`
 	_, err := r.db.Exec(sql, id)
+	return err
+}
+
+func (r *characterRepo) RequestAuth(id, uid string) error {
+	sql := `UPDATE characters SET auth_req = array_append(auth_req, $1) WHERE id = $2`
+	_, err := r.db.Exec(sql, uid, id)
+	return err
+}
+
+func (r *characterRepo) Invite(id, party string) error {
+	sql := `UPDATE characters SET party_inv = array_append(party_inv, $1) WHERE id = $2`
+	_, err := r.db.Exec(sql, party, id)
 	return err
 }
 

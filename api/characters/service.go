@@ -6,6 +6,8 @@ type PCService interface {
 	Upsert(data PC, uid string) (string, error)
 	FindByUser(uid string) ([]PC, error)
 	FindByID(id string) (*PC, error)
+	RequestAuth(id, uid string) error
+	Invite(id, party string) error
 	Delete(id string) error
 	Authorized(id, uid string) bool
 	AuthorizedLocal(pc PC, uid string) bool
@@ -46,6 +48,18 @@ func (s *pcService) FindByUser(uid string) (pc []PC, err error) {
 // check a users permissions for a character
 func (s *pcService) Authorized(id, uid string) bool {
 	return s.repo.Authorized(id, uid)
+}
+
+// RequestAuth will call the repo's function to
+// check a users permissions for a character
+func (s *pcService) RequestAuth(id, uid string) error {
+	return s.repo.RequestAuth(id, uid)
+}
+
+// Invite will call the repo's function to
+// check a users permissions for a character
+func (s *pcService) Invite(id, party string) error {
+	return s.repo.Invite(id, party)
 }
 
 // Authorized will call the repo's function to
