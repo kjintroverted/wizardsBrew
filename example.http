@@ -41,14 +41,15 @@ http://localhost:80/api/feats?class=fighter&subclass=eldritch+knight&level=10
 http://localhost:80/api/feats/5
 
 ### GET CHARACTER
-GET http://localhost:80/api/data/pc/63ac135f-df2e-40a5-adf4-b3941e8fc443	
+GET http://localhost:80/api/data/pc/dda66e3e-9fd9-4582-a4be-acb1f973f090
 Authorization: dev wkgreen13@gmail.com
 
 ### GET ALL CHARACTERS
 GET http://localhost:80/api/data/pc
+Authorization: dev wkgreen13@gmail.com
 
 ### DELETE CHARACTER
-DELETE http://localhost:80/api/data/pc/63ac135f-df2e-40a5-adf4-b3941e8fc443	
+DELETE http://localhost:80/api/data/pc/dda66e3e-9fd9-4582-a4be-acb1f973f090
 Authorization: dev wkgreen13@gmail.com
 
 ### UPSERT CHARACTER
@@ -57,7 +58,8 @@ Content-Type: application/json
 Authorization: dev wkgreen13@gmail.com
 
 {
-  "name": "Carrion",
+  "id": "dda66e3e-9fd9-4582-a4be-acb1f973f090",
+  "name": "Kayren",
   "authUsers": ["kDBRAhqohWPymd7249ZiQ4i9T153"],
   "raceID": 1,
   "classID": 5,

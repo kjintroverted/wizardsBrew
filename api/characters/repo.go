@@ -16,7 +16,8 @@ UPDATE characters
 SET
 	name = '%v',
 	auth_users = %v,
-	read_users = %v,
+	auth_req = %v,
+	party_inv = %v,
 	race_id = %v,
 	class_id = %v,
 	subclass = '%v',
@@ -35,7 +36,7 @@ SET
 	gold = %v,
 	spell_ids = %v,
 	feat_ids = %v
-WHERE id = %v
+WHERE id = '%v'
 RETURNING id`
 
 const insert string = `
@@ -43,7 +44,8 @@ INSERT INTO characters
 (
 	name,
 	auth_users,
-	read_users,
+	auth_req,
+	party_inv,
 	race_id,
 	class_id,
 	subclass,
@@ -65,7 +67,7 @@ INSERT INTO characters
 	owner,
 	id
 )
-VALUES ('%v', %v, %v, %v, %v, '%v', %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, '%v', '%v')
+VALUES ('%v', %v, %v, %v, %v, %v, '%v', %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, '%v', '%v')
 `
 
 // PCRepo defines the necessary actions to
@@ -131,7 +133,8 @@ func (r *characterRepo) Upsert(data PC, uid string) (string, error) {
 	var vals = []interface{}{
 		data.Name,
 		tasks.SimplerStrArray(data.AuthUsers),
-		tasks.SimplerStrArray(data.ReadUsers),
+		tasks.SimplerStrArray(data.AuthReq),
+		tasks.SimplerStrArray(data.PartyInv),
 		data.RaceID,
 		data.ClassID,
 		data.Subclass,
@@ -179,7 +182,8 @@ func scanPC(row psql.Scannable) (character *PC, err error) {
 		&character.Name,
 		&character.Owner,
 		pq.Array(&character.AuthUsers),
-		pq.Array(&character.ReadUsers),
+		pq.Array(&character.AuthReq),
+		pq.Array(&character.PartyInv),
 		&character.RaceID,
 		&character.ClassID,
 		&character.Subclass,

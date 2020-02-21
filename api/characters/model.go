@@ -12,7 +12,8 @@ type PC struct {
 	Name         string         `json:"name" db:"name"`
 	Owner        string         `json:"owner" db:"owner"`
 	AuthUsers    []string       `json:"authUsers" db:"auth_users"`
-	ReadUsers    []string       `json:"readUsers" db:"read_users"`
+	AuthReq      []string       `json:"authReq" db:"auth_req"`
+	PartyInv     []string       `json:"invites" db:"party_inv"`
 	RaceID       int            `json:"raceID" db:"race_id"`
 	ClassID      int            `json:"classID" db:"class_id"`
 	Subclass     string         `json:"subclass" db:"subclass"`
@@ -33,13 +34,6 @@ type PC struct {
 	SpellIDs     []psql.NullInt `json:"spellIDs" db:"spell_ids"`
 	SpecFeatIDs  []psql.NullInt `json:"specFeatIDs" db:"specFeat_ids"`
 }
-
-// func (pc PC) String() string {
-// 	if b, err := json.Marshal(pc); err == nil {
-// 		return string(b)
-// 	}
-// 	return "ERROR printing character..."
-// }
 
 type stats struct {
 	STR int `json:"str" db:"str"`
