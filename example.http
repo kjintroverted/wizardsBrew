@@ -48,7 +48,11 @@ GET http://localhost:80/api/data/pc/889ad4f2-9305-4a26-87d2-d110b2ff289a?detail=
 Authorization: dev wkgreen13@gmail.com
 
 ### GET ALL CHARACTERS
-GET http://localhost:80/api/data/pc?detail=true
+GET http://localhost:80/api/data/pc
+Authorization: dev wkgreen13@gmail.com
+
+### SEARCH CHARACTERS
+GET http://localhost:80/api/data/pc?name=sam&detail=true
 Authorization: dev wkgreen13@gmail.com
 
 ### REQUEST AUTH TO CHARACTER
@@ -69,7 +73,7 @@ Content-Type: application/json
 Authorization: dev wkgreen13@gmail.com
 
 {
-  "name": "Kayren",
+  "name": "Carpenter John",
   "authUsers": ["kDBRAhqohWPymd7249ZiQ4i9T153"],
   "raceID": 1,
   "classID": 5,

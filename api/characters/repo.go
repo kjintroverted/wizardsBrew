@@ -82,6 +82,7 @@ type PCRepo interface {
 	Invite(id, party string) error
 	Delete(id string) error
 	Authorized(id, uid string) bool
+	Search(q string) ([]PC, error)
 }
 
 type characterRepo struct {
@@ -104,6 +105,18 @@ func (r *characterRepo) FindByID(id string) (*PC, error) {
 func (r *characterRepo) FindByUser(uid string) (arr []PC, err error) {
 	sql := `SELECT * FROM characters WHERE owner=$1 or $1=any(auth_users)`
 	rows, _ := r.db.Query(sql, uid)
+	for rows.Next() {
+		if pc, err := scanPC(rows); err == nil {
+			arr = append(arr, *pc)
+		}
+	}
+	return
+}
+
+func (r *characterRepo) Search(q string) (arr []PC, err error) {
+	sql := `SELECT * FROM characters WHERE name ilike '%` + q + `%'`
+
+	rows, _ := r.db.Query(sql)
 	for rows.Next() {
 		if pc, err := scanPC(rows); err == nil {
 			arr = append(arr, *pc)

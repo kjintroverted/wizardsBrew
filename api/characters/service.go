@@ -5,6 +5,7 @@ package characters
 type PCService interface {
 	Upsert(data PC, uid string) (string, error)
 	FindByUser(uid string) ([]PC, error)
+	Search(q string) ([]PC, error)
 	FindByID(id string) (*PC, error)
 	RequestAuth(id, uid string) error
 	Invite(id, party string) error
@@ -42,6 +43,11 @@ func (s *pcService) FindByID(id string) (pc *PC, err error) {
 func (s *pcService) FindByUser(uid string) (pc []PC, err error) {
 	pc, err = s.repo.FindByUser(uid)
 	return pc, err
+}
+
+// Search will try to match character names to the query (q)
+func (s *pcService) Search(q string) (pc []PC, err error) {
+	return s.repo.Search(q)
 }
 
 // Authorized will call the repo's function to

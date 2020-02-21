@@ -178,10 +178,19 @@ func PlayableCharacters(w http.ResponseWriter, r *http.Request) {
 	} else {
 		var data []map[string]interface{}
 		var characters []PC
-		if characters, err = service.FindByUser(uid); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
-			return
+
+		if q := r.URL.Query().Get("name"); q != "" {
+			if characters, err = service.Search(q); err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(err.Error()))
+				return
+			}
+		} else {
+			if characters, err = service.FindByUser(uid); err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(err.Error()))
+				return
+			}
 		}
 
 		if !detail {
