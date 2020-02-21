@@ -152,6 +152,8 @@ func PlayableCharacters(w http.ResponseWriter, r *http.Request) {
 
 	// LOAD PATH PARAMS
 	pathParams := mux.Vars(r)
+	detail := r.URL.Query().Get("detail") == "true"
+
 	// GET AUTH UID
 	uid := r.Context().Value("uid").(string)
 
@@ -162,15 +164,29 @@ func PlayableCharacters(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(err.Error()))
 			return
 		}
+
+		if !detail {
+			res, _ = json.Marshal(pc)
+			w.Write(res)
+			return
+		}
+
 		data := getCharacterData(pc, uid, service, db)
 		res, _ = json.Marshal(data)
 		w.Write(res)
+
 	} else {
 		var data []map[string]interface{}
 		var characters []PC
 		if characters, err = service.FindByUser(uid); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
+			return
+		}
+
+		if !detail {
+			res, _ = json.Marshal(characters)
+			w.Write(res)
 			return
 		}
 
