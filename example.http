@@ -1,3 +1,6 @@
+### USER DATA
+GET http://localhost:80/api/user?uid=kun4zXFlM7g8JOubr2nbBkoo0lD2
+
 ### SRD ITEM
 GET http://localhost:80/api/items/675
 
