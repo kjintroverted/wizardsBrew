@@ -19,6 +19,7 @@ CREATE TABLE characters
 (
    id varchar(100) PRIMARY KEY,
    name varchar(150) NOT NULL,
+   photo_url text,
    owner varchar(100) NOT NULL,
    auth_users varchar(100)[],
    auth_req varchar(100)[],

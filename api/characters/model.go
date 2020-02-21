@@ -10,6 +10,7 @@ import (
 type PC struct {
 	ID           string         `json:"id" db:"id"`
 	Name         string         `json:"name" db:"name"`
+	PhotoURL     string         `json:"photoURL,omitempty" db:"photo_url"`
 	Owner        string         `json:"owner" db:"owner"`
 	AuthUsers    []string       `json:"authUsers" db:"auth_users"`
 	AuthReq      []string       `json:"authReq" db:"auth_req"`

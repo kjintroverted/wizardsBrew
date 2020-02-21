@@ -15,6 +15,7 @@ const update string = `
 UPDATE characters
 SET
 	name = '%v',
+	photo_url = '%v',
 	auth_users = %v,
 	auth_req = %v,
 	party_inv = %v,
@@ -43,6 +44,7 @@ const insert string = `
 INSERT INTO characters
 (
 	name,
+	photo_url,
 	auth_users,
 	auth_req,
 	party_inv,
@@ -67,7 +69,7 @@ INSERT INTO characters
 	owner,
 	id
 )
-VALUES ('%v', %v, %v, %v, %v, %v, '%v', %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, '%v', '%v')
+VALUES ('%v', '%v', %v, %v, %v, %v, %v, '%v', %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, '%v', '%v')
 `
 
 // PCRepo defines the necessary actions to
@@ -132,6 +134,7 @@ func (r *characterRepo) Upsert(data PC, uid string) (string, error) {
 
 	var vals = []interface{}{
 		data.Name,
+		data.PhotoURL,
 		tasks.SimplerStrArray(data.AuthUsers),
 		tasks.SimplerStrArray(data.AuthReq),
 		tasks.SimplerStrArray(data.PartyInv),
@@ -180,6 +183,7 @@ func scanPC(row psql.Scannable) (character *PC, err error) {
 	if err := row.Scan(
 		&character.ID,
 		&character.Name,
+		&character.PhotoURL,
 		&character.Owner,
 		pq.Array(&character.AuthUsers),
 		pq.Array(&character.AuthReq),
