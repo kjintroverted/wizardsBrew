@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/kjintroverted/wizardsBrew/api/characters"
+	"github.com/kjintroverted/wizardsBrew/api/parties"
 
 	"github.com/kjintroverted/wizardsBrew/api"
 
@@ -85,6 +86,11 @@ func createMux() *mux.Router {
 	r.HandleFunc("/api/data/pc", characters.PlayableCharacters).Methods("GET", "OPTIONS")
 	r.HandleFunc("/api/data/pc", characters.UpsertPC).Methods("POST", "PUT", "OPTIONS")
 	r.HandleFunc("/api/data/pc/{id}", characters.DeletePC).Methods("DELETE", "OPTIONS")
+
+	r.HandleFunc("/api/data/party/{id}", parties.Parties).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/data/party", parties.Parties).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/data/party", parties.UpsertParty).Methods("POST", "PUT", "OPTIONS")
+	r.HandleFunc("/api/data/party/{id}", parties.DeleteParty).Methods("DELETE", "OPTIONS")
 
 	// USERS
 	r.HandleFunc("/api/user", getUserData).Methods("GET", "OPTIONS")

@@ -44,3 +44,13 @@ CREATE TABLE characters
    spell_ids int[],
    feat_ids int[]
 );
+
+DROP TABLE IF EXISTS parties;
+CREATE TABLE parties
+(
+   id varchar(100) PRIMARY KEY,
+   name varchar(150) NOT NULL,
+   photo_url text,
+   admin varchar(100),
+   members varchar(100)[]
+)
