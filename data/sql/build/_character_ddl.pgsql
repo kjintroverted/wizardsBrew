@@ -17,7 +17,7 @@ CREATE TYPE skill AS (
 DROP TABLE IF EXISTS characters;
 CREATE TABLE characters
 (
-   id serial PRIMARY KEY,
+   id varchar(100) PRIMARY KEY,
    name varchar(150) NOT NULL,
    owner varchar(100) NOT NULL,
    auth_users varchar(100)[],

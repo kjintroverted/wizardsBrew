@@ -40,7 +40,7 @@ func UpsertPC(w http.ResponseWriter, r *http.Request) {
 	}
 
 	uid := r.Context().Value("uid").(string)
-	if data.ID != 0 {
+	if data.ID != "" {
 		if auth := service.Authorized(fmt.Sprintf("%v", data.ID), uid); !auth {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("Unauthorized UID: " + uid))

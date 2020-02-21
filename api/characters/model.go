@@ -8,7 +8,7 @@ import (
 
 // PC describes the data for a Playable Character
 type PC struct {
-	ID           int            `json:"id" db:"id"`
+	ID           string         `json:"id" db:"id"`
 	Name         string         `json:"name" db:"name"`
 	Owner        string         `json:"owner" db:"owner"`
 	AuthUsers    []string       `json:"authUsers" db:"auth_users"`

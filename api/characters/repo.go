@@ -3,9 +3,9 @@ package characters
 import (
 	"database/sql"
 	"fmt"
-	"strconv"
 
 	"github.com/lib/pq"
+	"github.com/pkg/errors"
 
 	"github.com/kjintroverted/wizardsBrew/data/tasks"
 	"github.com/kjintroverted/wizardsBrew/psql"
@@ -14,28 +14,28 @@ import (
 const update string = `
 UPDATE characters
 SET
-	name = '%s',
-	auth_users = %s,
-	read_users = %s,
-	race_id = %d,
-	class_id = %d,
-	subclass = '%s',
-	background = %d,
-	stats = %s,
-	xp = %d,
-	max_hp = %d,
-	hp = %d,
-	init = %d,
-	pro_skill = %s,
-	pro_tool = %s,
-	lang = %s,
-	equip_ids = %s,
-	weapon_ids = %s,
-	inventory_ids = %s,
-	gold = %f,
-	spell_ids = %s,
-	feat_ids = %s
-WHERE id = %d
+	name = '%v',
+	auth_users = %v,
+	read_users = %v,
+	race_id = %v,
+	class_id = %v,
+	subclass = '%v',
+	background = %v,
+	stats = %v,
+	xp = %v,
+	max_hp = %v,
+	hp = %v,
+	init = %v,
+	pro_skill = %v,
+	pro_tool = %v,
+	lang = %v,
+	equip_ids = %v,
+	weapon_ids = %v,
+	inventory_ids = %v,
+	gold = %v,
+	spell_ids = %v,
+	feat_ids = %v
+WHERE id = %v
 RETURNING id`
 
 const insert string = `
@@ -62,10 +62,11 @@ INSERT INTO characters
 	gold,
 	spell_ids,
 	feat_ids,
-	owner
+	owner,
+	id
 )
-VALUES ('%v', %v, %v, %v, %v, '%v', %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, '%v')
-RETURNING id`
+VALUES ('%v', %v, %v, %v, %v, '%v', %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, '%v', '%v')
+`
 
 // PCRepo defines the necessary actions to
 // interact with PC data
@@ -108,8 +109,8 @@ func (r *characterRepo) FindByUser(uid string) (arr []PC, err error) {
 func (r *characterRepo) Authorized(id, uid string) (auth bool) {
 	sql := `SELECT id FROM characters WHERE id=$1 and (owner=$2 or $2=any(auth_users))`
 	row := r.db.QueryRow(sql, id, uid)
-	var x int
-	err := row.Scan(&x)
+	var s string
+	err := row.Scan(&s)
 	return err == nil
 }
 
@@ -151,26 +152,24 @@ func (r *characterRepo) Upsert(data PC, uid string) (string, error) {
 		tasks.SimpleArray(tasks.IntToIArray(data.SpecFeatIDs)),
 	}
 
-	var statement string
-	if data.ID != 0 {
-		vals = append(vals, data.ID)
-		statement = update
-	} else {
+	id := data.ID
+	statement := update
+	if id == "" {
+		id = psql.GetUID()
 		vals = append(vals, uid)
 		statement = insert
 	}
+	vals = append(vals, id)
 
 	sql := fmt.Sprintf(statement, vals...)
 
-	row := r.db.QueryRow(sql)
-
-	var id int
-	if err := row.Scan(&id); err != nil {
+	_, err := r.db.Exec(sql)
+	if err != nil {
 		fmt.Println("ERR running:", sql)
-		return "", err
+		return "", errors.WithStack(err)
 	}
 
-	return strconv.Itoa(int(id)), nil
+	return id, nil
 }
 
 func scanPC(row psql.Scannable) (character *PC, err error) {

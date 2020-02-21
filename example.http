@@ -41,13 +41,15 @@ http://localhost:80/api/feats?class=fighter&subclass=eldritch+knight&level=10
 http://localhost:80/api/feats/5
 
 ### GET CHARACTER
-GET http://localhost:80/api/data/pc/1
+GET http://localhost:80/api/data/pc/63ac135f-df2e-40a5-adf4-b3941e8fc443	
+Authorization: dev wkgreen13@gmail.com
 
 ### GET ALL CHARACTERS
 GET http://localhost:80/api/data/pc
 
 ### DELETE CHARACTER
-DELETE http://localhost:80/api/data/pc/4
+DELETE http://localhost:80/api/data/pc/63ac135f-df2e-40a5-adf4-b3941e8fc443	
+Authorization: dev wkgreen13@gmail.com
 
 ### UPSERT CHARACTER
 POST http://localhost:80/api/data/pc?uid=kDBRAhqohWPymd7249ZiQ4i9T153
