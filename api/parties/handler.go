@@ -43,6 +43,29 @@ func UpsertParty(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
+// JoinParty adds a member to the specified party
+func JoinParty(w http.ResponseWriter, r *http.Request) {
+	db, err := psql.NewPostgresConnection()
+	if err != nil {
+		fmt.Println("ERR", err)
+	}
+	defer db.Close()
+
+	service := NewPartyService(NewPartyRepo(db))
+
+	id := mux.Vars(r)["id"]
+	member := r.URL.Query().Get("member")
+
+	if err := service.Join(id, member); err != nil {
+		b, _ := json.Marshal(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(b)
+		return
+	}
+
+	w.Write([]byte("Welcome to the Party"))
+}
+
 // DeleteParty deletes a Party
 func DeleteParty(w http.ResponseWriter, r *http.Request) {
 	db, err := psql.NewPostgresConnection()

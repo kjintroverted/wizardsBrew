@@ -116,13 +116,12 @@ Content-Type: application/json
 Authorization: dev wkgreen13@gmail.com
 
 {
-  "id": "a856eb4b-e83d-427e-a00b-96e26130f8e2",
   "name": "New Beginnings",
   "photoURL": "https://cdn.discordapp.com/attachments/524229046226255882/668206434080784436/unknown.png"
 }
 
 ### GET PARTY
-GET http://localhost:80/api/data/party/a856eb4b-e83d-427e-a00b-96e26130f8e2
+GET http://localhost:80/api/data/party/510996a9-bb48-4e32-b45f-ee0a696b5853
 Authorization: dev wkgreen13@gmail.com
 
 ### GET PARTIES FOR USER (ADMIN)
@@ -130,5 +129,9 @@ GET http://localhost:80/api/data/party
 Authorization: dev wkgreen13@gmail.com
 
 ### DELETE PARTY
-DELETE http://localhost:80/api/data/party/a856eb4b-e83d-427e-a00b-96e26130f8e2
+DELETE http://localhost:80/api/data/party/510996a9-bb48-4e32-b45f-ee0a696b5853
+Authorization: dev wkgreen13@gmail.com
+
+### JOIN PARTY
+POST http://localhost:80/api/data/party/510996a9-bb48-4e32-b45f-ee0a696b5853?member=889ad4f2-9305-4a26-87d2-d110b2ff289a
 Authorization: dev wkgreen13@gmail.com
