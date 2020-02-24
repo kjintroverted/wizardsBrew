@@ -171,7 +171,7 @@ func PlayableCharacters(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		data := getCharacterData(pc, uid, service, db)
+		data := getCharacterData(*pc, uid, service, db)
 		res, _ = json.Marshal(data)
 		w.Write(res)
 
@@ -200,14 +200,14 @@ func PlayableCharacters(w http.ResponseWriter, r *http.Request) {
 		}
 
 		for _, pc := range characters {
-			data = append(data, getCharacterData(&pc, uid, service, db))
+			data = append(data, getCharacterData(pc, uid, service, db))
 		}
 		res, _ = json.Marshal(data)
 		w.Write(res)
 	}
 }
 
-func getCharacterData(pc *PC, uid string, service PCService, db *sql.DB) map[string]interface{} {
+func getCharacterData(pc PC, uid string, service PCService, db *sql.DB) map[string]interface{} {
 	var err error
 	data := make(map[string]interface{})
 
@@ -216,7 +216,7 @@ func getCharacterData(pc *PC, uid string, service PCService, db *sql.DB) map[str
 	lvl := tasks.GetLevelInfo(pc.XP)
 	data["level"] = lvl
 
-	data["authorized"] = service.AuthorizedLocal(*pc, uid)
+	data["authorized"] = service.AuthorizedLocal(pc, uid)
 
 	var background *backgrounds.Background
 	var class *classes.Class

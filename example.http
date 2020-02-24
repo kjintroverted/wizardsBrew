@@ -48,7 +48,7 @@ GET http://localhost:80/api/data/pc/889ad4f2-9305-4a26-87d2-d110b2ff289a?detail=
 Authorization: dev wkgreen13@gmail.com
 
 ### GET ALL CHARACTERS
-GET http://localhost:80/api/data/pc
+GET http://localhost:80/api/data/pc?detail=true
 Authorization: dev wkgreen13@gmail.com
 
 ### SEARCH CHARACTERS
