@@ -30,7 +30,7 @@ type PC struct {
 	Lang         []string       `json:"languages" db:"languages"`
 	EquipmentIDs []psql.NullInt `json:"equipmentIDs" db:"equipment_ids"`
 	WeaponIDs    []psql.NullInt `json:"weaponIDs" db:"weapon_ids"`
-	InventoryIDs []psql.NullInt `json:"inventoryIDs" db:"inventory_ids"`
+	Inventory    []item         `json:"inventory" db:"inventory"`
 	Gold         float64        `json:"gold" db:"gold"`
 	SpellIDs     []psql.NullInt `json:"spellIDs" db:"spell_ids"`
 	SpecFeatIDs  []psql.NullInt `json:"specFeatIDs" db:"specFeat_ids"`
@@ -78,6 +78,25 @@ func (s *proSkill) Scan(value interface{}) (err error) {
 
 	s.Name = vals[0]
 	s.Mult, _ = strconv.Atoi(vals[1])
+
+	return
+}
+
+type item struct {
+	ID  int `json:"id"`
+	Qty int `json:"qty"`
+}
+
+// Scan is used to scan a record from the DB into a struct
+func (i *item) Scan(value interface{}) (err error) {
+	if value == nil {
+		return
+	}
+	str := string(value.([]byte))
+	vals := psql.ParseRow(str)
+
+	i.ID, _ = strconv.Atoi(vals[0])
+	i.Qty, _ = strconv.Atoi(vals[1])
 
 	return
 }
