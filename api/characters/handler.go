@@ -235,7 +235,12 @@ func getCharacterData(pc PC, uid string, service PCService, db *sql.DB) map[stri
 	if weapons, err := items.NewItemService(items.NewItemRepo(db)).FindByIDs(pc.WeaponIDs); err == nil {
 		data["weapons"] = weapons
 	}
-	if inventory, err := items.NewItemService(items.NewItemRepo(db)).FindByIDs(pc.InventoryIDs); err == nil {
+
+	var inventoryIDs []psql.NullInt
+	for _, i := range pc.Inventory {
+		inventoryIDs = append(inventoryIDs, psql.NullInt{sql.NullInt64{int64(i.ID), true}})
+	}
+	if inventory, err := items.NewItemService(items.NewItemRepo(db)).FindByIDs(inventoryIDs); err == nil {
 		data["inventory"] = inventory
 	}
 	if spells, err := spells.NewSpellService(spells.NewSpellRepo(db)).FindByIDs(pc.SpellIDs); err == nil {

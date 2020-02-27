@@ -14,6 +14,12 @@ CREATE TYPE skill AS (
    mult int
 );
 
+DROP TYPE IF EXISTS item CASCADE;
+CREATE TYPE item AS (
+   id int,
+   qty numeric
+);
+
 DROP TABLE IF EXISTS characters;
 CREATE TABLE characters
 (
@@ -39,7 +45,7 @@ CREATE TABLE characters
    lang varchar(100)[],
    equip_ids int[],
    weapon_ids int[],
-   inventory_ids int[],
+   inventory item[],
    gold numeric,
    spell_ids int[],
    feat_ids int[]
