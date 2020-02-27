@@ -68,7 +68,7 @@ DELETE http://localhost:80/api/data/pc/dda66e3e-9fd9-4582-a4be-acb1f973f090
 Authorization: dev wkgreen13@gmail.com
 
 ### UPSERT CHARACTER
-POST http://localhost:80/api/data/pc?uid=kDBRAhqohWPymd7249ZiQ4i9T153
+POST http://localhost:80/api/data/pc
 Content-Type: application/json
 Authorization: dev wkgreen13@gmail.com
 
