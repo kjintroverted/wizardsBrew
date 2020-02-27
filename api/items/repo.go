@@ -95,7 +95,7 @@ func (r *itemRepo) FindItems() (items []Item, err error) {
 
 func scanItem(row psql.Scannable) (item *Item, err error) {
 	item = new(Item)
-	item.Weapon = new(weaponInfo)
+	weapon := new(weaponInfo)
 	if err := row.Scan(
 		&item.ID,
 		&item.Name,
@@ -104,12 +104,17 @@ func scanItem(row psql.Scannable) (item *Item, err error) {
 		&item.Weight,
 		&item.Attune,
 		&item.Rarity,
-		&item.Weapon.Category,
-		&item.Weapon.Damage,
-		&item.Weapon.DamageType,
+		&weapon.Category,
+		&weapon.Damage,
+		&weapon.DamageType,
 		&item.AC,
 		pq.Array(&item.Info)); err != nil {
 		return nil, fmt.Errorf("Could not find row: %s", err)
 	}
+
+	if weapon.Category != nil && weapon.Category.Valid {
+		item.Weapon = weapon
+	}
+
 	return
 }
