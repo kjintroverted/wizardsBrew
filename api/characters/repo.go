@@ -33,7 +33,7 @@ SET
 	lang = %v,
 	equip_ids = %v,
 	weapon_ids = %v,
-	inventory_ids = %v,
+	inventory = %v,
 	gold = %v,
 	spell_ids = %v,
 	feat_ids = %v
@@ -62,7 +62,7 @@ INSERT INTO characters
 	lang,
 	equip_ids,
 	weapon_ids,
-	inventory_ids,
+	inventory,
 	gold,
 	spell_ids,
 	feat_ids,
@@ -155,8 +155,14 @@ func (r *characterRepo) Upsert(data PC, uid string) (string, error) {
 
 	var skillArr []interface{}
 	for _, skill := range data.ProSkills {
-		row := tasks.RowString("skill", "'"+skill.Name+"'", skill.Mult)
+		row := tasks.StructRow("skill", skill)
 		skillArr = append(skillArr, row)
+	}
+
+	var invArr []interface{}
+	for _, i := range data.Inventory {
+		row := tasks.StructRow("item", i)
+		invArr = append(invArr, row)
 	}
 
 	var vals = []interface{}{
@@ -169,7 +175,7 @@ func (r *characterRepo) Upsert(data PC, uid string) (string, error) {
 		data.ClassID,
 		data.Subclass,
 		data.BackgroundID,
-		tasks.RowString("raw_stat", data.Stats.STR, data.Stats.DEX, data.Stats.CON, data.Stats.INT, data.Stats.WIS, data.Stats.CHA),
+		tasks.StructRow("raw_stat", data.Stats),
 		data.XP,
 		data.MaxHP,
 		data.HP,
@@ -179,7 +185,7 @@ func (r *characterRepo) Upsert(data PC, uid string) (string, error) {
 		tasks.SimplerStrArray(data.Lang),
 		tasks.SimpleArray(tasks.IntToIArray(data.EquipmentIDs)),
 		tasks.SimpleArray(tasks.IntToIArray(data.WeaponIDs)),
-		tasks.SimpleArray(tasks.IntToIArray(data.InventoryIDs)),
+		tasks.SimpleArray(invArr),
 		data.Gold,
 		tasks.SimpleArray(tasks.IntToIArray(data.SpellIDs)),
 		tasks.SimpleArray(tasks.IntToIArray(data.SpecFeatIDs)),
@@ -230,7 +236,7 @@ func scanPC(row psql.Scannable) (character *PC, err error) {
 		pq.Array(&character.Lang),
 		pq.Array(&character.EquipmentIDs),
 		pq.Array(&character.WeaponIDs),
-		pq.Array(&character.InventoryIDs),
+		pq.Array(&character.Inventory),
 		&character.Gold,
 		pq.Array(&character.SpellIDs),
 		pq.Array(&character.SpecFeatIDs)); err != nil {

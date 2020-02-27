@@ -79,7 +79,7 @@ Authorization: dev wkgreen13@gmail.com
   "classID": 5,
   "backgroundID": 5,
   "stats": {
-  "str": 10,
+    "str": 10,
     "dex": 15,
     "con": 13,
     "int": 13,
@@ -112,8 +112,11 @@ Authorization: dev wkgreen13@gmail.com
     17,
     37
   ],
-  "inventoryIDs": [
-    15
+  "inventory": [
+    {
+      "id": 14,
+      "qty": 20
+    }
   ],
   "gold": 10,
   "spellIDs": [

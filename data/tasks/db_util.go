@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
 
@@ -143,12 +144,38 @@ func SimpleArray(arr []interface{}) string {
 	return strings.Trim(s, ",") + "]"
 }
 
+func RowArray(t string, arr []interface{}) string {
+	if len(arr) == 0 {
+		return "null"
+	}
+	s := "array["
+	for _, x := range arr {
+		s += fmt.Sprintf("%s,", StructRow(t, x))
+	}
+	return strings.Trim(s, ",") + "]"
+}
+
 func RowString(t string, arr ...interface{}) string {
 	if len(arr) == 0 {
 		return "null"
 	}
 	s := "row("
 	for _, x := range arr {
+		switch x.(type) {
+		case string:
+			s += fmt.Sprintf("%s,", x)
+		case int:
+			s += fmt.Sprintf("%d,", x)
+		}
+	}
+	return fmt.Sprintf("%s)::%s", strings.Trim(s, ","), t)
+}
+
+func StructRow(t string, v interface{}) string {
+	value := reflect.ValueOf(v)
+	s := "row("
+	for i := 0; i < value.NumField(); i++ {
+		x := value.Field(i).Interface()
 		switch x.(type) {
 		case string:
 			s += fmt.Sprintf("%s,", x)
