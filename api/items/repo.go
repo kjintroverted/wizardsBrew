@@ -21,6 +21,7 @@ type ItemRepo interface {
 	FindWeapons() ([]Item, error)
 	FindArmor() ([]Item, error)
 	FindItems() ([]Item, error)
+	InsertItem(item Item) error
 }
 
 type itemRepo struct {
@@ -91,6 +92,19 @@ func (r *itemRepo) FindItems() (items []Item, err error) {
 		}
 	}
 	return
+}
+
+func (r *itemRepo) InsertItem(item Item) (id int, err error) {
+	sql := `INSERT INTO items 
+						(name, type, cost, weight, attune, rarity, weapon, armor_class, info, homebrew) 
+					VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, true)
+					returning id
+					`
+	// Needs item fields
+	row := r.db.QueryRow(sql)
+	row.Scan(&id)
+
+	return id, nil
 }
 
 func scanItem(row psql.Scannable) (item *Item, err error) {
