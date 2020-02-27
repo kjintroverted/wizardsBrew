@@ -178,7 +178,8 @@ CREATE TABLE items
    rarity varchar(50),
    weapon weapon_info,
    armor_class int,
-   info section[]
+   info section[],
+   homebrew bool default false
 );
 
 DROP TABLE IF EXISTS spells;
