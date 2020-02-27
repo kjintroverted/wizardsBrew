@@ -73,10 +73,10 @@ Content-Type: application/json
 Authorization: dev wkgreen13@gmail.com
 
 {
-  "name": "Carpenter John",
+  "name": "Carpenter Tim",
   "authUsers": ["kDBRAhqohWPymd7249ZiQ4i9T153"],
-  "raceID": 1,
-  "classID": 5,
+  "raceID": 4,
+  "classID": 10,
   "backgroundID": 5,
   "stats": {
   "str": 10,
