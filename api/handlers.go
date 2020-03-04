@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/kjintroverted/wizardsBrew/api/backgrounds"
@@ -12,6 +13,7 @@ import (
 	"github.com/kjintroverted/wizardsBrew/api/races"
 	"github.com/kjintroverted/wizardsBrew/api/spells"
 	"github.com/kjintroverted/wizardsBrew/psql"
+	"github.com/pkg/errors"
 
 	"github.com/gorilla/mux"
 )
@@ -68,6 +70,33 @@ func Items(w http.ResponseWriter, r *http.Request) {
 Fail:
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Write([]byte(err.Error()))
+}
+
+// InsertItem handles attempts to create a homebrew item
+func InsertItem(w http.ResponseWriter, r *http.Request) {
+	db, err := psql.NewPostgresConnection()
+	if err != nil {
+		fmt.Println("ERR", err)
+	}
+	defer db.Close()
+	service := items.NewItemService(items.NewItemRepo(db))
+
+	b, _ := ioutil.ReadAll(r.Body)
+	var data items.Item
+	if err = json.Unmarshal(b, &data); err != nil {
+		fmt.Printf("ERR: %+v\n", errors.WithStack(err))
+		return
+	}
+
+	if id, err := service.InsertItem(data); err == nil {
+		res, _ := json.Marshal(map[string]interface{}{"id": id})
+		w.Write(res)
+	} else {
+		fmt.Printf("%+v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+	}
+
 }
 
 // Spells handles all Spell req

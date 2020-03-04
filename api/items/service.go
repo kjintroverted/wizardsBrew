@@ -10,6 +10,7 @@ type ItemService interface {
 	FindWeapons() ([]Item, error)
 	FindArmor() ([]Item, error)
 	FindItems() ([]Item, error)
+	InsertItem(item Item) (int, error)
 }
 
 type itemService struct {
@@ -56,4 +57,8 @@ func (s *itemService) FindArmor() ([]Item, error) {
 func (s *itemService) FindItems() ([]Item, error) {
 	items, err := s.repo.FindItems()
 	return items, err
+}
+
+func (s *itemService) InsertItem(i Item) (int, error) {
+	return s.repo.InsertItem(i)
 }

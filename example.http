@@ -2,7 +2,35 @@
 GET http://localhost:80/api/user?uid=kun4zXFlM7g8JOubr2nbBkoo0lD2
 
 ### SRD ITEM
-GET http://localhost:80/api/items/675
+GET http://localhost:80/api/items/1214
+
+### INSERT ITEM
+POST http://localhost:80/api/items
+Authorization: dev wkgreen13@gmail.com
+
+{
+    "name": "Umbra Staff 4",
+    "type": "Wondrous Item",
+    "cost": null,
+    "weight": 5,
+    "attune": "true",
+    "rarity": "Rare",
+    "weapon": {
+      "category": "Simple",
+      "damage": "1d6",
+      "damageType": "bludgeoning"
+    },
+    "info": [
+      {
+        "title": "",
+        "body": [
+          "This is a staff created by an organization that specialized in creating magical items disguised as everyday trinkets and gear. This particular staff looks like an ordinary umbrella but is in fact a powerful arcane focus.",
+          "After the weilder defeats a spellcaster, the Umbra Staff has the ability to absorb some of the arcane power of the fallen to charge up attacks for intense displays of power."
+        ]
+      }
+    ]
+  }
+
 
 ### SRD ITEMS
 GET http://localhost:80/api/items

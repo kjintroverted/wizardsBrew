@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/kjintroverted/wizardsBrew/data/tasks"
+	"github.com/pkg/errors"
 
 	"github.com/kjintroverted/wizardsBrew/psql"
 
@@ -21,7 +22,7 @@ type ItemRepo interface {
 	FindWeapons() ([]Item, error)
 	FindArmor() ([]Item, error)
 	FindItems() ([]Item, error)
-	InsertItem(item Item) error
+	InsertItem(item Item) (int, error)
 }
 
 type itemRepo struct {
@@ -95,16 +96,33 @@ func (r *itemRepo) FindItems() (items []Item, err error) {
 }
 
 func (r *itemRepo) InsertItem(item Item) (id int, err error) {
-	sql := `INSERT INTO items 
-						(name, type, cost, weight, attune, rarity, weapon, armor_class, info, homebrew) 
-					VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, true)
-					returning id
-					`
-	// Needs item fields
-	row := r.db.QueryRow(sql)
-	row.Scan(&id)
 
-	return id, nil
+	var infoArr []interface{}
+	for _, section := range item.Info {
+		infoArr = append(infoArr, fmt.Sprintf("row('%v',%v)::section", section.Title, tasks.SimplerStrArray(section.Body)))
+	}
+
+	sql := fmt.Sprintf(`
+		INSERT INTO items 
+			(name, type, cost, weight, attune, rarity, weapon, armor_class, info, homebrew) 
+		VALUES ($1, $2, $3, $4, $5, $6, %v, $7, %v, true)
+		returning id
+		`,
+		tasks.StructRow("weapon_info", item.Weapon),
+		tasks.SimpleArray(infoArr))
+
+	row := r.db.QueryRow(sql,
+		item.Name,
+		item.Type,
+		item.Cost,
+		item.Weight,
+		item.Attune.Value(),
+		item.Rarity.Value(),
+		item.AC,
+	)
+	err = row.Scan(&id)
+
+	return id, errors.WithStack(err)
 }
 
 func scanItem(row psql.Scannable) (item *Item, err error) {
