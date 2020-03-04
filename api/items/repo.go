@@ -12,7 +12,7 @@ import (
 	"github.com/lib/pq"
 )
 
-const fields string = "id,name,type,cost,weight,attune,rarity,(weapon).category,(weapon).damage,(weapon).damage_type,armor_class,info"
+const fields string = "id,name,type,cost,weight,attune,rarity,(weapon).category,(weapon).damage,(weapon).damage_type,armor_class,info,homebrew"
 
 // ItemRepo defines the necessary actions to
 // interact with Item data
@@ -140,7 +140,8 @@ func scanItem(row psql.Scannable) (item *Item, err error) {
 		&weapon.Damage,
 		&weapon.DamageType,
 		&item.AC,
-		pq.Array(&item.Info)); err != nil {
+		pq.Array(&item.Info),
+		&item.IsHomebrew); err != nil {
 		return nil, fmt.Errorf("Could not find row: %s", err)
 	}
 
