@@ -79,6 +79,18 @@ func (n *NullFloat) MarshalJSON() ([]byte, error) {
 	return json.Marshal(n.Float64)
 }
 
+// UnmarshalJSON unwraps the valid value when writing to JSON
+func (n *NullFloat) UnmarshalJSON(b []byte) error {
+	str := string(b)
+	if f, err := strconv.ParseFloat(str, 64); err == nil {
+		n.Float64 = f
+		n.Valid = true
+		return nil
+	}
+	n.Valid = false
+	return fmt.Errorf("Unable to parse float value: %v", str)
+}
+
 // NullInt is an alias fot sql nullable float
 type NullInt struct {
 	sql.NullInt64
@@ -100,7 +112,6 @@ func (n *NullInt) UnmarshalJSON(b []byte) error {
 		n.Valid = true
 		return nil
 	}
-	n.Int64 = 0
 	n.Valid = false
 	return fmt.Errorf("Unable to parse int value: %s", str)
 }
@@ -110,12 +121,28 @@ type NullString struct {
 	sql.NullString
 }
 
+func (n *NullString) Value() string {
+	return strings.Trim(n.String, "\"")
+}
+
 // MarshalJSON unwraps the valid value when writing to JSON
 func (n *NullString) MarshalJSON() ([]byte, error) {
 	if !n.Valid {
 		return []byte("null"), nil
 	}
 	return json.Marshal(n.String)
+}
+
+// UnmarshalJSON unwraps the valid value when writing to JSON
+func (n *NullString) UnmarshalJSON(b []byte) error {
+	str := string(b)
+	if len(str) > 0 && str != "null" {
+		n.String = str
+		n.Valid = true
+		return nil
+	}
+	n.Valid = false
+	return fmt.Errorf("Unable to parse int value: %v", str)
 }
 
 // NullBool is an alias fot sql nullable float

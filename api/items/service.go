@@ -7,9 +7,10 @@ import "github.com/kjintroverted/wizardsBrew/psql"
 type ItemService interface {
 	FindByID(id string) (*Item, error)
 	FindByIDs(ids []psql.NullInt) ([]Item, error)
-	FindWeapons() ([]Item, error)
-	FindArmor() ([]Item, error)
-	FindItems() ([]Item, error)
+	FindWeapons(string) ([]Item, error)
+	FindArmor(string) ([]Item, error)
+	FindItems(string) ([]Item, error)
+	InsertItem(item Item) (int, error)
 }
 
 type itemService struct {
@@ -25,35 +26,34 @@ func NewItemService(repo ItemRepo) ItemService {
 
 // FindById will call the repo's function to
 // find a Item by ID
-func (s *itemService) FindByID(id string) (item *Item, err error) {
-	item, err = s.repo.FindByID(id)
-	return item, err
+func (s *itemService) FindByID(id string) (*Item, error) {
+	return s.repo.FindByID(id)
 }
 
 // FindByIDs will call the repo's function to
 // find all weapon items
 func (s *itemService) FindByIDs(arr []psql.NullInt) ([]Item, error) {
-	items, err := s.repo.FindByIDs(arr)
-	return items, err
+	return s.repo.FindByIDs(arr)
 }
 
 // FindWeapons will call the repo's function to
 // find all weapon items
-func (s *itemService) FindWeapons() ([]Item, error) {
-	items, err := s.repo.FindWeapons()
-	return items, err
+func (s *itemService) FindWeapons(q string) ([]Item, error) {
+	return s.repo.FindWeapons(q)
 }
 
 // FindArmor will call the repo's function to
 // find all armor items
-func (s *itemService) FindArmor() ([]Item, error) {
-	items, err := s.repo.FindArmor()
-	return items, err
+func (s *itemService) FindArmor(q string) ([]Item, error) {
+	return s.repo.FindArmor(q)
 }
 
 // FindItems will call the repo's function to
 // find all armor items
-func (s *itemService) FindItems() ([]Item, error) {
-	items, err := s.repo.FindItems()
-	return items, err
+func (s *itemService) FindItems(q string) ([]Item, error) {
+	return s.repo.FindItems(q)
+}
+
+func (s *itemService) InsertItem(i Item) (int, error) {
+	return s.repo.InsertItem(i)
 }

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/kjintroverted/wizardsBrew/api/characters"
 	"github.com/kjintroverted/wizardsBrew/api/parties"
@@ -69,6 +68,7 @@ func createMux() *mux.Router {
 
 	// SRD ENDPOINTS
 	r.HandleFunc("/api/items", api.Items).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/items", api.InsertItem).Methods("POST", "OPTIONS")
 	r.HandleFunc("/api/items/{id}", api.Items).Methods("GET", "OPTIONS")
 	r.HandleFunc("/api/spells", api.Spells).Methods("GET", "OPTIONS")
 	r.HandleFunc("/api/spells/{id}", api.Spells).Methods("GET", "OPTIONS")
@@ -115,7 +115,7 @@ func cors(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-		if strings.Contains(r.URL.Path, "/api/data") {
+		if r.Method != "GET" {
 			w.Header().Set("Access-Control-Allow-Origin", os.Getenv("ALLOW_ORIGIN"))
 		}
 		if r.Method == "OPTIONS" {

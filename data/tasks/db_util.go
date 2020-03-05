@@ -173,17 +173,25 @@ func RowString(t string, arr ...interface{}) string {
 
 func StructRow(t string, v interface{}) string {
 	value := reflect.ValueOf(v)
+	if value.Kind() == reflect.Ptr {
+		value = value.Elem()
+	}
 	s := "row("
 	for i := 0; i < value.NumField(); i++ {
 		x := value.Field(i).Interface()
-		switch x.(type) {
+		switch t := x.(type) {
 		case string:
-			s += fmt.Sprintf("%s,", x)
+			s += fmt.Sprintf("'%v',", x)
 		case int:
-			s += fmt.Sprintf("%d,", x)
+			s += fmt.Sprintf("%v,", x)
+		case *psql.NullString:
+			ns := x.(*psql.NullString)
+			s += fmt.Sprintf("'%v',", ns.String)
+		default:
+			fmt.Println("Unknown type in struct to row conversion:", t)
 		}
 	}
-	return fmt.Sprintf("%s)::%s", strings.Trim(s, ","), t)
+	return fmt.Sprintf("%s)::%s", strings.ReplaceAll(strings.Trim(s, ","), "\"", ""), t)
 }
 
 func join(arr []interface{}, sep string) (j string) {
