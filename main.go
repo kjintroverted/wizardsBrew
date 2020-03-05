@@ -99,6 +99,7 @@ func createMux() *mux.Router {
 	// USERS
 	r.HandleFunc("/api/user", getUserData).Methods("GET", "OPTIONS")
 
+	r.Use(logger)
 	r.Use(cors)
 	r.Use(userAuth)
 
@@ -125,5 +126,16 @@ func cors(next http.Handler) http.Handler {
 		} else {
 			next.ServeHTTP(w, r)
 		}
+	})
+}
+
+func logger(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.RawQuery
+		if q != "" {
+			q = "?" + q
+		}
+		fmt.Printf("%v\t%v%v", r.Method, r.URL.Path, q)
+		next.ServeHTTP(w, r)
 	})
 }
