@@ -17,12 +17,12 @@ const fields string = "id,name,type,cost,weight,attune,rarity,(weapon).category,
 // ItemRepo defines the necessary actions to
 // interact with Item data
 type ItemRepo interface {
-	FindByID(id string) (*Item, error)
-	FindByIDs(ids []psql.NullInt) ([]Item, error)
-	FindWeapons() ([]Item, error)
-	FindArmor() ([]Item, error)
-	FindItems() ([]Item, error)
-	InsertItem(item Item) (int, error)
+	FindByID(string) (*Item, error)
+	FindByIDs([]psql.NullInt) ([]Item, error)
+	FindWeapons(string) ([]Item, error)
+	FindArmor(string) ([]Item, error)
+	FindItems(string) ([]Item, error)
+	InsertItem(Item) (int, error)
 }
 
 type itemRepo struct {
@@ -56,9 +56,13 @@ func (r *itemRepo) FindByIDs(ids []psql.NullInt) (items []Item, err error) {
 	return
 }
 
-func (r *itemRepo) FindWeapons() (items []Item, err error) {
-	sql := fmt.Sprintf(`select %s from items where weapon is not null`, fields)
+func (r *itemRepo) FindWeapons(q string) (items []Item, err error) {
+	sql := `select ` + fields + ` from items where weapon is not null and name ilike '%` + q + `%'`
 	rows, err := r.db.Query(sql)
+	if err != nil {
+		fmt.Printf("%v\n%+v\n", sql, errors.WithStack(err))
+		return nil, err
+	}
 	for rows.Next() {
 		if item, err := scanItem(rows); err == nil {
 			items = append(items, *item)
@@ -69,9 +73,13 @@ func (r *itemRepo) FindWeapons() (items []Item, err error) {
 	return
 }
 
-func (r *itemRepo) FindArmor() (items []Item, err error) {
-	sql := fmt.Sprintf(`select %s from items where armor_class is not null`, fields)
+func (r *itemRepo) FindArmor(q string) (items []Item, err error) {
+	sql := `select ` + fields + ` from items where armor_class is not null and name ilike '%` + q + `%'`
 	rows, err := r.db.Query(sql)
+	if err != nil {
+		fmt.Printf("%v\n%+v\n", sql, errors.WithStack(err))
+		return nil, err
+	}
 	for rows.Next() {
 		if item, err := scanItem(rows); err == nil {
 			items = append(items, *item)
@@ -82,14 +90,30 @@ func (r *itemRepo) FindArmor() (items []Item, err error) {
 	return
 }
 
-func (r *itemRepo) FindItems() (items []Item, err error) {
-	sql := fmt.Sprintf(`select %s from items where armor_class is null and weapon is null`, fields)
+func (r *itemRepo) FindItems(q string) (items []Item, err error) {
+	sql := `select ` + fields + ` from items where armor_class is null and weapon is null and name ilike '%` + q + `%'`
 	rows, err := r.db.Query(sql)
+	if err != nil {
+		fmt.Printf("%v\n%+v\n", sql, errors.WithStack(err))
+		return nil, err
+	}
 	for rows.Next() {
 		if item, err := scanItem(rows); err == nil {
 			items = append(items, *item)
 		} else {
 			return nil, fmt.Errorf("Could not find row: %s", err)
+		}
+	}
+	return
+}
+
+func (r *itemRepo) Search(q string) (arr []Item, err error) {
+	sql := `SELECT ` + fields + ` FROM characters WHERE name ilike '%` + q + `%'`
+
+	rows, _ := r.db.Query(sql)
+	for rows.Next() {
+		if item, err := scanItem(rows); err == nil {
+			arr = append(arr, *item)
 		}
 	}
 	return

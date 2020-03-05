@@ -33,13 +33,13 @@ Authorization: dev wkgreen13@gmail.com
 
 
 ### SRD ITEMS
-GET http://localhost:80/api/items
+GET http://localhost:80/api/items?search=rope
 
 ### SRD WEAPONS
-GET http://localhost:80/api/items?type=weapon
+GET http://localhost:80/api/items?type=weapon&search=staff
 
 ### SRD ARMOR
-GET http://localhost:80/api/items?type=armor
+GET http://localhost:80/api/items?type=armor&search=leather
 
 ### SRD SPELL
 GET http://localhost:80/api/spells/164

@@ -42,21 +42,23 @@ func Items(w http.ResponseWriter, r *http.Request) {
 		w.Write(res)
 		return
 	}
+	var items []items.Item
 
+	// FIND BY NAME
+	query := r.URL.Query().Get("search")
 	// FIND BY TYPE
 	itemType := r.URL.Query().Get("type")
-	var items []items.Item
 	switch itemType {
 	case "": // GEAR AND ITEMS
-		if items, err = service.FindItems(); err != nil {
+		if items, err = service.FindItems(query); err != nil {
 			goto Fail
 		}
 	case "weapon": // WEAPONS
-		if items, err = service.FindWeapons(); err != nil {
+		if items, err = service.FindWeapons(query); err != nil {
 			goto Fail
 		}
 	case "armor": // ARMOR
-		if items, err = service.FindArmor(); err != nil {
+		if items, err = service.FindArmor(query); err != nil {
 			goto Fail
 		}
 	default:
