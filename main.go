@@ -135,7 +135,7 @@ func logger(next http.Handler) http.Handler {
 		if q != "" {
 			q = "?" + q
 		}
-		fmt.Printf("%v\t%v%v", r.Method, r.URL.Path, q)
+		fmt.Printf("%v\t%v%v\n", r.Method, r.URL.Path, q)
 		next.ServeHTTP(w, r)
 	})
 }
