@@ -1,0 +1,7 @@
+runtime: go112
+
+service: wizard-brew
+
+env_variables:
+  ALLOW_ORIGIN: https://dungeon.wkgreen.dev
+  ENV: PROD
